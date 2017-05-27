@@ -124,7 +124,7 @@ void MeshRenderer::DrawMeshSimple() const
 
 	for (GLuint i = 0; i < textures.size(); i++)
 	{
-		glActiveTexture(GL_TEXTURE0 + i); // Active proper texture unit before binding
+		glActiveTexture(GL_TEXTURE1 + i); // Active proper texture unit before binding
 
 		std::stringstream ss;
 
@@ -133,7 +133,7 @@ void MeshRenderer::DrawMeshSimple() const
 		++shaderTextureTypeCounter[textures[i].type];
 
 		// Now set the sampler to the correct texture unit
-		glUniform1i(glGetUniformLocation(m_Shader, ss.str().c_str()), i);
+		glUniform1i(glGetUniformLocation(m_Shader, ss.str().c_str()), 1 + i);
 		// And finally bind the texture
 		glBindTexture(GL_TEXTURE_2D, textures[i].id);
 	}

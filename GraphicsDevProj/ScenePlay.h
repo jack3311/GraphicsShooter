@@ -22,6 +22,8 @@
 #include "ModelRenderer.h"
 #include "SkyboxRenderer.h"
 
+class Object;
+
 class ScenePlay :
 	public Scene
 {
@@ -32,11 +34,12 @@ private:
 	SkyboxRenderer * skyboxRenderer;
 
 	std::vector<Light *> lights;
-	int numLights;
 
 	float ambientStrength;
 	glm::vec3 ambientColor;
 	float specularStrength;
+
+	std::vector<Object *> players;
 
 public:
 	ScenePlay();
@@ -46,5 +49,12 @@ public:
 	virtual void update(float _dt);
 
 	void reset();
+
+	const std::vector<Light *> & getLights() const;
+	const unsigned int getNumLights() const;
+	const float getAmbientStrength() const;
+	const glm::vec3 & getAmbientColor() const;
+	const float getSpecularStrength() const;
+	const GLuint getSkyboxCubemap() const;
 };
 

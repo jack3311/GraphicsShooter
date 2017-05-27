@@ -4,10 +4,10 @@
 #include "AssetManager.h"
 #include "Camera.h"
 #include "Light.h"
+#include "ScenePlay.h"
 
 
-ModelRenderer::ModelRenderer(GLuint _shader, const std::vector<Light*>& _lights, const int & _numLights, const float & _ambientStrength, const glm::vec3 _ambientColor, const float & _specularStrength) :
-	m_Shader(_shader), lights(_lights), numLights(_numLights), ambientStrength(_ambientStrength), ambientColor(_ambientColor), specularStrength(_specularStrength)
+ModelRenderer::ModelRenderer(GLuint _shader, float _reflectionStrength) : m_Shader(_shader), reflectionStrength(_reflectionStrength)
 {
 }
 
@@ -134,9 +134,11 @@ bool ModelRenderer::initialize()
 	return true;
 }
 
-void ModelRenderer::draw(const Camera & _camera, const glm::mat4 & _model) const
+void ModelRenderer::draw(const Camera & _camera, const glm::mat4 & _model, const ScenePlay & _scenePlay) const
 {
 	glUseProgram(m_Shader);
+
+	//MVP matrices
 
 	GLuint uniformProjectionLocation = glGetUniformLocation(m_Shader, "projection");
 	glUniformMatrix4fv(uniformProjectionLocation, 1, GL_FALSE, glm::value_ptr(_camera.getProjMatrix()));
@@ -148,11 +150,14 @@ void ModelRenderer::draw(const Camera & _camera, const glm::mat4 & _model) const
 	glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, glm::value_ptr(_model));
 
 
-	//Lighting
+	//Lighting:
+
+	unsigned int numLights = _scenePlay.getNumLights();
+	auto lights = _scenePlay.getLights();
 
 	glm::vec3 * lightPositions = new glm::vec3[numLights];
 	glm::vec3 * lightColors = new glm::vec3[numLights];
-	for (int l = 0; l < numLights; ++l)
+	for (unsigned int l = 0; l < numLights; ++l)
 	{
 		lightPositions[l] = lights[l]->getPosition();
 		lightColors[l] = lights[l]->getColor();
@@ -170,18 +175,30 @@ void ModelRenderer::draw(const Camera & _camera, const glm::mat4 & _model) const
 	GLuint uniformNumLightsLocation = glGetUniformLocation(m_Shader, "numLights");
 	glUniform1i(uniformNumLightsLocation, numLights);
 
-
 	GLuint uniformCamPos = glGetUniformLocation(m_Shader, "camPos");
 	glUniform3fv(uniformCamPos, 1, glm::value_ptr(_camera.getPosition()));
 
 	GLuint uniformAmbientStrengthLocation = glGetUniformLocation(m_Shader, "ambientStrength");
-	glUniform1f(uniformAmbientStrengthLocation, ambientStrength);
+	glUniform1f(uniformAmbientStrengthLocation, _scenePlay.getAmbientStrength());
 
 	GLuint uniformAmbientColLocation = glGetUniformLocation(m_Shader, "ambientCol");
-	glUniform3fv(uniformAmbientColLocation, 1, glm::value_ptr(ambientColor));
+	glUniform3fv(uniformAmbientColLocation, 1, glm::value_ptr(_scenePlay.getAmbientColor()));
 
 	GLuint uniformSpecularStrength = glGetUniformLocation(m_Shader, "specularStrength");
-	glUniform1f(uniformSpecularStrength, specularStrength);
+	glUniform1f(uniformSpecularStrength, _scenePlay.getSpecularStrength());
+
+
+	//Reflections:
+
+	GLuint uniformReflectionStrengthLocation = glGetUniformLocation(m_Shader, "reflectionStrength");
+	glUniform1f(uniformReflectionStrengthLocation, reflectionStrength);
+
+
+	//Assign skybox tex
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(m_Shader, "skybox"), 0);
+	glBindTexture(GL_TEXTURE_2D, _scenePlay.getSkyboxCubemap());
+
 
 	//Draw all of the meshes
 

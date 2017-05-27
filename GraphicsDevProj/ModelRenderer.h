@@ -5,6 +5,8 @@
 #include "ModelInfo.h"
 #include "MeshRenderer.h"
 
+class ScenePlay;
+
 class ModelRenderer
 {
 private:
@@ -16,15 +18,10 @@ private:
 
 	GLuint m_Shader;
 
-	//TODO: FIX THIS NONSENSE
-	const std::vector<Light *> & lights;
-	const int & numLights;
-	const float & ambientStrength;
-	const glm::vec3 ambientColor;
-	const float & specularStrength;
+	float reflectionStrength;
 
 public:
-	ModelRenderer(GLuint _shader, const std::vector<Light*>& _lights, const int & _numLights, const float & _ambientStrength, const glm::vec3 _ambientColor, const float & _specularStrength);
+	ModelRenderer(GLuint _shader, float _reflectionStrength = 0.2f);
 	~ModelRenderer();
 
 	bool loadFromFile(std::string _path);
@@ -34,5 +31,5 @@ public:
 
 	bool initialize();
 
-	void draw(const Camera & _camera, const glm::mat4 & _model) const;
+	void draw(const Camera & _camera, const glm::mat4 & _model, const ScenePlay & _scenePlay) const;
 };

@@ -40,8 +40,6 @@ void SceneMenu::render() const
 
 void SceneMenu::update(float _dt)
 {
-	SceneManager::getSceneManager().getScene<ScenePlay>().update(0.f);
-
 	continueText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f, 2.f * Game::getGame()->getWindowHeight() / 5.f));
 
 	if (Input::isKeyDown(' '))

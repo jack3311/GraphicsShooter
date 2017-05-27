@@ -11,9 +11,11 @@ uniform float ambientStrength;
 uniform vec3 ambientCol;
 uniform float specularStrength;
 uniform int numLights;
+uniform float reflectionStrength;
 
 out vec4 color;
 
+uniform samplerCube skybox;
 uniform sampler2D texture_0_0;
 
 void main()
@@ -21,15 +23,13 @@ void main()
 	vec3 norm = normalize(outNormal);
 	vec3 viewDir = normalize(camPos - outFragPos);
 
-
 	vec3 lightSum = vec3(0.f, 0.f, 0.f);
 	
-
 	//Ambient
 	vec3 ambient = ambientStrength * ambientCol;
 	lightSum += ambient;
 
-
+	//Other factors
 	for (int l = 0; l < numLights; l++)
 	{
 		//For each light:
@@ -45,15 +45,24 @@ void main()
 		float spec = pow(max(dot(viewDir, reflectionDir), 0.0), 32);
 		vec3 specular = spec * lightColors[l] * specularStrength;
 
+		//Rim
+		float rimFactor = 1.0 - dot(norm, viewDir);
+		rimFactor = smoothstep(0.0, 1.0, rimFactor);
+		rimFactor = pow(rimFactor, 16);
+		vec3 rim = rimFactor * vec3(1.0f, 0.6f, 0.2f) * lightColors[l];
+
 
 		//Add to summed lighting value
 		lightSum += diffuse;
 		lightSum += specular;
+		lightSum += rim;
 	}
 
+	//Reflections:
+	vec3 reflectDir = reflect(-viewDir, norm);
+	vec4 skyboxReflectColor = texture(skybox, reflectDir);
+	
 
 	vec4 texColor = texture2D(texture_0_0, outTexCoord);
-
-	//color = vec4(1.0, 1.0, 1.0, 1.0) * vec4(lightSum, 1.f);
-	color = texColor * vec4(lightSum, 1.f);
+	color = texColor * vec4(lightSum, 1.f) + reflectionStrength * skyboxReflectColor;
 }
