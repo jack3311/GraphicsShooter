@@ -1,5 +1,7 @@
 #include "NetworkEntity.h"
 
+#include <thread>
+
 namespace JNetwork
 {
 	INetworkEntity::INetworkEntity(NetworkEntityType _type) : type(_type), active(false)
@@ -9,6 +11,20 @@ namespace JNetwork
 
 	INetworkEntity::~INetworkEntity()
 	{
+	}
+
+	void INetworkEntity::start()
+	{
+		active = true;
+
+		receiveThread = std::thread(&INetworkEntity::receiveThreadEntry, this);
+	}
+
+	void INetworkEntity::stop()
+	{
+		//Stop receiving packets, receive thread may end without requiring socket shutdown
+		active = false;
+		receiveThread.detach();
 	}
 
 	bool INetworkEntity::initialise(unsigned short _port)

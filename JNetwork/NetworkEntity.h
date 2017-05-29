@@ -1,14 +1,11 @@
 #pragma once
 
+#include <thread>
+
 #include "UDPSocket.h"
-
-
 
 namespace JNetwork
 {
-	#define CLIENT_PORT 5550
-	#define SERVER_PORT 6660
-
 	#define NUM_BIND_ATTEMPTS 10
 
 	enum NetworkEntityType
@@ -22,9 +19,11 @@ namespace JNetwork
 	{
 	private:
 		NetworkEntityType type;
+		std::thread receiveThread;
 
 	protected:
 		UDPSocket * socket;
+
 
 		bool active;
 
@@ -32,14 +31,14 @@ namespace JNetwork
 		INetworkEntity(NetworkEntityType _type);
 		~INetworkEntity();
 
-		virtual void start() = 0;
-		virtual void stop() = 0;
+		virtual void start();
+		virtual void stop();
+
+		virtual void receiveThreadEntry() = 0;
 
 		bool initialise(unsigned short _port);
 
 		NetworkEntityType getType() const;
-
-		virtual void processInput(const std::string & _input) = 0;
 
 		bool isActive() const;
 	};

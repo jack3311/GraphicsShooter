@@ -40,93 +40,93 @@ namespace JNetwork
 	}
 }
 
-
-bool clientConnection(Client * _client)
-{
-	logO("Connect to a server: ");
-	//Find username
-	logO("Please enter a username: ");
-	std::string nameEntry;
-	std::getline(std::cin, nameEntry);
-
-	logO("Press any key to continue or 'm' to manually enter a server address");
-
-	sockaddr_in serverAddr;
-
-	char input = (char)_getch();
-	if (input == 'm')
-	{
-		//Manually enter address
-		logO("Please enter the IP address of the server: ");
-		std::string ip;
-		std::getline(std::cin, ip);
-
-		logO("Please enter the port of the server, or enter for default: ");
-		std::string port;
-		unsigned short portConvert;
-		std::getline(std::cin, port);
-
-		if (port.size() == 0)
-		{
-			portConvert = SERVER_PORT;
-		}
-		else
-		{
-			std::istringstream iss(port);
-			iss >> portConvert;
-		}
-
-		createAddr(serverAddr, ip, portConvert);
-	}
-	else
-	{
-		//Broadcast
-
-		logO("Broadcasting for servers...");
-		_client->broadcastForServers();
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-
-		auto serverList = _client->getBroadcastFoundServers();
-		if (serverList.size() == 0)
-		{
-			logO("No servers found");
-			return false;
-		}
-		else
-		{
-			ResetTextColor();
-			std::cout << "Found " << serverList.size() << " server" << (serverList.size() > 1 ? "s" : "") << ": " << std::endl;
-			for (unsigned int i = 0; i < serverList.size(); ++i)
-			{
-				std::cout << i + 1 << ": " << addrToString(serverList[i]) << std::endl;
-			}
-
-			logO("Please enter the number corresponding to the server which you wish to join");
-			
-			int chosen;
-			std::string chosenString;
-			std::getline(std::cin, chosenString);
-			std::istringstream ss(chosenString);
-			ss >> chosen;
-			--chosen;
-
-			serverAddr = serverList[chosen];
-		}
-	}
-
-
-	//Try to officially connect to server with username
-
-	if (!_client->connect(serverAddr, nameEntry))
-	{
-		logE("Could not connect to server");
-		return false;
-	}
-
-	logS("Connected to server successfully");
-
-	return true;
-}
+//
+//bool clientConnection(Client * _client)
+//{
+//	logO("Connect to a server: ");
+//	//Find username
+//	logO("Please enter a username: ");
+//	std::string nameEntry;
+//	std::getline(std::cin, nameEntry);
+//
+//	logO("Press any key to continue or 'm' to manually enter a server address");
+//
+//	sockaddr_in serverAddr;
+//
+//	char input = (char)_getch();
+//	if (input == 'm')
+//	{
+//		//Manually enter address
+//		logO("Please enter the IP address of the server: ");
+//		std::string ip;
+//		std::getline(std::cin, ip);
+//
+//		logO("Please enter the port of the server, or enter for default: ");
+//		std::string port;
+//		unsigned short portConvert;
+//		std::getline(std::cin, port);
+//
+//		if (port.size() == 0)
+//		{
+//			portConvert = SERVER_PORT;
+//		}
+//		else
+//		{
+//			std::istringstream iss(port);
+//			iss >> portConvert;
+//		}
+//
+//		createAddr(serverAddr, ip, portConvert);
+//	}
+//	else
+//	{
+//		//Broadcast
+//
+//		logO("Broadcasting for servers...");
+//		_client->broadcastForServers();
+//		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+//
+//		auto serverList = _client->getBroadcastFoundServers();
+//		if (serverList.size() == 0)
+//		{
+//			logO("No servers found");
+//			return false;
+//		}
+//		else
+//		{
+//			ResetTextColor();
+//			std::cout << "Found " << serverList.size() << " server" << (serverList.size() > 1 ? "s" : "") << ": " << std::endl;
+//			for (unsigned int i = 0; i < serverList.size(); ++i)
+//			{
+//				std::cout << i + 1 << ": " << addrToString(serverList[i]) << std::endl;
+//			}
+//
+//			logO("Please enter the number corresponding to the server which you wish to join");
+//			
+//			int chosen;
+//			std::string chosenString;
+//			std::getline(std::cin, chosenString);
+//			std::istringstream ss(chosenString);
+//			ss >> chosen;
+//			--chosen;
+//
+//			serverAddr = serverList[chosen];
+//		}
+//	}
+//
+//
+//	//Try to officially connect to server with username
+//
+//	if (!_client->connect(serverAddr, nameEntry))
+//	{
+//		logE("Could not connect to server");
+//		return false;
+//	}
+//
+//	logS("Connected to server successfully");
+//
+//	return true;
+//}
 
 #ifdef MAIN
 int mainDONOTRUN()

@@ -1,7 +1,6 @@
 #include "Server.h"
 
 #include <algorithm>
-#include <iostream>
 #include <thread>
 
 #include "Util.h"
@@ -9,8 +8,6 @@
 
 namespace JNetwork
 {
-	#define PROCESS_PACKETS_ON_NEW_THREADS
-
 	#define KEEP_ALIVE_TIME_MILLISECONDS 750
 
 	Server::Server() : INetworkEntity::INetworkEntity(NetworkEntityType::SERVER)
@@ -23,48 +20,16 @@ namespace JNetwork
 
 	void Server::start()
 	{
-		active = true;
+		INetworkEntity::start();
 
-		receiveThread = std::thread(&Server::receiveThreadEntry, this);
 		keepAliveThread = std::thread(&Server::keepAliveThreadEntry, this);
 	}
 
 	void Server::stop()
 	{
-		//Stop receiving packets, receive thread may end without requiring socket shutdown
-		active = false;
+		INetworkEntity::stop();
 
-		receiveThread.detach();
 		keepAliveThread.detach();
-	}
-
-	void Server::processInput(const std::string & _input)
-	{
-		if (_input.size() > 1)
-		{
-			if (_input[0] == '!') //Ignore double '!'s
-			{
-				switch (_input[1])
-				{
-				case '?':
-					//List all commands
-					std::cout << "!q - stop server" << std::endl;
-					std::cout << "!k [name] - kick client with given name" << std::endl;
-					std::cout << std::endl;
-					break;
-				case 'k':
-					removeClient(_input.substr(3));
-					sendToAll(Packet(PacketType::CLIENT_DISCONNECT, _input.substr(3)));
-					//clientInfoMap.erase(clientInfoMap.begin());
-					break;
-				case 'q':
-					this->stop();
-					break;
-				}
-
-				return;
-			}
-		}
 	}
 
 	bool Server::addClient(ClientInfo _clientInfo)
@@ -84,9 +49,7 @@ namespace JNetwork
 			return false;
 		}
 
-
 		//Proceed to add client
-
 		clientInfoMap[addressString] = _clientInfo;
 
 		return true;
@@ -99,7 +62,6 @@ namespace JNetwork
 			if (itr->second.name == _name)
 			{
 				clientInfoMap.erase(itr->first);
-				//clientInfoMap.erase(itr);
 				break;
 			}
 		}
@@ -129,58 +91,52 @@ namespace JNetwork
 		while (active)
 		{
 			sockaddr_in addr;
-			Packet p;
+			JNetworkPacket p;
 
 			UDPSocketResponse r = socket->receivePacket(addr, p);
 
 			if (r == UDPSocketResponse::OK)
 			{
-				//Process packet
-
-#ifdef PROCESS_PACKETS_ON_NEW_THREADS
+				//Process packet - use OS thread management
 				std::thread packetProcessThread(&Server::processPacket, this, p, addr); //Member function so pass this as well
 				packetProcessThread.detach();
-#else
-				processPacket(p, addr);
-#endif
 			}
 			else/* if (r != UDPSocketResponse::CONNECTION_CLOSED)*/
 			{
-				std::cout << "Could not receive packet" << std::endl;
+				//std::cout << "Could not receive packet" << std::endl;
 			}
 		}
 	}
 
-	void Server::processPacket(Packet _p, const sockaddr_in _addr)
+	void Server::processPacket(JNetworkPacket _p, const sockaddr_in _addr)
 	{
 		//Process received packets:
 
-		if (_p.type == PacketType::JOIN_SERVER)
+		if (_p.type == JNetworkPacketType::JOIN_SERVER)
 		{
 			ClientInfo ci{ _p.data, _addr, true };
 			if (addClient(ci))
 			{
-				socket->sendPacket(_addr, Packet(PacketType::JOIN_SERVER_ACCEPTED));
+				socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_ACCEPTED));
 
 				//Send the client list
 				sendClientList(_addr);
 
 				//Send a notification that new client joined
-				sendToAllExcept(Packet(PacketType::NEW_CLIENT, ci.name), ci.name);
+				sendToAllExcept(JNetworkPacket(JNetworkPacketType::NEW_CLIENT, ci.name.c_str()), ci.name);
 			}
 			else
 			{
-				socket->sendPacket(_addr, Packet(PacketType::JOIN_SERVER_DENIED));
+				socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_DENIED));
 			}
 
 			return;
 		}
-		if (_p.type == PacketType::SERVER_BC_REQUEST)
+		if (_p.type == JNetworkPacketType::SERVER_BC_REQUEST)
 		{
-			socket->sendPacket(_addr, Packet(PacketType::SERVER_BC_RESPONSE));
+			socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::SERVER_BC_RESPONSE));
 			return;
 		}
-
 
 
 		std::string addrString = addrToString(_addr);
@@ -189,21 +145,12 @@ namespace JNetwork
 			//Client is connected officially
 			switch (_p.type)
 			{
-			case PacketType::CHAT:
-			{
-				//Relay message to all other clients
-				auto clientInfo = clientInfoMap[addrString];
-
-				std::string message = clientInfo.name + ": " + _p.data;
-				sendToAllExcept(Packet(PacketType::CHAT, message), clientInfo.name);
-			}
-			break;
-			case PacketType::CLIENT_LIST_REQUEST:
+			case JNetworkPacketType::CLIENT_LIST_REQUEST:
 			{
 				sendClientList(_addr);
 			}
 			break;
-			case PacketType::CLIENT_DISCONNECT:
+			case JNetworkPacketType::CLIENT_DISCONNECT:
 			{
 				auto clientInfo = clientInfoMap[addrString];
 
@@ -211,9 +158,9 @@ namespace JNetwork
 
 				removeClient(clientInfo.name);
 
-				sendToAll(Packet(PacketType::CLIENT_DISCONNECT, clientInfo.name));
+				sendToAll(JNetworkPacket(JNetworkPacketType::CLIENT_DISCONNECT, clientInfo.name.c_str()));
 			}
-			case PacketType::KEEP_ALIVE:
+			case JNetworkPacketType::KEEP_ALIVE:
 			{
 				auto & clientInfo = clientInfoMap[addrString];
 				clientInfo.keepAliveResponse = true;
@@ -224,11 +171,11 @@ namespace JNetwork
 		else
 		{
 			//Client not connected, send a please join packet
-			socket->sendPacket(_addr, Packet(PacketType::PLEASE_JOIN));
+			socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::PLEASE_JOIN));
 		}
 	}
 
-	void Server::sendToAll(const Packet & _p)
+	void Server::sendToAll(const JNetworkPacket & _p)
 	{
 		for (auto & client : clientInfoMap)
 		{
@@ -241,7 +188,7 @@ namespace JNetwork
 		}
 	}
 
-	void Server::sendToAllExcept(const Packet & _p, const std::string & _name)
+	void Server::sendToAllExcept(const JNetworkPacket & _p, const std::string & _name)
 	{
 		for (auto & client : clientInfoMap)
 		{
@@ -271,7 +218,7 @@ namespace JNetwork
 				}
 			}
 
-			socket->sendPacket(_addr, Packet(PacketType::CLIENT_LIST, tempClientList));
+			socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::CLIENT_LIST, tempClientList.c_str()));
 		}
 	}
 
@@ -296,7 +243,7 @@ namespace JNetwork
 						//Remove client, and notify other users
 						if (itr->second.name != "")
 						{
-							sendToAllExcept(Packet(PacketType::CLIENT_DISCONNECT, itr->second.name), itr->second.name);
+							sendToAllExcept(JNetworkPacket(JNetworkPacketType::CLIENT_DISCONNECT, itr->second.name.c_str()), itr->second.name);
 						}
 
 						itr = clientInfoMap.erase(itr);
@@ -309,7 +256,7 @@ namespace JNetwork
 				}
 
 				//Send keep alive packets
-				sendToAll(Packet(PacketType::KEEP_ALIVE));
+				sendToAll(JNetworkPacket(JNetworkPacketType::KEEP_ALIVE));
 			}
 
 			std::this_thread::yield();

@@ -1,48 +1,45 @@
 #include "Packet.h"
 
-#include <sstream>
 #include <string>
 
 namespace JNetwork
 {
-	Packet::Packet()
+	JNetworkPacket::JNetworkPacket() : data(nullptr)
 	{
 	}
 
-	Packet::Packet(const char * _netData)
+	JNetworkPacket::JNetworkPacket(const char * _netData)
 	{
-		std::string temp(_netData);
-		std::istringstream iss(temp);
-
 		//Read packet type
-		unsigned short t;
-		iss >> t;
-		type = static_cast<PacketType>(t);
+		type = static_cast<JNetworkPacketType>(_netData[0]);
 
-		iss.seekg(1, std::ios_base::cur); //Skip the space
-
-										  //Read packet content
-		std::getline(iss, data);
+		memcpy_s(data, PACKET_SIZE, _netData, PACKET_SIZE);
 	}
 
-	Packet::Packet(PacketType _type, const std::string & _data) : type(_type), data(_data)
+	//Takes in a type, and data (EXCLUDING TYPE)
+	JNetworkPacket::JNetworkPacket(JNetworkPacketType _type, const char * _data) : type(_type)
 	{
+		data = new char[PACKET_SIZE];
+		memset(data, 0, PACKET_SIZE);
+
+		data[0] = _type;
+
+		memcpy_s(data + 1u, PACKET_CONTENT_SIZE, _data, sizeof(_data));
 	}
 
-	Packet::Packet(PacketType _type) : type(_type), data("")
+	JNetworkPacket::JNetworkPacket(JNetworkPacketType _type) : type(_type)
 	{
+		data = new char[PACKET_SIZE];
+		memset(data, 0, PACKET_SIZE);
 	}
 
-	void Packet::serialize(char * _netData) const
+	JNetworkPacket::~JNetworkPacket()
 	{
-		std::ostringstream oss;
-		oss << static_cast<unsigned short>(type);
-		oss << " ";
-		oss << data;
+		delete[] data;
+	}
 
-		std::string strPacket = oss.str();
-		const char * cPacket = strPacket.c_str();
-
-		strcpy_s(_netData, strlen(cPacket) + 1, cPacket);
+	void JNetworkPacket::serialize(char * _netData) const
+	{
+		memcpy_s(_netData, sizeof(_netData), data, PACKET_SIZE);
 	}
 }

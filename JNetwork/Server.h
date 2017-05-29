@@ -8,6 +8,8 @@
 
 namespace JNetwork
 {
+	class JNetworkPacket;
+
 	struct ClientInfo
 	{
 		std::string name;
@@ -21,20 +23,19 @@ namespace JNetwork
 	private:
 		std::map<std::string, ClientInfo> clientInfoMap;
 
-		std::thread receiveThread;
 		std::thread keepAliveThread;
-
 
 		bool addClient(ClientInfo _clientInfo);
 		void removeClient(const std::string & _name);
 		bool clientConnected(const sockaddr_in & _addr);
 		bool clientConnected(const std::string & _addrString);
 
-		void receiveThreadEntry();
-		void processPacket(Packet _p, const sockaddr_in _addr);
+		virtual void receiveThreadEntry();
 
-		void sendToAll(const Packet & _p);
-		void Server::sendToAllExcept(const Packet & _p, const std::string & _name);
+		void processPacket(JNetworkPacket _p, const sockaddr_in _addr);
+
+		void sendToAll(const JNetworkPacket & _p);
+		void Server::sendToAllExcept(const JNetworkPacket & _p, const std::string & _name);
 
 		void sendClientList(const sockaddr_in & _addr);
 
@@ -46,7 +47,5 @@ namespace JNetwork
 
 		virtual void start();
 		virtual void stop();
-
-		virtual void processInput(const std::string & _input);
 	};
 }

@@ -30,9 +30,9 @@ namespace JNetwork
 		bool isValidSocket() const;
 
 
-		UDPSocketResponse sendPacket(const sockaddr_in & _where, const Packet & _packet);
+		UDPSocketResponse sendPacket(const sockaddr_in & _where, const JNetworkPacket & _packet);
 		UDPSocketResponse sendData(const sockaddr_in & _where, const char * _data);
-		UDPSocketResponse receivePacket(sockaddr_in & _sourceOut, Packet & _packetOut);
+		UDPSocketResponse receivePacket(sockaddr_in & _sourceOut, JNetworkPacket & _packetOut);
 		UDPSocketResponse receiveData(sockaddr_in & _sourceOut, char * _dataOut, size_t _size);
 
 		void enableBroadcast();

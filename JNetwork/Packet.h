@@ -2,16 +2,17 @@
 
 #include <string>
 
+#define PACKET_HEADER_SIZE sizeof(JNetworkPacketType)
+#define PACKET_SIZE 64 //bytes
+#define PACKET_CONTENT_SIZE (PACKET_SIZE - PACKET_HEADER_SIZE)
+
 namespace JNetwork
 {
-	#define PACKET_SIZE 64
-
-	enum PacketType : unsigned short
+	enum JNetworkPacketType : unsigned __int8
 	{
 		JOIN_SERVER,
 		JOIN_SERVER_ACCEPTED,
 		JOIN_SERVER_DENIED,
-		CHAT,
 		NEW_CLIENT,
 		CLIENT_DISCONNECT,
 		CLIENT_LIST,
@@ -20,19 +21,21 @@ namespace JNetwork
 		SERVER_BC_REQUEST,
 		SERVER_BC_RESPONSE,
 		KEEP_ALIVE,
+		UPDATE, //Pass through to game parsing
 		PACKETTYPE_NUM_ITEMS
 	};
 
-	class Packet
+	class JNetworkPacket
 	{
 	public:
-		Packet();
-		Packet(const char * _netData);
-		Packet(PacketType _type, const std::string & _data);
-		Packet(PacketType _type);
+		JNetworkPacket();
+		JNetworkPacket(const char * _netData);
+		JNetworkPacket(JNetworkPacketType _type, const char * _data);
+		JNetworkPacket(JNetworkPacketType _type);
+		~JNetworkPacket();
 
-		PacketType type;
-		std::string data;
+		JNetworkPacketType type;
+		char * data;
 
 		void serialize(char * _netData) const;
 	};

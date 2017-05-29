@@ -18,7 +18,7 @@ namespace JNetwork
 		std::thread receiveThread;
 
 		void receiveThreadEntry();
-		void processPacket(Packet _p, const sockaddr_in _addr);
+		void processPacket(JNetworkPacket _p, const sockaddr_in _addr);
 
 		std::vector<sockaddr_in> broadcastFoundServerAddresses;
 
@@ -29,15 +29,13 @@ namespace JNetwork
 		virtual void start();
 		virtual void stop();
 
-		bool connect(sockaddr_in _serverAddr, const std::string & _clientName);
+		bool connect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout = 500u);
 
-		virtual void processInput(const std::string & _input);
-
-		void parseClientListPacket(const Packet & _packet);
+		void parseClientListPacket(const JNetworkPacket & _packet);
 
 		bool isConnectedToServer() const;
 
-		void broadcastForServers();
+		void broadcastForServers(unsigned int _startPort);
 
 		const std::vector<sockaddr_in> & getBroadcastFoundServers();
 	};

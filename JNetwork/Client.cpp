@@ -1,11 +1,11 @@
 #include "Client.h"
 
-#include <iostream>
 #include <sstream>
 #include <vector>
 #include <iterator>
 
 #include "Util.h"
+#include "Packet.h"
 
 namespace JNetwork
 {
@@ -29,7 +29,7 @@ namespace JNetwork
 		if (connectedToServer)
 		{
 			//Send quit packet
-			socket->sendPacket(serverAddr, Packet(PacketType::CLIENT_DISCONNECT));
+			socket->sendPacket(serverAddr, JNetworkPacketType(JNetworkPacketType::CLIENT_DISCONNECT));
 		}
 
 		//Stop receiving packets, receive thread may end without requiring socket shutdown
@@ -38,63 +38,7 @@ namespace JNetwork
 		receiveThread.detach();
 	}
 
-	void Client::processInput(const std::string & _input)
-	{
-		std::string messageToSend = _input;
-
-		if (_input.size() == 0 || _input == "\n")
-		{
-			return;
-		}
-
-		if (_input.size() > 1)
-		{
-			if (_input[0] == '!' && _input[1] == '!')
-			{
-				messageToSend = _input.substr(1);
-			}
-			else if (_input[0] == '!') //Ignore double '!'s
-			{
-				switch (_input[1])
-				{
-				case '?':
-					//List all commands
-					std::cout << "!q - quit" << std::endl;
-					std::cout << "!c - client list" << std::endl;
-					std::cout << std::endl;
-					break;
-				case 'c':
-					//send client list request
-					socket->sendPacket(serverAddr, Packet(PacketType::CLIENT_LIST_REQUEST));
-					break;
-				case 'q':
-					this->stop();
-					break;
-				}
-
-				//Do not send chat message
-				return;
-			}
-		}
-
-
-		//Send a chat packet
-		if (_input.size() > PACKET_SIZE - (sizeof(unsigned short) * 6))
-		{
-			logE("Message too long");
-			return;
-		}
-
-		UDPSocketResponse r = socket->sendPacket(serverAddr, Packet(PacketType::CHAT, messageToSend));
-
-		if (r != UDPSocketResponse::OK)
-		{
-			setE();
-			std::cout << "Could not send chat message: code " << r << std::endl;
-		}
-	}
-
-	void Client::parseClientListPacket(const Packet & _packet)
+	void Client::parseClientListPacket(const JNetworkPacket & _packet)
 	{
 		std::istringstream ss(_packet.data);
 
@@ -109,20 +53,20 @@ namespace JNetwork
 		}
 
 		//Display clients
-		std::cout << std::endl;
-		if (nameList.size() > 0)
-		{
-			logR("Connected Clients: ");
-			for (std::string name : nameList)
-			{
-				logR(name);
-			}
-		}
-		else
-		{
-			logR("No other clients connected");
-		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
+		//if (nameList.size() > 0)
+		//{
+		//	//logR("Connected Clients: ");
+		//	for (std::string name : nameList)
+		//	{
+		//		//logR(name);
+		//	}
+		//}
+		//else
+		//{
+		//	//logR("No other clients connected");
+		//}
+		//std::cout << std::endl;
 	}
 
 	bool Client::isConnectedToServer() const
@@ -130,7 +74,7 @@ namespace JNetwork
 		return connectedToServer;
 	}
 
-	void Client::broadcastForServers()
+	void Client::broadcastForServers(unsigned int _startPort)
 	{
 		broadcastFoundServerAddresses.clear();
 
@@ -143,12 +87,12 @@ namespace JNetwork
 		broadcastAddr.sin_addr.S_un.S_addr = htonl(INADDR_BROADCAST);
 
 
-		Packet p(PacketType::SERVER_BC_REQUEST);
+		JNetworkPacket p(JNetworkPacketType::SERVER_BC_REQUEST);
 
 		//Broadcast a packet to the range of possible server addresses
 		for (int i = 0; i < NUM_BIND_ATTEMPTS; ++i)
 		{
-			broadcastAddr.sin_port = htons(SERVER_PORT + i);
+			broadcastAddr.sin_port = htons(_startPort + i);
 
 			socket->sendPacket(broadcastAddr, p);
 		}
@@ -174,7 +118,7 @@ namespace JNetwork
 			{
 				//Process packet
 
-				Packet p(buff);
+				JNetworkPacket p(buff);
 
 #ifdef PROCESS_PACKETS_ON_NEW_THREADS
 				std::thread packetProcessThread(&Server::processPacket, this, p, addr); //Member function so pass this as well
@@ -185,50 +129,50 @@ namespace JNetwork
 			}
 			else if (r == UDPSocketResponse::CONNECTION_CLOSED)
 			{
-				logE("No server present");
+				//logE("No server present");
 			}
 			else
 			{
-				logE("Could not receive packet");
+				//logE("Could not receive packet");
 			}
 
 			delete[] buff;
 		}
 	}
 
-	void Client::processPacket(Packet _p, const sockaddr_in _addr)
+	void Client::processPacket(JNetworkPacket _p, const sockaddr_in _addr)
 	{
-		if (_p.type == PacketType::KEEP_ALIVE)
+		if (_p.type == JNetworkPacketType::KEEP_ALIVE)
 		{
-			socket->sendPacket(serverAddr, Packet(PacketType::KEEP_ALIVE));
+			socket->sendPacket(serverAddr, JNetworkPacket(JNetworkPacketType::KEEP_ALIVE));
 			return; //Skip formatting things
 		}
 
-		GotoXY(0, GetConsoleCursorY());
+		//GotoXY(0, GetConsoleCursorY());
 
 		//Process packet
 		switch (_p.type)
 		{
-		case PacketType::SERVER_BC_RESPONSE:
+		case JNetworkPacketType::SERVER_BC_RESPONSE:
 			broadcastFoundServerAddresses.push_back(_addr);
 			break;
-		case PacketType::JOIN_SERVER_ACCEPTED:
-			logR("Successfully joined server");
+		case JNetworkPacketType::JOIN_SERVER_ACCEPTED:
+			//logR("Successfully joined server");
 			connectedToServer = true;
 			break;
-		case PacketType::JOIN_SERVER_DENIED:
-			logR("Username already in use");
+		case JNetworkPacketType::JOIN_SERVER_DENIED:
+			//logR("Username already in use");
 			connectedToServer = false;
 			break;
-		case PacketType::PLEASE_JOIN:
+		case JNetworkPacketType::PLEASE_JOIN:
 			if (connectedToServer)
 			{
 				//We have been removed from server
-				logE("Connection was dropped, please reconnect");
+				//logE("Connection was dropped, please reconnect");
 			}
 			else
 			{
-				logE("Please connect to the server");
+				//logE("Please connect to the server");
 			}
 
 			connectedToServer = false;
@@ -239,42 +183,31 @@ namespace JNetwork
 		{
 			switch (_p.type)
 			{
-			case PacketType::CHAT:
-			{
-				//Find color
-				Color fore = static_cast<Color>((_p.data[0] % 6) + 9);
-
-				log(_p.data, fore);
-			}
 			break;
-			case PacketType::NEW_CLIENT:
-				setR();
-				std::cout << _p.data << " has joined the server!" << std::endl;
+			case JNetworkPacketType::NEW_CLIENT:
+				//setR();
+				//std::cout << _p.data << " has joined the server!" << std::endl;
 				break;
-			case PacketType::CLIENT_DISCONNECT:
-				setR();
-				std::cout << _p.data << " has left the server" << std::endl;
+			case JNetworkPacketType::CLIENT_DISCONNECT:
+				//setR();
+				//std::cout << _p.data << " has left the server" << std::endl;
 				break;
-			case PacketType::CLIENT_LIST:
+			case JNetworkPacketType::CLIENT_LIST:
 				parseClientListPacket(_p);
 				break;
 			}
 		}
 
-		//Reset for command input
-		if (connectedToServer)
-		{
-			ResetTextColor();
-			std::cout << ">>";
-		}
+		//TODO: pass on packet to game
 	}
 
-	bool Client::connect(sockaddr_in _serverAddr, const std::string & _clientName)
+	bool Client::connect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout)
 	{
 		serverAddr = _serverAddr;
 
 		//Send a join packet
-		UDPSocketResponse r = socket->sendPacket(_serverAddr, Packet(PacketType::JOIN_SERVER, _clientName));
+		UDPSocketResponse r = socket->sendPacket(_serverAddr,
+			JNetworkPacket(JNetworkPacketType::JOIN_SERVER, _clientName.c_str()));
 
 		//If join packet unsuccessful, return false
 		if (r != UDPSocketResponse::OK)
@@ -283,7 +216,7 @@ namespace JNetwork
 		}
 
 		//Wait for a period, then check if connected (received a response)
-		std::this_thread::sleep_for(std::chrono::milliseconds(500));
+		std::this_thread::sleep_for(std::chrono::milliseconds(_timeout));
 		if (connectedToServer == false)
 		{
 			return false;

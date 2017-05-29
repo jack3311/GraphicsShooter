@@ -1,4 +1,3 @@
-#include <iostream>
 #include <WS2tcpip.h>
 #include <WinSock2.h>
 
@@ -42,7 +41,7 @@ namespace JNetwork
 		return m_hSocket != INVALID_SOCKET;
 	}
 
-	UDPSocketResponse UDPSocket::sendPacket(const sockaddr_in & _where, const Packet & _packet)
+	UDPSocketResponse UDPSocket::sendPacket(const sockaddr_in & _where, const JNetworkPacket & _packet)
 	{
 		char * data = new char[PACKET_SIZE];
 		_packet.serialize(data);
@@ -68,7 +67,7 @@ namespace JNetwork
 		return UDPSocketResponse::OK;
 	}
 
-	UDPSocketResponse UDPSocket::receivePacket(sockaddr_in & _sourceOut, Packet & _packetOut)
+	UDPSocketResponse UDPSocket::receivePacket(sockaddr_in & _sourceOut, JNetworkPacket & _packetOut)
 	{
 		char * buff = new char[PACKET_SIZE];
 
@@ -76,7 +75,7 @@ namespace JNetwork
 
 		if (r == UDPSocketResponse::OK)
 		{
-			_packetOut = Packet(buff);
+			_packetOut = JNetworkPacket(buff);
 		}
 
 		delete[] buff;
