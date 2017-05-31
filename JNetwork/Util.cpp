@@ -18,7 +18,7 @@ namespace JNetwork
 	{
 		//INET_ADDRSTRLEN - maximum length for IPv4 addresses
 		char _pcAddress[INET_ADDRSTRLEN];
-		inet_ntop(AF_INET, &_sockAddress.sin_addr, _pcAddress, INET_ADDRSTRLEN);
+		inet_ntop(AF_INET, (void *)&_sockAddress.sin_addr, _pcAddress, INET_ADDRSTRLEN);
 
 		std::string _strAddress = _pcAddress;
 		std::string _strPort = std::to_string(ntohs(_sockAddress.sin_port));

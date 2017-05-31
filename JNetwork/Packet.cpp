@@ -15,6 +15,7 @@ namespace JNetwork
 		type = static_cast<JNetworkPacketType>(_netData[0]);
 
 		data = new char[PACKET_SIZE];
+		memset(data, 0, PACKET_SIZE);
 
 		memcpy_s(data, PACKET_SIZE, _netData, PACKET_SIZE);
 	}
@@ -34,23 +35,40 @@ namespace JNetwork
 	{
 		data = new char[PACKET_SIZE];
 		memset(data, 0, PACKET_SIZE);
+		data[0] = _type;
 	}
 
 	JNetworkPacket::JNetworkPacket(const JNetworkPacket & _other)
 	{
 		data = new char[PACKET_SIZE];
-		memcpy_s(data, sizeof(data), _other.data, sizeof(_other.data));
+		memset(data, 0, PACKET_SIZE);
+		memcpy_s(data, PACKET_SIZE, _other.data, PACKET_SIZE);
 
 		type = _other.type;
 	}
 
 	JNetworkPacket::~JNetworkPacket()
 	{
-		delete[] data;
+		if (data != nullptr)
+			delete[] data;
 	}
 
 	void JNetworkPacket::serialize(char * _netData) const
 	{
 		memcpy_s(_netData, PACKET_SIZE, data, PACKET_SIZE);
+	}
+
+	void JNetworkPacket::deserialize(char * _netData)
+	{
+		if (data)
+			delete[] data;
+
+		//Read packet type
+		type = static_cast<JNetworkPacketType>(_netData[0]);
+
+		data = new char[PACKET_SIZE];
+		memset(data, 0, PACKET_SIZE);
+
+		memcpy_s(data, PACKET_SIZE, _netData, PACKET_SIZE);
 	}
 }

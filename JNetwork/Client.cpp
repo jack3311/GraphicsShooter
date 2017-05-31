@@ -7,7 +7,7 @@
 #include "Util.h"
 #include "Packet.h"
 
-//#define PROCESS_PACKETS_ON_NEW_THREADS
+#define PROCESS_PACKETS_ON_NEW_THREADS
 
 namespace JNetwork
 {
@@ -126,6 +126,9 @@ namespace JNetwork
 				JNetworkPacket p(buff);
 
 #ifdef PROCESS_PACKETS_ON_NEW_THREADS
+				//Process packet - use OS thread management
+				//Copy packet for thread - deleted in thread
+				//JNetworkPacket * pCopy = new JNetworkPacket(p);
 				std::thread packetProcessThread(&Client::processPacket, this, p, addr); //Member function so pass this as well
 				packetProcessThread.detach();
 #else
@@ -147,8 +150,6 @@ namespace JNetwork
 
 	void Client::processPacket(JNetworkPacket _p, const sockaddr_in _addr)
 	{
-		
-
 		if (_p.type == JNetworkPacketType::KEEP_ALIVE)
 		{
 			socket->sendPacket(serverAddr, JNetworkPacket(JNetworkPacketType::KEEP_ALIVE));
@@ -207,8 +208,6 @@ namespace JNetwork
 				break;
 			}
 		}
-
-		//TODO: pass on packet to game
 	}
 
 	bool Client::connect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout)

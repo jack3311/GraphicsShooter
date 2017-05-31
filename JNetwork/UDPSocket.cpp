@@ -70,12 +70,13 @@ namespace JNetwork
 	UDPSocketResponse UDPSocket::receivePacket(sockaddr_in & _sourceOut, JNetworkPacket & _packetOut)
 	{
 		char * buff = new char[PACKET_SIZE];
+		memset(buff, 0, PACKET_SIZE);
 
 		UDPSocketResponse r = receiveData(_sourceOut, buff, PACKET_SIZE);
 
 		if (r == UDPSocketResponse::OK)
 		{
-			_packetOut = JNetworkPacket(buff);
+			_packetOut.deserialize(buff);
 		}
 
 		delete[] buff;

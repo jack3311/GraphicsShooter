@@ -10,7 +10,7 @@ namespace JNetwork
 {
 	enum JNetworkPacketType : unsigned __int8
 	{
-		JOIN_SERVER,
+		JOIN_SERVER = 1,
 		JOIN_SERVER_ACCEPTED,
 		JOIN_SERVER_DENIED,
 		NEW_CLIENT,
@@ -39,5 +39,6 @@ namespace JNetwork
 		char * data;
 
 		void serialize(char * _netData) const;
+		void deserialize(char * _netData);
 	};
 }

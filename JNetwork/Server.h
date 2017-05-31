@@ -32,7 +32,7 @@ namespace JNetwork
 
 		virtual void receiveThreadEntry();
 
-		void processPacket(JNetworkPacket _p, const sockaddr_in _addr);
+		void processPacket(JNetworkPacket & _p, const sockaddr_in _addr);
 
 		void sendClientList(const sockaddr_in & _addr);
 

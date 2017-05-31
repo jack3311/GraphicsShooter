@@ -8,7 +8,7 @@
 
 namespace JNetwork
 {
-	//#define PROCESS_PACKETS_ON_NEW_THREAD
+	#define PROCESS_PACKETS_ON_NEW_THREAD
 	#define KEEP_ALIVE_TIME_MILLISECONDS 750
 
 	Server::Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc) : INetworkEntity::INetworkEntity(NetworkEntityType::SERVER, _receivePacketGameFunc)
@@ -98,13 +98,7 @@ namespace JNetwork
 
 			if (r == UDPSocketResponse::OK)
 			{
-				#ifdef PROCESS_PACKETS_ON_NEW_THREAD
-					//Process packet - use OS thread management
-					std::thread packetProcessThread(&Server::processPacket, this, p, addr); //Member function so pass this as well
-					packetProcessThread.detach();
-				#else
-					processPacket(p, addr);
-				#endif
+				processPacket(p, addr);
 			}
 			else /*if (r != UDPSocketResponse::CONNECTION_CLOSED)*/
 			{
@@ -113,7 +107,7 @@ namespace JNetwork
 		}
 	}
 
-	void Server::processPacket(JNetworkPacket _p, const sockaddr_in _addr)
+	void Server::processPacket(JNetworkPacket & _p, const sockaddr_in _addr)
 	{
 		//Process received packets:
 
