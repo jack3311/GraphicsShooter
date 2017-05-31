@@ -23,17 +23,16 @@
 #include "Camera.h" 
 #include "Object.h"
 #include "Light.h"
+#include "GameWorld.h"
 
 #include "Dependencies\glm\glm.hpp"
 #include "Dependencies\glm\gtc\matrix_transform.hpp"
 #include "Dependencies\glm\gtx\projection.hpp"
 
-#include <sstream>
-
 
 ScenePlay::ScenePlay()
 {
-	ambientStrength = 0.0f;
+	ambientStrength = 1.0f;
 	ambientColor = glm::vec3(1.f, 0.8f, 0.8f);
 	specularStrength = 1.f;
 
@@ -75,13 +74,16 @@ void ScenePlay::render() const
 {
 	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(100.f, 100.f, 100.f)));
 
-
-	//Object o = Object(glm::vec3(0, 0, 0), glm::vec3(1.f, 1.f, 1.f));
-
 	for (auto player : players)
 	{
 		modelRendererTest->draw(Game::getGame()->getCamera(), player->getModelMatrix(), *this);
 	}
+
+	auto & gw = Game::getGame()->getGameWorld();
+
+
+
+	modelRendererTest->draw(Game::getGame()->getCamera(), gw.testObject->getModelMatrix(), *this);
 }
 
 void ScenePlay::update(float _dt)
@@ -128,18 +130,26 @@ void ScenePlay::update(float _dt)
 	}
 
 
+	//Update game world
+	Game::getGame()->getGameWorld().update(_dt);
+
+
+
+
+
 
 	//Camera settings
 	Game & g = *Game::getGame();
 
-	//g.getCamera().setPosition(glm::vec3(-3.0f, 7.0f, 5.f));
-
 	auto offset = glm::cross(facing2D, glm::vec3(0, 1, 0)) * 2.f + glm::vec3(0.f, 3.5f, 0);
-
 	g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 8.f);
-
 	g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 800.f);
-	//g.getCamera().setLookAt(thisPlayer->getPosition() + 0.5f * offset + facing2D * 8.f);
+
+
+
+	/*g.getCamera().setLookAt(glm::vec3(0, 0, 0));
+	g.getCamera().setPosition(glm::vec3(-30.0f, 70.0f, 50.f));*/
+
 
 	Game::getGame()->getCamera().updateCamera();
 

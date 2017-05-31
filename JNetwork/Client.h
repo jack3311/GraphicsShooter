@@ -23,7 +23,7 @@ namespace JNetwork
 		std::vector<sockaddr_in> broadcastFoundServerAddresses;
 
 	public:
-		Client();
+		Client(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc);
 		virtual ~Client();
 
 		virtual void start();

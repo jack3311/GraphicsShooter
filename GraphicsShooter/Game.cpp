@@ -21,6 +21,8 @@
 #include "Input.h"
 #include "ShaderLoader.h"
 #include "AssetManager.h"
+#include "Logger.h"
+#include "GameWorld.h"
 
 
 Game * Game::game = nullptr;
@@ -53,16 +55,6 @@ Camera & Game::getCamera()
 	return *camera;
 }
 
-SpriteRenderer & Game::getTexturedSpriteRenderer()
-{
-	return *texturedSpriteRenderer;
-}
-
-const GLuint & Game::getTexturedSpriteShader()
-{
-	return texturedSpriteShader;
-}
-
 void Game::fpsCounter()
 {
 	static int lastTime = 0;
@@ -84,7 +76,7 @@ void Game::render()
 	glEnable(GL_DEPTH_TEST);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 1.0, 0.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	SceneManager::getSceneManager().render();
 
@@ -112,20 +104,15 @@ void Game::update()
 
 void Game::init(int _windowWidth, int _windowHeight)
 {
+	Logger::getLogger().log("Initializing game");
+
 	windowWidth = _windowWidth;
 	windowHeight = _windowHeight;
 
 	//wglSwapIntervalEXT(0); //Disable vsync
 
 	camera = new Camera(glm::vec2(0, 0));
-
-	//LOAD SHADER
-	ShaderLoader shaderLoader;
-	texturedSpriteShader = shaderLoader.CreateProgram("Shaders/texturedSpriteShader.vert", "Shaders/texturedSpriteShader.frag");
-
-	texturedSpriteRenderer = new SpriteRenderer(texturedSpriteShader);
-	texturedSpriteRenderer->Initialise();
-
+	
 	AssetManager::getAssetManager().initSound();
 
 	loadAssets();
@@ -156,25 +143,22 @@ bool Game::hasFinishedLoading() const
 	return finishedLoading;
 }
 
+void Game::createGameWorld(bool _isServer)
+{
+	Logger::getLogger().log("Creating game world as ", (_isServer ? "server" : "client"));
+	gameWorld = new GameWorld(_isServer);
+}
+
+GameWorld & Game::getGameWorld() const
+{
+	return *gameWorld;
+}
+
 void Game::loadAssets()
 {
-	AssetManager::getAssetManager().loadTexture("star", "Assets/Textures/Star.png", true);
-	
-	AssetManager::getAssetManager().loadTexture("laser-1", "Assets/Textures/laser/1.png", true);
-	AssetManager::getAssetManager().loadTexture("laser-2", "Assets/Textures/laser/2.png", true);
-
-	AssetManager::getAssetManager().loadTexture("bullet1", "Assets/Textures/bullet1.png", true);
-	AssetManager::getAssetManager().loadTexture("bullet2", "Assets/Textures/bullet2.png", true);
-
-	AssetManager::getAssetManager().loadTexture("ship1", "Assets/Textures/playerShip2_blue.png", true);
-	AssetManager::getAssetManager().loadTexture("enemy1", "Assets/Textures/enemyRed2.png", true);
-	AssetManager::getAssetManager().loadTexture("boss", "Assets/Textures/ufoYellow.png", true);
+	Logger::getLogger().log("Loading assets");
 
 	AssetManager::getAssetManager().loadTexture("black", "Assets/Textures/black.jpg");
-
-	AssetManager::getAssetManager().loadTexture("planet1", "Assets/Textures/planets/1.png", true);
-	AssetManager::getAssetManager().loadTexture("planet2", "Assets/Textures/planets/2.png", true);
-	AssetManager::getAssetManager().loadTexture("planet3", "Assets/Textures/planets/3.png", true);
 
 	AssetManager::getAssetManager().loadCubeMap("skybox1", std::vector<std::string>{
 			"Assets/Textures/envmap_miramar/miramar_rt.png",

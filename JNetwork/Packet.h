@@ -32,6 +32,7 @@ namespace JNetwork
 		JNetworkPacket(const char * _netData);
 		JNetworkPacket(JNetworkPacketType _type, const char * _data);
 		JNetworkPacket(JNetworkPacketType _type);
+		JNetworkPacket(const JNetworkPacket & _other);
 		~JNetworkPacket();
 
 		JNetworkPacketType type;

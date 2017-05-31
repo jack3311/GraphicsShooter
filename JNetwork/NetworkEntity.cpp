@@ -4,7 +4,7 @@
 
 namespace JNetwork
 {
-	INetworkEntity::INetworkEntity(NetworkEntityType _type) : type(_type), active(false)
+	INetworkEntity::INetworkEntity(NetworkEntityType _type, std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc) : type(_type), active(false), receivePacketGameFunc(_receivePacketGameFunc)
 	{
 		socket = new UDPSocket();
 	}

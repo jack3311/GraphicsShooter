@@ -7,9 +7,11 @@
 #include "Util.h"
 #include "Packet.h"
 
+//#define PROCESS_PACKETS_ON_NEW_THREADS
+
 namespace JNetwork
 {
-	Client::Client() : INetworkEntity(NetworkEntityType::CLIENT), connectedToServer(false)
+	Client::Client(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc) : INetworkEntity(NetworkEntityType::CLIENT, _receivePacketGameFunc), connectedToServer(false)
 	{
 	}
 
@@ -51,6 +53,9 @@ namespace JNetwork
 			if (current.size() != 0)
 				nameList.push_back(current);
 		}
+
+		//TODO: set member variable or something
+
 
 		//Display clients
 		//std::cout << std::endl;
@@ -121,7 +126,7 @@ namespace JNetwork
 				JNetworkPacket p(buff);
 
 #ifdef PROCESS_PACKETS_ON_NEW_THREADS
-				std::thread packetProcessThread(&Server::processPacket, this, p, addr); //Member function so pass this as well
+				std::thread packetProcessThread(&Client::processPacket, this, p, addr); //Member function so pass this as well
 				packetProcessThread.detach();
 #else
 				processPacket(p, addr);
@@ -142,6 +147,8 @@ namespace JNetwork
 
 	void Client::processPacket(JNetworkPacket _p, const sockaddr_in _addr)
 	{
+		
+
 		if (_p.type == JNetworkPacketType::KEEP_ALIVE)
 		{
 			socket->sendPacket(serverAddr, JNetworkPacket(JNetworkPacketType::KEEP_ALIVE));
@@ -194,6 +201,9 @@ namespace JNetwork
 				break;
 			case JNetworkPacketType::CLIENT_LIST:
 				parseClientListPacket(_p);
+				break;
+			case JNetworkPacketType::UPDATE:
+				receivePacketGameFunc(_p, _addr);
 				break;
 			}
 		}

@@ -26,4 +26,29 @@ namespace JNetwork
 
 		return _strAddressPort;
 	}
+
+	bool initWSA()
+	{
+		WSADATA wsaData;
+		int error;
+		if (WSAStartup(0x0202, &wsaData) != 0)
+		{
+			error = WSAGetLastError();
+			//std::cout << "Error starting WSA: code" << error << std::endl;
+			return false;
+		}
+		return true;
+	}
+
+	bool shutdownWSA()
+	{
+		int error;
+		if (WSACleanup() != 0)
+		{
+			error = WSAGetLastError();
+			//std::cout << "Error closing WSA: code" << error << std::endl;
+			return false;
+		}
+		return true;
+	}
 }

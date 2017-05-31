@@ -1,5 +1,6 @@
 #include "Packet.h"
 
+#include <iostream>
 #include <string>
 
 namespace JNetwork
@@ -12,6 +13,8 @@ namespace JNetwork
 	{
 		//Read packet type
 		type = static_cast<JNetworkPacketType>(_netData[0]);
+
+		data = new char[PACKET_SIZE];
 
 		memcpy_s(data, PACKET_SIZE, _netData, PACKET_SIZE);
 	}
@@ -33,6 +36,14 @@ namespace JNetwork
 		memset(data, 0, PACKET_SIZE);
 	}
 
+	JNetworkPacket::JNetworkPacket(const JNetworkPacket & _other)
+	{
+		data = new char[PACKET_SIZE];
+		memcpy_s(data, sizeof(data), _other.data, sizeof(_other.data));
+
+		type = _other.type;
+	}
+
 	JNetworkPacket::~JNetworkPacket()
 	{
 		delete[] data;
@@ -40,6 +51,6 @@ namespace JNetwork
 
 	void JNetworkPacket::serialize(char * _netData) const
 	{
-		memcpy_s(_netData, sizeof(_netData), data, PACKET_SIZE);
+		memcpy_s(_netData, PACKET_SIZE, data, PACKET_SIZE);
 	}
 }

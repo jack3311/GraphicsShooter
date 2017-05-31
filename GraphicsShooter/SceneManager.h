@@ -21,6 +21,7 @@
 
 #include "Camera.h"
 #include "SpriteRenderer.h"
+#include "Logger.h"
 
 class Scene;
 
@@ -60,6 +61,8 @@ public:
 template<typename T, typename ...Args>
 inline void SceneManager::initScene(Args & ..._args)
 {
+	Logger::getLogger().log("Initilizing scene: ", typeid(T).name());
+
 	T* scene = new T();
 	scene->reset(_args...);
 	sceneMap[typeid(T)] = scene;
@@ -68,13 +71,17 @@ inline void SceneManager::initScene(Args & ..._args)
 template<typename T, typename ...Args>
 inline void SceneManager::activate(Args & ..._args)
 {
-	currentScene = sceneMap[typeid(T)];
+	//currentScene = sceneMap[typeid(T)];
 	dynamic_cast<T*>(currentScene)->reset(_args...);
+
+	activateWithoutReset<T>(_args...);
 }
 
 template<typename T, typename ...Args>
 inline void SceneManager::activateWithoutReset(Args & ..._args)
 {
+	Logger::getLogger().log("Activating scene: ", typeid(T).name());
+
 	currentScene = sceneMap[typeid(T)];
 }
 

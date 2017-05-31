@@ -20,6 +20,63 @@
 #include "Dependencies\glm\gtx\projection.hpp"
 
 #include <vector>
+#include <string>
+#include <cassert>
+
+template <typename Target>
+void fromData(char * _in, Target * _out)
+{
+	auto p = reinterpret_cast<Target *>(_in);
+	memcpy_s(_out, sizeof(_out), p, sizeof(p));
+
+	/*assert(sizeof(_in) >= sizeof(Target));
+
+	union
+	{
+		char data[sizeof(Target)];
+		Target conversion;
+	} conversionUnion;
+
+	//Copy 1: into union
+	memcpy_s(conversionUnion.data, sizeof(Target), _in, sizeof(Target));
+
+	//Copy 2: out of union
+	memcpy_s(_out, sizeof(Target), &conversionUnion.conversion, sizeof(Target));*/
+}
+
+template <typename Target>
+void toData(char * _out, Target * _in)
+{
+	auto p = reinterpret_cast<char *>(_in);
+	memcpy_s(_out, sizeof(_out), p, sizeof(p));
+
+	/*assert(sizeof(_out) >= sizeof(Target));
+
+	union
+	{
+		char data[sizeof(Target)];
+		Target conversion;
+	} conversionUnion;
+
+	//Copy 1: into union
+	memcpy_s(&conversionUnion.conversion, sizeof(Target), _in, sizeof(Target));
+
+	//Copy 2: out of union
+	memcpy_s(_out, sizeof(Target), conversionUnion.data, sizeof(Target));*/
+}
+
+
+template <typename T, typename... Args>
+std::string concatenate(T _first, Args ..._args)
+{
+	return std::string(_first) + concatenate(_args...);
+}
+
+template <typename T>
+std::string concatenate(T _first)
+{
+	return std::string(_first);
+}
 
 template <typename T>
 T clamp(T _min, T _val, T _max)

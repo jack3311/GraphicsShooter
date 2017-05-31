@@ -1,3 +1,5 @@
+#pragma comment(lib,"Ws2_32.lib")
+
 //
 //  Bachelor of Game Development
 //  Media Design School
@@ -18,6 +20,8 @@
 #include "Dependencies\freeglut\freeglut.h"
 
 #include "Game.h"
+
+#include "JNetwork\Util.h"
 
 #define START_WINDOW_WIDTH 800
 #define START_WINDOW_HEIGHT 600
@@ -45,6 +49,8 @@ void reshape(int _width, int _height)
 
 int main(int argc, char ** argv)
 {
+	JNetwork::initWSA();
+
 	srand(static_cast<unsigned int>(time(0)));
 
 	g_game = Game::createGame();
@@ -64,5 +70,6 @@ int main(int argc, char ** argv)
 	glutIdleFunc(update);
 	glutMainLoop();
 
+	JNetwork::shutdownWSA();
 	return 0;
 }

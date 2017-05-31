@@ -1,0 +1,7 @@
+31-05-2017 17-12-12: 	Initializing game
+31-05-2017 17-12-12: 	Loading assets
+31-05-2017 17-12-12: 	Initilizing scene: class SceneMenu
+31-05-2017 17-12-14: 	Creating game world as server
+31-05-2017 17-12-14: 	Starting network entity
+31-05-2017 17-12-14: 	Initilizing scene: class ScenePlay
+31-05-2017 17-12-18: 	Activating scene: class SceneMenu

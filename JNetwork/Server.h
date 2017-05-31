@@ -34,18 +34,19 @@ namespace JNetwork
 
 		void processPacket(JNetworkPacket _p, const sockaddr_in _addr);
 
-		void sendToAll(const JNetworkPacket & _p);
-		void Server::sendToAllExcept(const JNetworkPacket & _p, const std::string & _name);
-
 		void sendClientList(const sockaddr_in & _addr);
 
 		void keepAliveThreadEntry();
 
 	public:
-		Server();
+		Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc);
 		virtual ~Server();
 
 		virtual void start();
 		virtual void stop();
+
+
+		void sendToAll(const JNetworkPacket & _p);
+		void Server::sendToAllExcept(const JNetworkPacket & _p, const std::string & _name);
 	};
 }

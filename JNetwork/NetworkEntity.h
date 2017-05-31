@@ -24,11 +24,12 @@ namespace JNetwork
 	protected:
 		UDPSocket * socket;
 
+		std::function<void(JNetworkPacket &, const sockaddr_in &)> receivePacketGameFunc;
 
 		bool active;
 
 	public:
-		INetworkEntity(NetworkEntityType _type);
+		INetworkEntity(NetworkEntityType _type, std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc);
 		~INetworkEntity();
 
 		virtual void start();

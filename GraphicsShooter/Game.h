@@ -20,6 +20,7 @@
 
 class SpriteRenderer;
 class Camera;
+class GameWorld;
 
 class Game
 {
@@ -30,10 +31,7 @@ private:
 	Game(const Game &) = delete;
 	~Game();
 
-	SpriteRenderer * texturedSpriteRenderer;
 	Camera * camera;
-
-	GLuint texturedSpriteShader;
 
 	int numFrames = 0;
 
@@ -44,6 +42,8 @@ private:
 
 	bool finishedLoading = false;
 
+	GameWorld * gameWorld = nullptr;
+
 public:
 	int windowID;
 
@@ -52,9 +52,6 @@ public:
 	static Game * createGame();
 
 	Camera & getCamera();
-	SpriteRenderer & getTexturedSpriteRenderer();
-
-	const GLuint & getTexturedSpriteShader();
 
 	void render();
 	void update();
@@ -66,5 +63,8 @@ public:
 	void setWindowDimensions(int _width, int _height);
 
 	bool hasFinishedLoading() const;
+
+	void createGameWorld(bool _isServer);
+	GameWorld & getGameWorld() const;
 };
 

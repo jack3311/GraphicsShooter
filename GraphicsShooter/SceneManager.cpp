@@ -25,7 +25,7 @@ SceneManager::SceneManager()
 	initScene<SceneMenu>();
 	initScene<ScenePlay>();
 
-	activate<SceneMenu>();
+	activateWithoutReset<SceneMenu>();
 }
 
 
