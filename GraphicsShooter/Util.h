@@ -65,6 +65,10 @@ void toData(char * _out, Target * _in)
 	memcpy_s(_out, sizeof(Target), conversionUnion.data, sizeof(Target));*/
 }
 
+void floatToChar(float _in, char _out[sizeof(float)]);
+
+float charToFloat(char _in[sizeof(float)]);
+
 
 template <typename T, typename... Args>
 std::string concatenate(T _first, Args ..._args)

@@ -14,6 +14,29 @@
 
 #include "Util.h"
 
+void floatToChar(float _in, char _out[sizeof(float)])
+{
+	union {
+		float a;
+		char b[sizeof(float)];
+	} conversionUnion;
+
+	conversionUnion.a = _in;
+	memcpy_s(_out, sizeof(_out), conversionUnion.b, sizeof(conversionUnion.b));
+}
+
+float charToFloat(char _in[sizeof(float)])
+{
+	union {
+		float a;
+		char b[sizeof(float)];
+	} conversionUnion;
+
+	memcpy_s(conversionUnion.b, sizeof(conversionUnion.b), _in, sizeof(_in));
+
+	return conversionUnion.a;
+}
+
 void Util::CreateQuad(std::vector<TexturedVertexFormat>& _rVertices, std::vector<GLuint>& _rIndices, float _fWidth, float _fHeight)
 {
 	_rVertices = {

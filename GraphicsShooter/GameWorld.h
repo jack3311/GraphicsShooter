@@ -1,6 +1,7 @@
 #pragma once
 
 #include <queue>
+#include <mutex>
 
 #include "JNetwork\NetworkEntity.h"
 #include "JNetwork\UDPSocket.h"
@@ -14,6 +15,7 @@ private:
 
 	JNetwork::INetworkEntity * networkEntity;
 
+	std::mutex clientPacketQueueMutex;
 	std::queue<std::pair<JNetwork::JNetworkPacket, sockaddr_in>> clientPacketQueue;
 
 public:
