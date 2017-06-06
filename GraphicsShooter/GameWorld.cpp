@@ -41,6 +41,8 @@ GameWorld::~GameWorld()
 
 void GameWorld::update(float _dt)
 {
+	timeSinceReloadStart += _dt;
+
 	//Update bullets
 	for (auto bullet : bullets)
 	{
@@ -54,6 +56,8 @@ void GameWorld::update(float _dt)
 
 		glm::vec3 delta = player->getPosition() - enemy->getPosition();
 		glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
+		
+		
 		if (length2(enemy->getPosition() + delScl - player->getPosition()) < 9)
 		{
 			enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * 3.f);
@@ -64,6 +68,11 @@ void GameWorld::update(float _dt)
 		{
 			enemy->move(delScl);
 		}
+
+
+
+
+
 
 		for (auto enemy1 : enemies)
 		{
@@ -129,13 +138,32 @@ Object * GameWorld::getPlayer()
 
 void GameWorld::playerFire()
 {
-	auto facing2D = -glm::vec3(player->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
+	//Check if reload is finished
+	if (timeSinceReloadStart >= RELOAD_TIME && playerAmmo == 0)
+	{
+		playerAmmo = CLIP_SIZE;
+	}
 
-	PhysicsObject * bullet = new PhysicsObject(player->getPosition(), glm::vec3(1, 1, 1));
-	bullet->move(facing2D * 0.5f + glm::vec3(0, 1, 0));
-	bullet->setVelocity(facing2D * BULLET_MAX_SPEED);
+	if (playerAmmo > 0)
+	{
+		auto facing2D = -glm::vec3(player->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
 
-	bullets.push_back(bullet);
+		PhysicsObject * bullet = new PhysicsObject(player->getPosition(), glm::vec3(0.4, 0.4, 0.4));
+		bullet->move(facing2D * 0.5f + glm::vec3(0, 1, 0));
+		bullet->setVelocity(facing2D * BULLET_MAX_SPEED);
+
+		bullets.push_back(bullet);
+
+
+		//Start reload if this is last bullet
+		if (playerAmmo == 1)
+		{
+			timeSinceReloadStart = 0.f;
+		}
+		
+		//Reduce ammo
+		--playerAmmo;
+	}
 }
 
 //void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)

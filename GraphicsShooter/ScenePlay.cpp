@@ -32,9 +32,9 @@
 
 ScenePlay::ScenePlay()
 {
-	ambientStrength = 1.0f;
+	ambientStrength = 0.6f;
 	ambientColor = glm::vec3(1.f, 0.8f, 0.8f);
-	specularStrength = 1.f;
+	specularStrength = 0.8f;
 
 	ShaderLoader sl;
 	GLuint shader = sl.CreateProgram("Shaders/texturedNormalsShader.vert",
@@ -58,10 +58,14 @@ ScenePlay::ScenePlay()
 	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
 	enemy1Renderer->initialize();
 
-	bulletRenderer = new ModelRenderer(shader, 0.0f);
-	bulletRenderer->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
-	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
-	bulletRenderer->initialize();
+
+	std::vector<TexturedNormalsVertexFormat> tempBulletVertices;
+	std::vector<GLuint> tempBulletIndices;
+	Util::CreateSphere(tempBulletVertices, tempBulletIndices);
+	//Util::CreateTexturedNormalsCube(tempBulletVertices, tempBulletIndices);
+	bulletRenderer = new MeshRenderer(shader, tempBulletVertices, tempBulletIndices,
+		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
+	bulletRenderer->Initialise();
 
 
 
@@ -85,7 +89,7 @@ void ScenePlay::render() const
 	auto & gw = Game::getGame()->getGameWorld();
 
 	//Render skybox
-	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(100.f, 100.f, 100.f)));
+	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(10000.f, 10000.f, 10000.f)));
 
 	//Render player
 	playerRenderer->draw(Game::getGame()->getCamera(), gw.getPlayer()->getModelMatrix(), *this);
@@ -99,7 +103,7 @@ void ScenePlay::render() const
 	//Render bullets
 	for (auto bullet : gw.getBullets())
 	{
-		bulletRenderer->draw(Game::getGame()->getCamera(), bullet->getModelMatrix(), *this);
+		bulletRenderer->DrawMesh(Game::getGame()->getCamera(), bullet->getModelMatrix(), *this, 0.0f);
 	}
 }
 

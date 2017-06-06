@@ -28,6 +28,7 @@
 
 class Light;
 class Camera;
+class ScenePlay;
 
 class MeshRenderer
 {
@@ -55,8 +56,7 @@ public:
 
 	void Initialise();
 
-	void DrawMesh(const Camera & _camera, const glm::mat4 & _model,
-		const std::vector<Light*>& _lights, const int & _numLights, const float & _ambientStrength, const glm::vec3 _ambientColor, const float & _specularStrength) const;
+	void DrawMesh(const Camera & _camera, const glm::mat4 & _model, const ScenePlay & _scenePlay, const float & _reflectionStrength) const;
 	void DrawMeshSimple() const;
 };
 

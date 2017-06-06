@@ -6,6 +6,7 @@ class PhysicsObject :
 {
 private:
 	glm::vec3 velocity;
+	float lifetime = 0.f;
 
 public:
 	PhysicsObject(glm::vec3 & _position, glm::vec3 & _scale, glm::mat4 & _rotation = glm::mat4());

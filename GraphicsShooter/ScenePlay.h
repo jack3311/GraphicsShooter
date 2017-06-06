@@ -32,7 +32,7 @@ private:
 
 	ModelRenderer * playerRenderer;
 	ModelRenderer * enemy1Renderer;
-	ModelRenderer * bulletRenderer;
+	MeshRenderer * bulletRenderer;
 
 	SkyboxRenderer * skyboxRenderer;
 

@@ -64,7 +64,9 @@
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PhysicsObject.cpp" />
+    <ClCompile Include="PhysicsObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h">
@@ -130,7 +132,9 @@
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="PhysicsObject.h" />
+    <ClInclude Include="PhysicsObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\texturedSpriteShader.vert">

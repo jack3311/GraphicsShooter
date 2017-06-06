@@ -22,4 +22,5 @@ void PhysicsObject::setVelocity(glm::vec3 _velocity)
 void PhysicsObject::update(float _dt)
 {
 	move(velocity * _dt);
+	lifetime += _dt;
 }

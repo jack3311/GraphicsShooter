@@ -4,8 +4,8 @@
 
 #include "Light.h"
 #include "Camera.h"
-
 #include "AssetManager.h"
+#include "ScenePlay.h"
 
 
 MeshRenderer::MeshRenderer(GLuint _shader, std::vector<TexturedNormalsVertexFormat> _vertices, std::vector<GLuint> _indices, std::vector<ModelTextureInfo> _textures) : m_Shader(_shader)
@@ -52,8 +52,7 @@ void MeshRenderer::Initialise()
 }
 
 //When not using ModelRenderer
-void MeshRenderer::DrawMesh(const Camera & _camera, const glm::mat4 & _model, 
-	const std::vector<Light*>& _lights, const int & _numLights, const float & _ambientStrength, const glm::vec3 _ambientColor, const float & _specularStrength) const
+void MeshRenderer::DrawMesh(const Camera & _camera, const glm::mat4 & _model, const ScenePlay & _scenePlay, const float & _reflectionStrength) const
 {
 	glUseProgram(m_Shader);
 
@@ -69,41 +68,59 @@ void MeshRenderer::DrawMesh(const Camera & _camera, const glm::mat4 & _model,
 
 	//Lighting
 
-	glm::vec3 * lightPositions = new glm::vec3[_numLights];
-	glm::vec3 * lightColors = new glm::vec3[_numLights];
-	for (int l = 0; l < _numLights; ++l)
+	unsigned int numLights = _scenePlay.getNumLights();
+	auto lights = _scenePlay.getLights();
+
+	glm::vec3 * lightPositions = new glm::vec3[numLights];
+	glm::vec3 * lightColors = new glm::vec3[numLights];
+	for (unsigned int l = 0; l < numLights; ++l)
 	{
-		lightPositions[l] = _lights[l]->getPosition();
-		lightColors[l] = _lights[l]->getColor();
+		lightPositions[l] = lights[l]->getPosition();
+		lightColors[l] = lights[l]->getColor();
 	}
 
 	GLuint uniformLightPos1Location = glGetUniformLocation(m_Shader, "lightPositions");
-	glUniform3fv(uniformLightPos1Location, _numLights, glm::value_ptr(lightPositions[0]));
+	glUniform3fv(uniformLightPos1Location, numLights, glm::value_ptr(lightPositions[0]));
 
 	GLuint uniformLightCol1Location = glGetUniformLocation(m_Shader, "lightColors");
-	glUniform3fv(uniformLightCol1Location, _numLights, glm::value_ptr(lightColors[0]));
+	glUniform3fv(uniformLightCol1Location, numLights, glm::value_ptr(lightColors[0]));
 
 	delete[] lightPositions;
 	delete[] lightColors;
 
 	GLuint uniformNumLightsLocation = glGetUniformLocation(m_Shader, "numLights");
-	glUniform1i(uniformNumLightsLocation, _numLights);
-
+	glUniform1i(uniformNumLightsLocation, numLights);
 
 	GLuint uniformCamPos = glGetUniformLocation(m_Shader, "camPos");
 	glUniform3fv(uniformCamPos, 1, glm::value_ptr(_camera.getPosition()));
 
 	GLuint uniformAmbientStrengthLocation = glGetUniformLocation(m_Shader, "ambientStrength");
-	glUniform1f(uniformAmbientStrengthLocation, _ambientStrength);
+	glUniform1f(uniformAmbientStrengthLocation, _scenePlay.getAmbientStrength());
 
 	GLuint uniformAmbientColLocation = glGetUniformLocation(m_Shader, "ambientCol");
-	glUniform3fv(uniformAmbientColLocation, 1, glm::value_ptr(_ambientColor));
+	glUniform3fv(uniformAmbientColLocation, 1, glm::value_ptr(_scenePlay.getAmbientColor()));
 
 	GLuint uniformSpecularStrength = glGetUniformLocation(m_Shader, "specularStrength");
-	glUniform1f(uniformSpecularStrength, _specularStrength);
+	glUniform1f(uniformSpecularStrength, _scenePlay.getSpecularStrength());
+
+
+	//Reflections:
+
+	GLuint uniformReflectionStrengthLocation = glGetUniformLocation(m_Shader, "reflectionStrength");
+	glUniform1f(uniformReflectionStrengthLocation, _reflectionStrength);
+
+
+	//Assign skybox tex
+	glActiveTexture(GL_TEXTURE0);
+	glUniform1i(glGetUniformLocation(m_Shader, "skybox"), 0);
+	glBindTexture(GL_TEXTURE_2D, _scenePlay.getSkyboxCubemap());
+
+	//Assign normal texture
+	glActiveTexture(GL_TEXTURE1);
+	glUniform1i(glGetUniformLocation(m_Shader, "texture_0_0"), 1);
+	glBindTexture(GL_TEXTURE_2D, texture);
 
 	//Draw
-
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	glBindVertexArray(m_QuadVAO);

@@ -19,7 +19,7 @@
 
 #define VERTICAL_SCALE 1280
 #define Z_NEAR 0.001f
-#define Z_FAR 10000.f
+#define Z_FAR 100000.f
 
 class Camera
 {

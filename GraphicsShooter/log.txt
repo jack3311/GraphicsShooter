@@ -1,7 +1,7 @@
-06-06-2017 12-23-03: 	Initializing game
-06-06-2017 12-23-03: 	Loading assets
-06-06-2017 12-23-03: 	Initilizing scene: class SceneMenu
-06-06-2017 12-23-03: 	Creating game world
-06-06-2017 12-23-03: 	Initilizing scene: class ScenePlay
-06-06-2017 12-23-10: 	Activating scene: class SceneMenu
-06-06-2017 12-23-11: 	Activating scene: class ScenePlay
+07-06-2017 10-00-31: 	Initializing game
+07-06-2017 10-00-31: 	Loading assets
+07-06-2017 10-00-32: 	Initilizing scene: class SceneMenu
+07-06-2017 10-00-32: 	Creating game world
+07-06-2017 10-00-32: 	Initilizing scene: class ScenePlay
+07-06-2017 10-00-40: 	Activating scene: class SceneMenu
+07-06-2017 10-00-41: 	Activating scene: class ScenePlay

@@ -9,8 +9,10 @@
 #include "Object.h"
 #include "PhysicsObject.h"
 
-#define ENEMY1_MAX_SPEED 5.f
-#define BULLET_MAX_SPEED 20.f
+#define ENEMY1_MAX_SPEED 0.f//5.f
+#define BULLET_MAX_SPEED 0.f//40.f
+#define RELOAD_TIME 2.f
+#define CLIP_SIZE 10
 
 class GameWorld
 {
@@ -28,6 +30,9 @@ private:
 	std::vector<PhysicsObject *> bullets;
 
 	Object * player;
+
+	unsigned int playerAmmo = CLIP_SIZE;
+	float timeSinceReloadStart = 0.f;
 
 public:
 	GameWorld(/*bool _isServer*/);
