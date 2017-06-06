@@ -53,47 +53,49 @@ void SceneMenu::update(float _dt)
 
 void SceneMenu::reset()
 {
-	//TODO: Change to actual menu....
-	std::cout << "Client or server? " << std::endl;
-	int input;
-	std::cin >> input;
+	Game::getGame()->createGameWorld();
 
-	Game::getGame()->createGameWorld(input == 1);
-
-	Logger::getLogger().log("Starting network entity");
-	Game::getGame()->getGameWorld().startNetwork();
-
-	if (!Game::getGame()->getGameWorld().getIsServer())
-	{
-		auto _client = dynamic_cast<JNetwork::Client *>(Game::getGame()->getGameWorld().getNetworkEntity());
-
-
-
-
-		_client->broadcastForServers(5000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		
-		auto serverList = _client->getBroadcastFoundServers();
-		std::cout << "Found " << serverList.size() << " server" << (serverList.size() > 1 ? "s" : "") << ": " << std::endl;
-		for (unsigned int i = 0; i < serverList.size(); ++i)
-		{
-			std::cout << i + 1 << ": " << JNetwork::addrToString(serverList[i]) << std::endl;
-		}
-		
-		std::cout << "Please enter the number corresponding to the server which you wish to join";
-					
-		int chosen;
-		std::cin >> chosen;
-		--chosen;
-		
-		auto serverAddr = serverList[chosen];
-
-
-
-
-		if (Game::getGame()->getGameWorld().clientConnect(serverAddr, "Jack", 5000))
-		{
-			Logger::getLogger().log("Connected to server successfully");
-		}
-	}
+//	//TODO: Change to actual menu....
+//	std::cout << "Client or server? " << std::endl;
+//	int input;
+//	std::cin >> input;
+//
+//	Game::getGame()->createGameWorld(input == 1);
+//
+//	Logger::getLogger().log("Starting network entity");
+//	Game::getGame()->getGameWorld().startNetwork();
+//
+//	if (!Game::getGame()->getGameWorld().getIsServer())
+//	{
+//		auto _client = dynamic_cast<JNetwork::Client *>(Game::getGame()->getGameWorld().getNetworkEntity());
+//
+//
+//
+//
+//		_client->broadcastForServers(5000);
+//		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+//		
+//		auto serverList = _client->getBroadcastFoundServers();
+//		std::cout << "Found " << serverList.size() << " server" << (serverList.size() > 1 ? "s" : "") << ": " << std::endl;
+//		for (unsigned int i = 0; i < serverList.size(); ++i)
+//		{
+//			std::cout << i + 1 << ": " << JNetwork::addrToString(serverList[i]) << std::endl;
+//		}
+//		
+//		std::cout << "Please enter the number corresponding to the server which you wish to join";
+//					
+//		int chosen;
+//		std::cin >> chosen;
+//		--chosen;
+//		
+//		auto serverAddr = serverList[chosen];
+//
+//
+//
+//
+//		if (Game::getGame()->getGameWorld().clientConnect(serverAddr, "Jack", 5000))
+//		{
+//			Logger::getLogger().log("Connected to server successfully");
+//		}
+//	}
 }

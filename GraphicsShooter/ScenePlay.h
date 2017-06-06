@@ -30,7 +30,10 @@ class ScenePlay :
 private:
 	float elapsedTime = 0.f;
 
-	ModelRenderer * modelRendererTest;
+	ModelRenderer * playerRenderer;
+	ModelRenderer * enemy1Renderer;
+	ModelRenderer * bulletRenderer;
+
 	SkyboxRenderer * skyboxRenderer;
 
 	std::vector<Light *> lights;
@@ -39,7 +42,7 @@ private:
 	glm::vec3 ambientColor;
 	float specularStrength;
 
-	std::vector<Object *> players;
+	bool spaceBarLastFrame = false;
 
 public:
 	ScenePlay();

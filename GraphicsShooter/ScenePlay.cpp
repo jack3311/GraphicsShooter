@@ -48,10 +48,21 @@ ScenePlay::ScenePlay()
 	meshRendererTest->Initialise();*/
 
 
-	modelRendererTest = new ModelRenderer(shader, 0.0f);
-	modelRendererTest->loadFromFile("Assets/Models/tank1/Abrams_BF3.obj");
+	playerRenderer = new ModelRenderer(shader, 0.0f);
+	playerRenderer->loadFromFile("Assets/Models/tank1/Abrams_BF3.obj");
 	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
-	modelRendererTest->initialize();
+	playerRenderer->initialize();
+
+	enemy1Renderer = new ModelRenderer(shader, 0.0f);
+	enemy1Renderer->loadFromFile("Assets/Models/brawler_armoured/brawler_armoured.obj");
+	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
+	enemy1Renderer->initialize();
+
+	bulletRenderer = new ModelRenderer(shader, 0.0f);
+	bulletRenderer->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
+	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
+	bulletRenderer->initialize();
+
 
 
 	GLuint shader1 = sl.CreateProgram("Shaders/skyboxShader.vert",
@@ -63,7 +74,6 @@ ScenePlay::ScenePlay()
 
 	lights.push_back(new Light(glm::vec3(5.f, 5.f, 5.f), glm::vec3(0.f, 0.5f, 1.f)));
 	lights.push_back(new Light(glm::vec3(5.f, 5.f, 5.f), glm::vec3(1.f, 0.5f, 0.f)));
-	players.push_back(new Object(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::mat4()));
 }
 
 ScenePlay::~ScenePlay()
@@ -72,24 +82,33 @@ ScenePlay::~ScenePlay()
 
 void ScenePlay::render() const
 {
-	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(100.f, 100.f, 100.f)));
-
-	for (auto player : players)
-	{
-		modelRendererTest->draw(Game::getGame()->getCamera(), player->getModelMatrix(), *this);
-	}
-
 	auto & gw = Game::getGame()->getGameWorld();
 
+	//Render skybox
+	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(100.f, 100.f, 100.f)));
 
+	//Render player
+	playerRenderer->draw(Game::getGame()->getCamera(), gw.getPlayer()->getModelMatrix(), *this);
 
-	modelRendererTest->draw(Game::getGame()->getCamera(), gw.testObject->getModelMatrix(), *this);
+	//Render enemies
+	for (auto enemy : gw.getEnemies())
+	{
+		enemy1Renderer->draw(Game::getGame()->getCamera(), enemy->getModelMatrix(), *this);
+	}
+
+	//Render bullets
+	for (auto bullet : gw.getBullets())
+	{
+		bulletRenderer->draw(Game::getGame()->getCamera(), bullet->getModelMatrix(), *this);
+	}
 }
 
 void ScenePlay::update(float _dt)
 {
+	auto & gw = Game::getGame()->getGameWorld();
+
 	elapsedTime += _dt;
-	auto thisPlayer = players[0];
+	auto thisPlayer = gw.getPlayer();
 
 
 	//Mouse controls
@@ -128,6 +147,13 @@ void ScenePlay::update(float _dt)
 	{
 		thisPlayer->setPosition(thisPlayer->getPosition() + facing2D * 10.f * _dt);
 	}
+
+	if (Input::isKeyDown(' ') && !spaceBarLastFrame)
+	{
+		gw.playerFire();
+	}
+
+	spaceBarLastFrame = Input::isKeyDown(' ');
 
 
 	//Update game world

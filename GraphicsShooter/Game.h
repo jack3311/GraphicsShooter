@@ -64,7 +64,7 @@ public:
 
 	bool hasFinishedLoading() const;
 
-	void createGameWorld(bool _isServer);
+	void createGameWorld(/*bool _isServer*/);
 	GameWorld & getGameWorld() const;
 };
 
