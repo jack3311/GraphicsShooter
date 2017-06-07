@@ -37,6 +37,7 @@ public:
 	void setScale(GLfloat _scale);
 	void setText(std::string _text);
 	int getWidth();
+	int getHeight();
 
 private:
 	std::string text;

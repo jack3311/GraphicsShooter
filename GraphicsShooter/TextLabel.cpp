@@ -110,6 +110,7 @@ void TextLabel::Render(){
 	if (positionIsCenter)
 	{
 		textPos.x -= this->getWidth() / 2.f;
+		textPos.y -= this->getHeight() / 2.f;
 	}
 
 		//enable blending
@@ -205,4 +206,13 @@ int TextLabel::getWidth()
 	}
 
 	return widthSum;
+}
+
+int TextLabel::getHeight()
+{
+	if (text.size() == 0) return 0;
+
+	return Characters[0].Size.y;
+
+	return 0;
 }

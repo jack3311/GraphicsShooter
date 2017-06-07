@@ -29,6 +29,11 @@ SceneMenu::SceneMenu()
 {
 	continueText = new TextLabel("Press space to continue. . .", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), true);
 	continueText->setScale(0.75f);
+
+	mainMenu.initialise();
+
+	mainMenu.addElement(new UIElement(200, 200, 64, 32, "Hello"));
+	mainMenu.addElement(new UIElement(200, 400, 128, 64, "World"));
 }
 
 SceneMenu::~SceneMenu()
@@ -39,11 +44,15 @@ SceneMenu::~SceneMenu()
 void SceneMenu::render() const
 {
 	continueText->Render();
+
+	mainMenu.draw();
 }
 
 void SceneMenu::update(float _dt)
 {
 	continueText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f, 2.f * Game::getGame()->getWindowHeight() / 5.f));
+
+	mainMenu.update(_dt);
 
 	if (Input::isKeyDown('f'))
 	{

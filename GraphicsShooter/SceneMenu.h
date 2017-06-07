@@ -17,6 +17,7 @@
 #include "Scene.h"
 #include "Sprite.h"
 #include "TextLabel.h"
+#include "UIMenu.h"
 
 class SceneMenu :
 	public Scene
@@ -25,7 +26,7 @@ private:
 	float timeAccum = 0.f;
 	TextLabel * continueText;
 
-
+	UIMenu mainMenu;
 
 public:
 	SceneMenu();

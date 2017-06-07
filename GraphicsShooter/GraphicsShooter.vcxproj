@@ -163,6 +163,7 @@
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="SpriteRenderer.cpp" />
     <ClCompile Include="TextLabel.cpp" />
+    <ClCompile Include="UIMenu.cpp" />
     <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +189,7 @@
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="TextLabel.h" />
+    <ClInclude Include="UIMenu.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
