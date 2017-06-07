@@ -45,16 +45,20 @@ void SceneMenu::update(float _dt)
 {
 	continueText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f, 2.f * Game::getGame()->getWindowHeight() / 5.f));
 
-	if (Input::isKeyDown(' '))
+	if (Input::isKeyDown('f'))
 	{
-		SceneManager::getSceneManager().activateWithoutReset<ScenePlay>();
+		Game::getGame()->createGameWorld();
+		SceneManager::getSceneManager().activate<ScenePlay>();
+	}
+
+	if (Input::isKeyDown('g'))
+	{
+		SceneManager::getSceneManager().activate<ScenePlay>();
 	}
 }
 
 void SceneMenu::reset()
 {
-	Game::getGame()->createGameWorld();
-
 //	//TODO: Change to actual menu....
 //	std::cout << "Client or server? " << std::endl;
 //	int input;

@@ -43,6 +43,8 @@ public:
 	glm::vec3 & getPosition();
 	glm::mat4 & getRotation();
 
+	void lookAt(glm::vec3 pos);
+
 	const glm::mat4 getModelMatrix() const;
 };
 

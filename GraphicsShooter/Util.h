@@ -121,6 +121,13 @@ inline bool lineCircleCollision(const glm::vec2 & _lineStartPos, const glm::vec2
 	return fabsf(dist2) <= powf((_lineRadius + _r), 2.f);
 }
 
+inline bool sphereSphereCollision(const glm::vec3 & _pos1, const float & _r1, const glm::vec3 & _pos2, const float & _r2)
+{
+	float r1plusr2 = _r1 + _r2;
+	auto d = _pos1 - _pos2;
+	return length2(d) < r1plusr2 * r1plusr2;
+}
+
 struct Position
 {
 	GLfloat x, y, z;

@@ -16,5 +16,9 @@ public:
 	void setVelocity(glm::vec3);
 
 	void update(float _dt);
+
+	float getLifetime() const;
+
+	unsigned int flag;
 };
 

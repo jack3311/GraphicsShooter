@@ -4,6 +4,8 @@
 #include "JNetwork\Client.h"
 
 #include "Logger.h"
+#include "SceneManager.h"
+#include "SceneMenu.h"
 
 
 GameWorld::GameWorld(/*bool _isServer*/)/* : isServer(_isServer)*/
@@ -23,12 +25,14 @@ GameWorld::GameWorld(/*bool _isServer*/)/* : isServer(_isServer)*/
 	//	});
 	//}
 
-	player = new Object(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
+	player = new Player(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
 
 	for (int i = 0; i < 25; ++i)
 	{
-		enemies.push_back(new Object(glm::vec3(rand() % 201 - 100, 0, rand() % 201 - 100), glm::vec3(0.1, 0.1, 0.1)));
+		enemies.push_back(new Object(glm::vec3(rand() % 201 - 100, 0, rand() % 201 - 100), glm::vec3(4.f / 40.f, 4.f / 40.f, 4.f / 40.f)));
 	}
+
+	gameInProgress = true;
 }
 
 GameWorld::~GameWorld()
@@ -37,31 +41,37 @@ GameWorld::~GameWorld()
 	{
 		delete obj;
 	}
+
+	//TODO: Stop network entity
 }
 
 void GameWorld::update(float _dt)
 {
-	timeSinceReloadStart += _dt;
-
-	//Update bullets
-	for (auto bullet : bullets)
+	//Check for player death
+	if (player->isDead())
 	{
-		bullet->update(_dt);
+		gameInProgress = false;
+		SceneManager::getSceneManager().activate<SceneMenu>();
 	}
 
-	//Enemy AI:
+
+
+	//Update player:
+	player->update(_dt);
+
+	//Update enemies:
 	for (auto enemy : enemies)
 	{
 		//Path towards player
 
 		glm::vec3 delta = player->getPosition() - enemy->getPosition();
 		glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
-		
-		
+
+
 		if (length2(enemy->getPosition() + delScl - player->getPosition()) < 9)
 		{
 			enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * 3.f);
-		
+
 			//TODO: Damage player
 		}
 		else
@@ -69,16 +79,27 @@ void GameWorld::update(float _dt)
 			enemy->move(delScl);
 		}
 
+		//Face towards player
+		enemy->lookAt(player->getPosition());
+
+		//Try to shoot
+		if (rand() % 10000 < 1000 * _dt)
+		{
+			if (enemy->getPosition() != player->getPosition())
+			{
+				auto facing2D = normalize(player->getPosition() - enemy->getPosition());
+
+				createBullet(enemy->getPosition() + facing2D * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), facing2D, false);
+			}
+		}
 
 
-
-
-
+		//Stay away from other enemies
 		for (auto enemy1 : enemies)
 		{
 			if (enemy1 != enemy)
 			{
-				//Stay away from other enemies
+				//Move away from other enemy based on the distance between them
 				glm::vec3 delta2 = enemy->getPosition() - enemy1->getPosition();
 				glm::vec3 delScl2 = glm::normalize(delta2) * ENEMY1_MAX_SPEED * _dt * (1.f / length2(delta2));
 
@@ -86,6 +107,55 @@ void GameWorld::update(float _dt)
 			}
 		}
 
+	}
+
+	//Update bullets
+	for (auto itr = bullets.begin(); itr != bullets.end(); )
+	{
+		(*itr)->update(_dt);
+
+		bool collision = false;
+		
+		//Check for collision with enemies
+		if ((*itr)->flag != 0) //If bullet is friendly
+		{
+			for (auto itr2 = enemies.begin(); itr2 != enemies.end(); )
+			{
+				//Check collision with two spheres
+				if (sphereSphereCollision((*itr2)->getPosition(), ENEMY_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+				{
+					itr2 = enemies.erase(itr2);
+					collision = true;
+					break;
+				}
+				else
+				{
+					++itr2;
+				}
+			}
+		}
+
+		//Check for collision with player
+		if ((*itr)->flag == 0) //If bullet is not friendly
+		{
+			if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+			{
+				player->dealDamage(1);
+
+				collision = true;
+			}
+		}
+
+		if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
+		{
+			itr = bullets.erase(itr);
+
+			//TODO: Show explosion
+		}
+		else
+		{
+			++itr;
+		}
 	}
 
 
@@ -131,39 +201,42 @@ std::vector<PhysicsObject*> GameWorld::getBullets()
 	return bullets;
 }
 
-Object * GameWorld::getPlayer()
+Player * GameWorld::getPlayer()
 {
 	return player;
 }
 
 void GameWorld::playerFire()
 {
-	//Check if reload is finished
-	if (timeSinceReloadStart >= RELOAD_TIME && playerAmmo == 0)
+	//If we can fire
+	if (player->tryFire())
 	{
-		playerAmmo = CLIP_SIZE;
-	}
-
-	if (playerAmmo > 0)
-	{
+		//Fire bullet
 		auto facing2D = -glm::vec3(player->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
-
-		PhysicsObject * bullet = new PhysicsObject(player->getPosition(), glm::vec3(0.4, 0.4, 0.4));
-		bullet->move(facing2D * 0.5f + glm::vec3(0, 1, 0));
-		bullet->setVelocity(facing2D * BULLET_MAX_SPEED);
-
-		bullets.push_back(bullet);
-
-
-		//Start reload if this is last bullet
-		if (playerAmmo == 1)
-		{
-			timeSinceReloadStart = 0.f;
-		}
-		
-		//Reduce ammo
-		--playerAmmo;
+		createBullet(player->getPosition() + facing2D * 0.5f + glm::vec3(0.f, 1.5f, 0.f), facing2D, true);
 	}
+	else
+	{
+		//Start reload
+		player->reload();
+	}
+}
+
+void GameWorld::createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed)
+{
+	assert(length2(_dir) != 0);
+
+	PhysicsObject * bullet = new PhysicsObject(_source, glm::vec3(BULLET_RADIUS, BULLET_RADIUS, BULLET_RADIUS));
+	bullet->setVelocity(normalize(_dir) * BULLET_MAX_SPEED);
+
+	bullet->flag = _friendly;
+
+	bullets.push_back(bullet);
+}
+
+bool GameWorld::isGameInProgress() const
+{
+	return gameInProgress;
 }
 
 //void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)

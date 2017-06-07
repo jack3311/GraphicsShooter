@@ -54,10 +54,10 @@ ScenePlay::ScenePlay()
 	playerRenderer->initialize();
 
 	enemy1Renderer = new ModelRenderer(shader, 0.0f);
-	enemy1Renderer->loadFromFile("Assets/Models/brawler_armoured/brawler_armoured.obj");
+	enemy1Renderer->loadFromFile("Assets/Models/tank2/tank2.obj");
 	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
 	enemy1Renderer->initialize();
-
+	
 
 	std::vector<TexturedNormalsVertexFormat> tempBulletVertices;
 	std::vector<GLuint> tempBulletIndices;
@@ -158,6 +158,11 @@ void ScenePlay::update(float _dt)
 	}
 
 	spaceBarLastFrame = Input::isKeyDown(' ');
+
+	if (Input::isKeyDown(27)) //Escape key
+	{
+		SceneManager::getSceneManager().activate<SceneMenu>();
+	}
 
 
 	//Update game world

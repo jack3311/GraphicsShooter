@@ -46,6 +46,20 @@ glm::mat4 & Object::getRotation()
 	return rotation;
 }
 
+void Object::lookAt(glm::vec3 pos)
+{
+	if (pos == position) return; //Ignore if we are at the same position
+
+	auto forwards = glm::vec3(0, 0, 1);
+	auto delta = glm::normalize(pos - position);
+	
+	float dot = glm::dot(forwards, delta);
+	float angle = acosf(dot);
+	auto axis = glm::cross(forwards, delta);
+
+	rotation = glm::rotate(glm::mat4(), angle, axis);
+}
+
 const glm::mat4 Object::getModelMatrix() const
 {
 	const glm::mat4 step1 = glm::scale(glm::mat4(), scale);
@@ -53,5 +67,4 @@ const glm::mat4 Object::getModelMatrix() const
 	const glm::mat4 step3 = glm::translate(glm::mat4(), position);
 
 	return step3 * step2 * step1;
-	// TODO: insert return statement here
 }

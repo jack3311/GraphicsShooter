@@ -8,11 +8,15 @@
 
 #include "Object.h"
 #include "PhysicsObject.h"
+#include "Player.h"
 
-#define ENEMY1_MAX_SPEED 0.f//5.f
-#define BULLET_MAX_SPEED 0.f//40.f
-#define RELOAD_TIME 2.f
-#define CLIP_SIZE 10
+#define ENEMY1_MAX_SPEED 5.f
+#define BULLET_MAX_SPEED 40.f
+#define BULLET_LIFETIME 5.f
+#define BULLET_RADIUS 0.4f
+#define ENEMY_COLLISION_RADIUS 2.f
+#define PLAYER_COLLISION_RADIUS 4.f
+#define BULLET_COLLISION_RADIUS BULLET_RADIUS
 
 class GameWorld
 {
@@ -29,10 +33,9 @@ private:
 
 	std::vector<PhysicsObject *> bullets;
 
-	Object * player;
+	Player * player;
 
-	unsigned int playerAmmo = CLIP_SIZE;
-	float timeSinceReloadStart = 0.f;
+	bool gameInProgress = false;
 
 public:
 	GameWorld(/*bool _isServer*/);
@@ -44,9 +47,13 @@ public:
 
 	std::vector<PhysicsObject *> getBullets();
 
-	Object * getPlayer();
+	Player * getPlayer();
 
 	void playerFire();
+
+	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED);
+
+	bool isGameInProgress() const;
 
 	////Packet processing step 1 (pool packets if client / directly process if server)
 	//void onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);

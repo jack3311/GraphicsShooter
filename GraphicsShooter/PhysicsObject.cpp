@@ -24,3 +24,8 @@ void PhysicsObject::update(float _dt)
 	move(velocity * _dt);
 	lifetime += _dt;
 }
+
+float PhysicsObject::getLifetime() const
+{
+	return lifetime;
+}
