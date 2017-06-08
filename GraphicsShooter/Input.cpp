@@ -37,26 +37,36 @@ void Input::init()
 
 bool Input::isKeyDown(const unsigned char _key)
 {
+	assert(0 <= _key);
+	assert(_key < 255);
+
 	return keyState[_key];
 }
 
 bool Input::isMouseDown(const unsigned int _button)
 {
+	assert(0 <= _button);
+	assert(_button < 3);
+
 	return mouseState[_button];
 }
 
-glm::vec2 Input::getMousePosition()
+glm::vec2 Input::getMousePosition() 
 {
 	return mousePosition;
 }
 
 void Input::keyboardFunc(unsigned char _key, int _x, int _y)
 {
+	if (_key < 0 || _key >= 255) return;
+
 	keyState[_key] = true;
 }
 
 void Input::keyboardFuncUp(unsigned char _key, int _x, int _y)
 {
+	if (_key < 0 || _key >= 255) return;
+
 	keyState[_key] = false;
 }
 

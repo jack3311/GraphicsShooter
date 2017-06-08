@@ -30,9 +30,13 @@ class ScenePlay :
 private:
 	float elapsedTime = 0.f;
 
+	MeshRenderer * floorRenderer;
+
 	ModelRenderer * playerRenderer;
 	ModelRenderer * enemy1Renderer;
+
 	MeshRenderer * bulletRenderer;
+	MeshRenderer * powerup1Renderer;
 
 	SkyboxRenderer * skyboxRenderer;
 
@@ -43,6 +47,10 @@ private:
 	float specularStrength;
 
 	bool spaceBarLastFrame = false;
+
+	TextLabel * ammoText;
+	TextLabel * scoreText;
+	TextLabel * healthText;
 
 public:
 	ScenePlay();

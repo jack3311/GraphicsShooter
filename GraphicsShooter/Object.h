@@ -46,5 +46,7 @@ public:
 	void lookAt(glm::vec3 pos);
 
 	const glm::mat4 getModelMatrix() const;
+
+	unsigned int flag;
 };
 

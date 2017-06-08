@@ -66,5 +66,6 @@ public:
 
 	void createGameWorld(/*bool _isServer*/);
 	GameWorld & getGameWorld() const;
+	bool hasGameWorld() const;
 };
 

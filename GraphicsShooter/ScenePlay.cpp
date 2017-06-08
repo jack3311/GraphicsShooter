@@ -14,6 +14,8 @@
 
 #include "ScenePlay.h"
 
+#include <sstream>
+
 #include "AssetManager.h"
 #include "SceneManager.h"
 #include "SceneMenu.h"
@@ -48,6 +50,14 @@ ScenePlay::ScenePlay()
 	meshRendererTest->Initialise();*/
 
 
+	std::vector<TexturedNormalsVertexFormat> tempFloorVertices;
+	std::vector<GLuint> tempFloorIndices;
+	Util::CreateTexturedNormalsCube(tempFloorVertices, tempFloorIndices);
+	floorRenderer = new MeshRenderer(shader, tempFloorVertices, tempFloorIndices,
+		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
+	floorRenderer->Initialise();
+
+
 	playerRenderer = new ModelRenderer(shader, 0.0f);
 	playerRenderer->loadFromFile("Assets/Models/tank1/Abrams_BF3.obj");
 	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
@@ -67,6 +77,13 @@ ScenePlay::ScenePlay()
 		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
 	bulletRenderer->Initialise();
 
+	std::vector<TexturedNormalsVertexFormat> tempPowerup1Vertices;
+	std::vector<GLuint> tempPowerup1Indices;
+	Util::CreateTexturedNormalsCube(tempPowerup1Vertices, tempPowerup1Indices);
+	powerup1Renderer = new MeshRenderer(shader, tempPowerup1Vertices, tempPowerup1Indices,
+		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
+	powerup1Renderer->Initialise();
+
 
 
 	GLuint shader1 = sl.CreateProgram("Shaders/skyboxShader.vert",
@@ -78,15 +95,26 @@ ScenePlay::ScenePlay()
 
 	lights.push_back(new Light(glm::vec3(5.f, 5.f, 5.f), glm::vec3(0.f, 0.5f, 1.f)));
 	lights.push_back(new Light(glm::vec3(5.f, 5.f, 5.f), glm::vec3(1.f, 0.5f, 0.f)));
+
+	ammoText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
+	scoreText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
+	healthText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 }
 
 ScenePlay::~ScenePlay()
 {
+	//TODO: Add destructor...
 }
 
 void ScenePlay::render() const
 {
 	auto & gw = Game::getGame()->getGameWorld();
+
+	//Render floor
+	auto floorScale = glm::scale(glm::mat4(), glm::vec3(10000.f, 1.f, 10000.f));
+	auto floorTrans = glm::translate(glm::mat4(), glm::vec3(0.f, -2.f, 0.f));
+
+	floorRenderer->DrawMesh(Game::getGame()->getCamera(), floorTrans * floorScale, *this, 0.1f);
 
 	//Render skybox
 	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(10000.f, 10000.f, 10000.f)));
@@ -105,14 +133,27 @@ void ScenePlay::render() const
 	{
 		bulletRenderer->DrawMesh(Game::getGame()->getCamera(), bullet->getModelMatrix(), *this, 0.0f);
 	}
+
+	//Render powerups
+	for (auto powerup : gw.getPowerups())
+	{
+		powerup1Renderer->DrawMesh(Game::getGame()->getCamera(), powerup->getModelMatrix(), *this, 0.0f);
+	}
+
+	//Render text
+	scoreText->Render();
+	ammoText->Render();
+	healthText->Render();
 }
 
 void ScenePlay::update(float _dt)
 {
 	auto & gw = Game::getGame()->getGameWorld();
+	auto thisPlayer = gw.getPlayer();
 
 	elapsedTime += _dt;
-	auto thisPlayer = gw.getPlayer();
+
+
 
 
 	//Mouse controls
@@ -132,12 +173,12 @@ void ScenePlay::update(float _dt)
 	//Keyboard controls
 	if (Input::isKeyDown('a'))
 	{
-		thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), 5.f * _dt, glm::vec3(0, 1, 0)));
+		thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), 3.f * _dt, glm::vec3(0, 1, 0)));
 	}
 
 	if (Input::isKeyDown('d'))
 	{
-		thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), -5.f * _dt, glm::vec3(0, 1, 0)));
+		thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), -3.f * _dt, glm::vec3(0, 1, 0)));
 	}
 
 	auto facing2D = -glm::vec3(thisPlayer->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
@@ -170,20 +211,13 @@ void ScenePlay::update(float _dt)
 
 
 
-
-
-
 	//Camera settings
 	Game & g = *Game::getGame();
 
 	auto offset = glm::cross(facing2D, glm::vec3(0, 1, 0)) * 2.f + glm::vec3(0.f, 3.5f, 0);
-	g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 8.f);
-	g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 800.f);
-
-
-
-	/*g.getCamera().setLookAt(glm::vec3(0, 0, 0));
-	g.getCamera().setPosition(glm::vec3(-30.0f, 70.0f, 50.f));*/
+	offset *= thisPlayer->getScale();
+	g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
+	g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
 
 
 	Game::getGame()->getCamera().updateCamera();
@@ -197,6 +231,42 @@ void ScenePlay::update(float _dt)
 	lights.at(1)->setPosition(glm::vec3(cosf(elapsedTime) * 4.f, 0.f, -sinf(elapsedTime) * 4.f));
 
 	//ambientStrength = 0.5f * (sinf(elapsedTime / 2.f) + 1.f);
+
+
+	//Update text
+	std::stringstream ss;
+	if (thisPlayer->isReloading())
+	{
+		ss << "Reloading...";
+	}
+	else if (thisPlayer->hasInfiniteAmmo())
+	{
+		ss << "Infinite Ammo";
+	}
+	else
+	{
+		ss << "Ammo: " << thisPlayer->getAmmo();
+	}
+	ammoText->setText(ss.str());
+
+
+	ss = std::stringstream();
+	ss << "Score: " << thisPlayer->getScore();
+	scoreText->setText(ss.str());
+
+	ss = std::stringstream();
+	ss << "Health: " << thisPlayer->getHealth() << " / " << MAX_HEALTH;
+	if (thisPlayer->hasShield())
+	{
+		ss << " SHIELDED";
+	}
+	healthText->setText(ss.str());
+
+	ammoText->setPosition(glm::vec2(0.f, 0.f));
+	healthText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() - healthText->getWidth(), 0.f));
+
+	scoreText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f - scoreText->getWidth() / 2.f,
+		Game::getGame()->getWindowHeight() - scoreText->getHeight()));
 }
 
 void ScenePlay::reset()

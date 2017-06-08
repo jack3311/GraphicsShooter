@@ -43,13 +43,13 @@ public:
 	static void deleteSceneManager();
 
 	template<typename T, typename ...Args>
-	void initScene(Args & ..._args);
+	void initScene(Args ..._args);
 
 	template<typename T, typename ...Args>
-	void activate(Args & ..._args);
+	void activate(Args ..._args);
 
 	template<typename T, typename ...Args>
-	void activateWithoutReset(Args & ..._args);
+	void activateWithoutReset(Args ..._args);
 
 	template<typename T>
 	T & getScene();
@@ -59,26 +59,26 @@ public:
 };
 
 template<typename T, typename ...Args>
-inline void SceneManager::initScene(Args & ..._args)
+inline void SceneManager::initScene(Args ..._args)
 {
 	Logger::getLogger().log("Initilizing scene: ", typeid(T).name());
 
 	T* scene = new T();
-	scene->reset(_args...);
+	//scene->reset(_args...);
 	sceneMap[typeid(T)] = scene;
 }
 
 template<typename T, typename ...Args>
-inline void SceneManager::activate(Args & ..._args)
+inline void SceneManager::activate(Args ..._args)
 {
-	//currentScene = sceneMap[typeid(T)];
-	dynamic_cast<T*>(currentScene)->reset(_args...);
+	Logger::getLogger().log("Activating scene: ", typeid(T).name());
 
-	activateWithoutReset<T>(_args...);
+	currentScene = sceneMap[typeid(T)];
+	dynamic_cast<T*>(currentScene)->reset(_args...);
 }
 
 template<typename T, typename ...Args>
-inline void SceneManager::activateWithoutReset(Args & ..._args)
+inline void SceneManager::activateWithoutReset(Args ..._args)
 {
 	Logger::getLogger().log("Activating scene: ", typeid(T).name());
 

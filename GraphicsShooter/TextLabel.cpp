@@ -143,13 +143,13 @@ void TextLabel::Render(){
 		GLfloat h = ch.Size.y * this->scale;
 		// Update VBO for each character
 		GLfloat vertices[6][4] = {
-			{ xpos, ypos + h, 0.0, 0.0 },
-			{ xpos, ypos, 0.0, 1.0 },
-			{ xpos + w, ypos, 1.0, 1.0 },
+			{ xpos, ypos + h,		0.0, 0.0 },
+			{ xpos, ypos,			0.0, 1.0 },
+			{ xpos + w, ypos,		1.0, 1.0 },
 
-			{ xpos, ypos + h, 0.0, 0.0 },
-			{ xpos + w, ypos, 1.0, 1.0 },
-			{ xpos + w, ypos + h, 1.0, 0.0 }
+			{ xpos, ypos + h,		0.0, 0.0 },
+			{ xpos + w, ypos,		1.0, 1.0 },
+			{ xpos + w, ypos + h,	1.0, 0.0 }
 		};
 		// Render glyph texture over quad
 		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
@@ -212,7 +212,20 @@ int TextLabel::getHeight()
 {
 	if (text.size() == 0) return 0;
 
-	return Characters[0].Size.y;
+	int tallestCharHeight = 0;
 
-	return 0;
+	// Iterate through all characters
+	std::string::const_iterator c;
+	for (c = text.begin(); c != text.end(); c++)
+	{
+		Character ch = Characters[*c];
+
+		int h = ch.Size.y;
+		if (h > tallestCharHeight)
+		{
+			tallestCharHeight = h;
+		}
+	}
+
+	return tallestCharHeight * this->scale;
 }

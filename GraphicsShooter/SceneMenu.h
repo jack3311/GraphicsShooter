@@ -24,9 +24,8 @@ class SceneMenu :
 {
 private:
 	float timeAccum = 0.f;
-	TextLabel * continueText;
 
-	UIMenu mainMenu;
+	UIMenu * mainMenu;
 
 public:
 	SceneMenu();

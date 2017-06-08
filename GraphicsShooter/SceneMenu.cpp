@@ -14,6 +14,8 @@
 
 #include "SceneMenu.h"
 
+#include <functional>
+
 #include "AssetManager.h"
 #include "SceneManager.h"
 #include "ScenePlay.h"
@@ -27,47 +29,46 @@
 
 SceneMenu::SceneMenu()
 {
-	continueText = new TextLabel("Press space to continue. . .", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), true);
-	continueText->setScale(0.75f);
-
-	mainMenu.initialise();
-
-	mainMenu.addElement(new UIElement(200, 200, 64, 32, "Hello"));
-	mainMenu.addElement(new UIElement(200, 400, 128, 64, "World"));
+	mainMenu = new UIMenu();
+	mainMenu->initialise();
 }
 
 SceneMenu::~SceneMenu()
 {
-	delete continueText;
+	delete mainMenu;
 }
 
 void SceneMenu::render() const
 {
-	continueText->Render();
-
-	mainMenu.draw();
+	mainMenu->draw();
 }
 
 void SceneMenu::update(float _dt)
 {
-	continueText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f, 2.f * Game::getGame()->getWindowHeight() / 5.f));
-
-	mainMenu.update(_dt);
-
-	if (Input::isKeyDown('f'))
-	{
-		Game::getGame()->createGameWorld();
-		SceneManager::getSceneManager().activate<ScenePlay>();
-	}
-
-	if (Input::isKeyDown('g'))
-	{
-		SceneManager::getSceneManager().activate<ScenePlay>();
-	}
+	mainMenu->update(_dt);
 }
 
 void SceneMenu::reset()
 {
+	mainMenu->clear();
+
+	if (Game::getGame()->hasGameWorld() && Game::getGame()->getGameWorld().isGameInProgress())
+	{
+		mainMenu->addElement(new UIElement(0.5f, 2.f / 3.f, "Continue", []() {
+			SceneManager::getSceneManager().activate<ScenePlay>();
+		}));
+	}
+
+	mainMenu->addElement(new UIElement(0.5f, 1.f / 3.f, "New Game", []() {
+		Game::getGame()->createGameWorld();
+		SceneManager::getSceneManager().activate<ScenePlay>();
+	}));
+
+
+
+
+
+
 //	//TODO: Change to actual menu....
 //	std::cout << "Client or server? " << std::endl;
 //	int input;

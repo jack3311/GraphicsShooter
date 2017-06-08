@@ -6,6 +6,8 @@
 #include "Logger.h"
 #include "SceneManager.h"
 #include "SceneMenu.h"
+#include "SceneGameOver.h"
+#include "AssetManager.h"
 
 
 GameWorld::GameWorld(/*bool _isServer*/)/* : isServer(_isServer)*/
@@ -25,12 +27,9 @@ GameWorld::GameWorld(/*bool _isServer*/)/* : isServer(_isServer)*/
 	//	});
 	//}
 
-	player = new Player(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1));
+	player = new Player(glm::vec3(0, 0, 0), glm::vec3(1.32f, 1.32f, 1.32f));
 
-	for (int i = 0; i < 25; ++i)
-	{
-		enemies.push_back(new Object(glm::vec3(rand() % 201 - 100, 0, rand() % 201 - 100), glm::vec3(4.f / 40.f, 4.f / 40.f, 4.f / 40.f)));
-	}
+	nextLevel();
 
 	gameInProgress = true;
 }
@@ -51,7 +50,13 @@ void GameWorld::update(float _dt)
 	if (player->isDead())
 	{
 		gameInProgress = false;
-		SceneManager::getSceneManager().activate<SceneMenu>();
+		SceneManager::getSceneManager().activate<SceneGameOver>(player->getScore());
+	}
+
+	//Check for victory
+	if (enemies.size() == 0)
+	{
+		nextLevel();
 	}
 
 
@@ -61,38 +66,81 @@ void GameWorld::update(float _dt)
 
 	//Update enemies:
 	for (auto enemy : enemies)
-	{
-		//Path towards player
-
-		glm::vec3 delta = player->getPosition() - enemy->getPosition();
-		glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
-
-
-		if (length2(enemy->getPosition() + delScl - player->getPosition()) < 9)
+	{	
+		//Enemy movement and shooting AI
+		switch (enemy->flag)
 		{
-			enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * 3.f);
-
-			//TODO: Damage player
-		}
-		else
+		case EnemyType::SHOOTER:
 		{
-			enemy->move(delScl);
-		}
+			//Path towards player
+			glm::vec3 delta = player->getPosition() - enemy->getPosition();
+			glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
 
-		//Face towards player
-		enemy->lookAt(player->getPosition());
-
-		//Try to shoot
-		if (rand() % 10000 < 1000 * _dt)
-		{
-			if (enemy->getPosition() != player->getPosition())
+			if (length2(enemy->getPosition() + delScl - player->getPosition()) < SHOOTER_STOPPING_DISTANCE * SHOOTER_STOPPING_DISTANCE)
 			{
-				auto facing2D = normalize(player->getPosition() - enemy->getPosition());
+				enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * SHOOTER_STOPPING_DISTANCE);
+			}
+			else
+			{
+				enemy->move(delScl);
+			}
 
-				createBullet(enemy->getPosition() + facing2D * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), facing2D, false);
+			//Face towards player
+			enemy->lookAt(player->getPosition());
+
+			//Try to shoot
+			if (rand() % 10000 < 1000 * _dt)
+			{
+				if (enemy->getPosition() != player->getPosition())
+				{
+					auto facing2D = normalize(player->getPosition() - enemy->getPosition());
+
+					createBullet(enemy->getPosition() + facing2D * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), facing2D, false);
+					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("laser"));
+				}
 			}
 		}
+		break;
+		case EnemyType::FIGHTER:
+		{
+			glm::vec3 delta = player->getPosition() - enemy->getPosition();
+			glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
 
+			if (length2(enemy->getPosition() + delScl - player->getPosition()) < powf(ENEMY_COLLISION_RADIUS + PLAYER_COLLISION_RADIUS, 2.f))
+			{
+				enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * (ENEMY_COLLISION_RADIUS + PLAYER_COLLISION_RADIUS));
+				player->dealDamage(FIGHTER_DPS * _dt);
+				
+				//Try to play drill sound
+				if (rand() % 10000 < 7500 * _dt)
+					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode1"));
+			}
+			else
+			{
+				enemy->move(delScl);
+			}
+
+			//Face towards player
+			enemy->lookAt(player->getPosition());
+		}
+		break;
+		case EnemyType::TURRET:
+		{
+			//Try to shoot
+			if (rand() % 10000 < 1000 * _dt)
+			{
+				//Fire in 8 paths around the enemy
+				for (float theta = 0.f; theta <= 2.f * glm::pi<float>(); theta += 2.f * glm::pi<float>() / 8.f)
+				{
+					glm::vec3 vel = glm::vec3(cosf(theta), 0.f, sinf(theta));
+					createBullet(enemy->getPosition() + vel * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), vel, false);
+				}
+
+				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode2"));
+			}
+		}
+		break;
+		}
 
 		//Stay away from other enemies
 		for (auto enemy1 : enemies)
@@ -124,7 +172,10 @@ void GameWorld::update(float _dt)
 				//Check collision with two spheres
 				if (sphereSphereCollision((*itr2)->getPosition(), ENEMY_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
 				{
+					//Destroy the enemy
+					delete (*itr2);
 					itr2 = enemies.erase(itr2);
+					player->addScore(100);
 					collision = true;
 					break;
 				}
@@ -140,7 +191,11 @@ void GameWorld::update(float _dt)
 		{
 			if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
 			{
-				player->dealDamage(1);
+				//If the player doesn't have shield, deal damage
+				if (!player->hasShield())
+					player->dealDamage(2);
+
+				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
 
 				collision = true;
 			}
@@ -148,9 +203,55 @@ void GameWorld::update(float _dt)
 
 		if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
 		{
+			delete (*itr);
 			itr = bullets.erase(itr);
 
 			//TODO: Show explosion
+		}
+		else
+		{
+			++itr;
+		}
+	}
+
+	//Update powerups
+	for (auto itr = powerups.begin(); itr != powerups.end(); )
+	{
+		float lt = (*itr)->getLifetime();
+		
+		auto velocity = glm::vec3(
+			sinf(lt / 10.f) * POWERUP_MAX_SPEED,
+			cosf(lt),
+			cos(lt / 10.f) * POWERUP_MAX_SPEED);
+
+		(*itr)->setVelocity(velocity);
+
+		(*itr)->update(_dt);
+
+		//Check for collision with player
+		if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), POWERUP_COLLISION_RADIUS))
+		{
+			//Process the powerup
+			switch ((*itr)->flag)
+			{
+			case PowerupType::HEALTH:
+				//Restore the player's health
+				player->dealDamage(-POWERUP_HEALTH_REGEN_AMOUNT);
+				break;
+			case PowerupType::INFINITE_AMMO:
+				//Give player infinite ammo
+				player->infiniteAmmoFor(POWERUP_INFINITE_AMMO_DURATION);
+				break;
+			case PowerupType::SHIELD:
+				//Give player shield
+				player->shieldFor(POWERUP_SHIELD_DURATION);
+				break;
+			}
+
+			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
+			player->addScore(500);
+			delete (*itr);
+			itr = powerups.erase(itr);
 		}
 		else
 		{
@@ -201,6 +302,11 @@ std::vector<PhysicsObject*> GameWorld::getBullets()
 	return bullets;
 }
 
+std::vector<PhysicsObject*> GameWorld::getPowerups()
+{
+	return powerups;
+}
+
 Player * GameWorld::getPlayer()
 {
 	return player;
@@ -213,7 +319,9 @@ void GameWorld::playerFire()
 	{
 		//Fire bullet
 		auto facing2D = -glm::vec3(player->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
-		createBullet(player->getPosition() + facing2D * 0.5f + glm::vec3(0.f, 1.5f, 0.f), facing2D, true);
+		createBullet(player->getPosition() + facing2D * 7.f + glm::vec3(0.f, 2.0f, 0.f), facing2D, true);
+
+		AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().loadSound("shoot", "Assets/Sounds/shoot.wav"));
 	}
 	else
 	{
@@ -237,6 +345,42 @@ void GameWorld::createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, 
 bool GameWorld::isGameInProgress() const
 {
 	return gameInProgress;
+}
+
+void GameWorld::nextLevel()
+{
+	Logger::getLogger().log("Proceeding to next level");
+
+	++stage;
+
+	//Clear previous level
+	for (auto obj : enemies)
+	{
+		delete obj;
+	}
+	enemies.clear();
+
+	for (auto obj : powerups)
+	{
+		delete obj;
+	}
+	powerups.clear();
+
+
+	//Create enemies
+	for (int i = 0; i < 15 * stage; ++i)
+	{
+		enemies.push_back(new Object(glm::vec3(rand() % 201 - 100, 0, rand() % 201 - 100), glm::vec3(4.f / 40.f, 4.f / 40.f, 4.f / 40.f)));
+		enemies[i]->flag = rand() % EnemyType::ENEMYTYPE_NUM_ITEMS;
+	}
+
+	//Create powerups
+	for (int i = 0; i < 5 + stage; ++i)
+	{
+		powerups.push_back(new PhysicsObject(glm::vec3(rand() % 201 - 100, 1.5f, rand() % 201 - 100), glm::vec3(POWERUP_RADIUS, POWERUP_RADIUS, POWERUP_RADIUS)));
+		powerups[i]->update(rand()); //Offset lifetime
+		powerups[i]->flag = rand() % PowerupType::POWERUPTYPE_NUM_ITEMS;
+	}
 }
 
 //void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)

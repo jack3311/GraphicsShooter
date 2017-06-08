@@ -155,6 +155,11 @@ GameWorld & Game::getGameWorld() const
 	return *gameWorld;
 }
 
+bool Game::hasGameWorld() const
+{
+	return gameWorld != nullptr;
+}
+
 void Game::loadAssets()
 {
 	Logger::getLogger().log("Loading assets");
@@ -162,19 +167,32 @@ void Game::loadAssets()
 	AssetManager::getAssetManager().loadTexture("black", "Assets/Textures/black.jpg");
 
 	AssetManager::getAssetManager().loadCubeMap("skybox1", std::vector<std::string>{
-			"Assets/Textures/envmap_miramar/miramar_rt.png",
+			"Assets/Textures/red_space/pinkRT.png",
+			"Assets/Textures/red_space/pinkLF.png",
+			"Assets/Textures/red_space/pinkUP.png",
+			"Assets/Textures/red_space/pinkDN.png",
+			"Assets/Textures/red_space/pinkBK.png",
+			"Assets/Textures/red_space/pinkFT.png",
+		}
+	);
+/*
+	AssetManager::getAssetManager().loadCubeMap("skybox1", std::vector<std::string>{
+		"Assets/Textures/envmap_miramar/miramar_rt.png",
 			"Assets/Textures/envmap_miramar/miramar_lf.png",
 			"Assets/Textures/envmap_miramar/miramar_up.png",
 			"Assets/Textures/envmap_miramar/miramar_dn.png",
 			"Assets/Textures/envmap_miramar/miramar_bk.png",
 			"Assets/Textures/envmap_miramar/miramar_ft.png",
-		}
-	);
-/*
+	}
+	);*/
+
 	AssetManager::getAssetManager().loadSound("explode1", "Assets/Sounds/explode1.wav");
 	AssetManager::getAssetManager().loadSound("explode2", "Assets/Sounds/explode2.wav");
 	AssetManager::getAssetManager().loadSound("laser", "Assets/Sounds/laser.wav");
 	AssetManager::getAssetManager().loadSound("fail", "Assets/Sounds/fail.wav");
 	AssetManager::getAssetManager().loadSound("success", "Assets/Sounds/success.wav");
-	AssetManager::getAssetManager().loadSound("star", "Assets/Sounds/star.wav");*/
+	AssetManager::getAssetManager().loadSound("star", "Assets/Sounds/star.wav");
+	AssetManager::getAssetManager().loadSound("shoot", "Assets/Sounds/shoot.wav");
+	AssetManager::getAssetManager().loadSound("impact", "Assets/Sounds/impact.wav");
+
 }

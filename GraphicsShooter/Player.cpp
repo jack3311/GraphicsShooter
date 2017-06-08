@@ -13,6 +13,9 @@ Player::~Player()
 
 bool Player::tryFire()
 {
+	if (hasInfiniteAmmo())
+		return true;
+
 	--ammo;
 	return ammo >= 0;
 }
@@ -26,8 +29,20 @@ void Player::reload()
 	}
 }
 
+bool Player::isReloading() const
+{
+	return reloading;
+}
+
+int Player::getAmmo() const
+{
+	return ammo;
+}
+
 void Player::update(float _dt)
 {
+	lifetime += _dt;
+
 	if (reloading)
 	{
 		timeSinceReloadStart += _dt;
@@ -46,8 +61,57 @@ bool Player::isDead() const
 	return health <= 0;
 }
 
-void Player::dealDamage(int amount)
+void Player::dealDamage(float _amount)
 {
-	health -= amount;
-	health = clamp(0, health, MAX_HEALTH);
+	health -= _amount;
+	health = clamp(0.f, health, MAX_HEALTH);
+}
+
+int Player::getHealth() const
+{
+	return static_cast<int>(health);
+}
+
+void Player::addScore(int _amount)
+{
+	score += _amount;
+}
+
+int Player::getScore() const
+{
+	return score;
+}
+
+void Player::infiniteAmmoFor(float _duration)
+{
+	if (infiniteAmmoEndTime < lifetime)
+	{
+		infiniteAmmoEndTime = lifetime + _duration;
+	}
+	else
+	{
+		infiniteAmmoEndTime += _duration;
+	}
+}
+
+void Player::shieldFor(float _duration)
+{
+	if (shieldEndTime < lifetime)
+	{
+		shieldEndTime = lifetime + _duration;
+	}
+	else
+	{
+		shieldEndTime += _duration;
+	}
+}
+
+bool Player::hasInfiniteAmmo() const
+{
+	return infiniteAmmoEndTime > lifetime;
+}
+
+bool Player::hasShield() const
+{
+	return shieldEndTime > lifetime;
 }

@@ -45,6 +45,10 @@ void UIMenu::initialise()
 void UIMenu::addElement(UIElement * _element)
 {
 	uiElements.push_back(_element);
+	if (_element->calcWH)
+	{
+		_element->recalculateWH(genericLabel);
+	}
 }
 
 void UIMenu::update(float _dt)
@@ -65,10 +69,7 @@ void UIMenu::update(float _dt)
 			if (e->containsPoint(mX, mY))
 			{
 				//Mouse down on this ui element
-				if (e->onClick)
-				{
-					(*e->onClick)();
-				}
+				e->onClick();
 				break; //Do not check other elements
 			}
 		}
@@ -85,23 +86,42 @@ void UIMenu::draw() const
 	}
 }
 
-UIElement::UIElement(int _x, int _y, int _width, int _height, std::string _text, std::function<void()> * _onClick) :
+void UIMenu::clear()
+{
+	for (auto e : uiElements)
+	{
+		delete e;
+	}
+
+	uiElements.clear();
+}
+
+UIElement::UIElement(float _x, float _y, int _width, int _height, std::string _text, std::function<void()> _onClick) :
 	x(_x), y(_y), width(_width), height(_height), text(_text), onClick(_onClick)
 {
 }
 
+UIElement::UIElement(float _x, float _y, std::string _text, std::function<void()> _onClick) : x(_x), y(_y), text(_text), onClick(_onClick)
+{
+	calcWH = true; //Calculate width and height based on text label
+}
+
 void UIElement::draw(GLuint _texture, SpriteRenderer * _spriteRenderer, TextLabel * _label) const
 {
+	float actualX = x * Game::getGame()->getWindowWidth();
+	float actualY = y * Game::getGame()->getWindowHeight();
+
+	_label->setPosition(glm::vec2(actualX, actualY));
+	_label->setText(text);
+
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(Game::getGame()->getWindowWidth()),
 		0.0f, static_cast<GLfloat>(Game::getGame()->getWindowHeight()));
 
 	auto scale = glm::scale(glm::mat4(), scaleFactor * glm::vec3(width, height, 1));
-	auto translate = glm::translate(glm::mat4(), glm::vec3(x, y, 0.f));
+	auto translate = glm::translate(glm::mat4(), glm::vec3(actualX, actualY, 0.f));
 
 	_spriteRenderer->DrawSprite(_texture, projection, glm::mat4(), translate * scale);
 
-	_label->setPosition(glm::vec2(x, y));
-	_label->setText(text);
 	_label->Render();
 }
 
@@ -119,6 +139,18 @@ void UIElement::update(int _mX, int _mY)
 
 bool UIElement::containsPoint(int _mX, int _mY) const
 {
-	return	_mX > x - (width / 2)	&& _mX < x + (width / 2) &&
-			_mY > y - (height / 2)	&& _mY < y + (height / 2);
+	float actualX = x * Game::getGame()->getWindowWidth();
+	float actualY = y * Game::getGame()->getWindowHeight();
+
+	return	_mX > actualX - (width / 2)		&& _mX < actualX + (width / 2) &&
+			_mY > actualY - (height / 2)	&& _mY < actualY + (height / 2);
+}
+
+void UIElement::recalculateWH(TextLabel * _label)
+{
+	_label->setText(text);
+
+	//Find width, height based on text
+	width = _label->getWidth() + ELEMENT_PADDING_X;
+	height = _label->getHeight() + ELEMENT_PADDING_Y;
 }

@@ -18,7 +18,5 @@ public:
 	void update(float _dt);
 
 	float getLifetime() const;
-
-	unsigned int flag;
 };
 
