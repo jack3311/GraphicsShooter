@@ -101,9 +101,9 @@ void Util::CreateSphere(std::vector<TexturedNormalsVertexFormat>& _rVertices, st
 {
 	//TODO: Fix this
 
-	static const int rings = 30;
-	static const int sectors = 30;
-	static const float radius = 1.f;
+	static const int rings = 6;
+	static const int sectors = 6;
+	static const float radius = 2.f;
 
 	float const R = 1.f / (float)(rings - 1);
 	float const S = 1.f / (float)(sectors - 1);

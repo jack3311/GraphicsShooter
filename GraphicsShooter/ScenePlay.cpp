@@ -34,8 +34,8 @@
 
 ScenePlay::ScenePlay()
 {
-	ambientStrength = 0.6f;
-	ambientColor = glm::vec3(1.f, 0.8f, 0.8f);
+	ambientStrength = 0.33f;
+	ambientColor = glm::vec3(1.f, 0.7f, 1.f);
 	specularStrength = 0.8f;
 
 	ShaderLoader sl;
@@ -54,7 +54,7 @@ ScenePlay::ScenePlay()
 	std::vector<GLuint> tempFloorIndices;
 	Util::CreateTexturedNormalsCube(tempFloorVertices, tempFloorIndices);
 	floorRenderer = new MeshRenderer(shader, tempFloorVertices, tempFloorIndices,
-		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
+		AssetManager::getAssetManager().getTexture("black"));
 	floorRenderer->Initialise();
 
 
@@ -93,8 +93,8 @@ ScenePlay::ScenePlay()
 	skyboxRenderer->Initialise();
 
 
-	lights.push_back(new Light(glm::vec3(5.f, 5.f, 5.f), glm::vec3(0.f, 0.5f, 1.f)));
-	lights.push_back(new Light(glm::vec3(5.f, 5.f, 5.f), glm::vec3(1.f, 0.5f, 0.f)));
+	lights.push_back(new Light(glm::vec3(10000.f, 100.f, 0.f), glm::vec3(0.f, 0.0f, 1.f)));
+	lights.push_back(new Light(glm::vec3(-10000.f, 100.f, 0.f), glm::vec3(1.f, 0.0f, 0.f)));
 
 	ammoText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	scoreText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
@@ -114,7 +114,7 @@ void ScenePlay::render() const
 	auto floorScale = glm::scale(glm::mat4(), glm::vec3(10000.f, 1.f, 10000.f));
 	auto floorTrans = glm::translate(glm::mat4(), glm::vec3(0.f, -2.f, 0.f));
 
-	floorRenderer->DrawMesh(Game::getGame()->getCamera(), floorTrans * floorScale, *this, 0.1f);
+	floorRenderer->DrawMesh(Game::getGame()->getCamera(), floorTrans * floorScale, *this, 0.5f);
 
 	//Render skybox
 	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(10000.f, 10000.f, 10000.f)));
@@ -148,7 +148,8 @@ void ScenePlay::render() const
 
 void ScenePlay::update(float _dt)
 {
-	auto & gw = Game::getGame()->getGameWorld();
+	Game & g = *Game::getGame();
+	auto & gw = g.getGameWorld();
 	auto thisPlayer = gw.getPlayer();
 
 	elapsedTime += _dt;
@@ -157,17 +158,17 @@ void ScenePlay::update(float _dt)
 
 
 	//Mouse controls
-	/*glm::vec2 mousePos = Input::getMousePosition();
+	glm::vec2 mousePos = Input::getMousePosition();
 
 	glm::vec2 mouseDel = mousePos - glm::vec2(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f);
 
-	//glutWarpPointer(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f);
+	glutWarpPointer(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f);
 
 	float rotationX = -mouseDel.x * 0.005f;
 	float rotationY = mouseDel.y * 0.005f;
 
-	thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), rotationX, glm::vec3(0, 1, 0)));*/
-
+	thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), rotationX, glm::vec3(0, 1, 0)));
+	
 
 
 	//Keyboard controls
@@ -212,10 +213,10 @@ void ScenePlay::update(float _dt)
 
 
 	//Camera settings
-	Game & g = *Game::getGame();
-
-	auto offset = glm::cross(facing2D, glm::vec3(0, 1, 0)) * 2.f + glm::vec3(0.f, 3.5f, 0);
+	auto sideways = glm::cross(facing2D, glm::vec3(0, 1, 0));
+	auto offset = sideways * 2.f + glm::vec3(0.f, 3.5f, 0);
 	offset *= thisPlayer->getScale();
+
 	g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
 	g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
 
@@ -228,7 +229,7 @@ void ScenePlay::update(float _dt)
 	//Light testing
 
 	//lights.at(0)->setPosition(g.getCamera().getPosition());
-	lights.at(1)->setPosition(glm::vec3(cosf(elapsedTime) * 4.f, 0.f, -sinf(elapsedTime) * 4.f));
+	//lights.at(1)->setPosition(glm::vec3(cosf(elapsedTime) * 4.f, 0.f, -sinf(elapsedTime) * 4.f));
 
 	//ambientStrength = 0.5f * (sinf(elapsedTime / 2.f) + 1.f);
 

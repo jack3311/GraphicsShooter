@@ -175,16 +175,6 @@ void Game::loadAssets()
 			"Assets/Textures/red_space/pinkFT.png",
 		}
 	);
-/*
-	AssetManager::getAssetManager().loadCubeMap("skybox1", std::vector<std::string>{
-		"Assets/Textures/envmap_miramar/miramar_rt.png",
-			"Assets/Textures/envmap_miramar/miramar_lf.png",
-			"Assets/Textures/envmap_miramar/miramar_up.png",
-			"Assets/Textures/envmap_miramar/miramar_dn.png",
-			"Assets/Textures/envmap_miramar/miramar_bk.png",
-			"Assets/Textures/envmap_miramar/miramar_ft.png",
-	}
-	);*/
 
 	AssetManager::getAssetManager().loadSound("explode1", "Assets/Sounds/explode1.wav");
 	AssetManager::getAssetManager().loadSound("explode2", "Assets/Sounds/explode2.wav");
