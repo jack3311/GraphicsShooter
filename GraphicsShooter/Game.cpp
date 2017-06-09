@@ -165,6 +165,8 @@ void Game::loadAssets()
 	Logger::getLogger().log("Loading assets");
 
 	AssetManager::getAssetManager().loadTexture("black", "Assets/Textures/black.jpg");
+	AssetManager::getAssetManager().loadTexture("button", "Assets/Textures/buttonTex.png", true);
+
 
 	AssetManager::getAssetManager().loadCubeMap("skybox1", std::vector<std::string>{
 			"Assets/Textures/red_space/pinkRT.png",
@@ -184,5 +186,8 @@ void Game::loadAssets()
 	AssetManager::getAssetManager().loadSound("star", "Assets/Sounds/star.wav");
 	AssetManager::getAssetManager().loadSound("shoot", "Assets/Sounds/shoot.wav");
 	AssetManager::getAssetManager().loadSound("impact", "Assets/Sounds/impact.wav");
+	AssetManager::getAssetManager().loadSound("click", "Assets/Sounds/click.wav");
+
+	AssetManager::getAssetManager().loadSound("bgMusic", "Assets/Sounds/Clash Defiant.mp3", FMOD_LOOP_NORMAL);
 
 }

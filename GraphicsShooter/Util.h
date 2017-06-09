@@ -23,6 +23,16 @@
 #include <string>
 #include <cassert>
 
+template <typename T>
+T dist2(T x1, T y1, T x2, T y2)
+{
+	T dX = x1 - x2;
+	T dY = y1 - y2;
+
+	return dX * dX + dY * dY;
+}
+
+
 template <typename Target>
 void fromData(char * _in, Target * _out)
 {

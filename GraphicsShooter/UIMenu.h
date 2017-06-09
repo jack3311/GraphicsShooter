@@ -17,11 +17,12 @@ struct UIElement
 	float scaleFactor = 1.f;
 	std::string text;
 	bool calcWH = false;
+	bool isButton;
 
 	std::function<void()> onClick;
 
-	UIElement(float _x, float _y, int _width, int _height, std::string _text, std::function<void()> _onClick = []() {});
-	UIElement(float _x, float _y, std::string _text, std::function<void()> _onClick = []() {});
+	UIElement(float _x, float _y, int _width, int _height, std::string _text, bool _isButton = true, std::function<void()> _onClick = []() {});
+	UIElement(float _x, float _y, std::string _text, bool _isButton = true, std::function<void()> _onClick = []() {});
 
 	void draw(GLuint _texture, SpriteRenderer * _spriteRenderer, TextLabel * _label) const;
 	void update(int _mX, int _mY);
@@ -38,7 +39,7 @@ private:
 
 	TextLabel * genericLabel = nullptr;
 	SpriteRenderer * spriteRenderer = nullptr;
-	GLuint blackTexture;
+	GLuint buttonTexture;
 
 
 public:

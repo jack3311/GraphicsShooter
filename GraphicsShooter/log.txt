@@ -1,9 +1,15 @@
-08-06-2017 21-05-55: 	Initializing game
-08-06-2017 21-05-55: 	Loading assets
-08-06-2017 21-05-55: 	Initilizing scene: class SceneMenu
-08-06-2017 21-05-57: 	Initilizing scene: class ScenePlay
-08-06-2017 21-06-04: 	Initilizing scene: class SceneGameOver
-08-06-2017 21-06-05: 	Activating scene: class SceneMenu
-08-06-2017 21-06-07: 	Creating game world
-08-06-2017 21-06-07: 	Proceeding to next level
-08-06-2017 21-06-07: 	Activating scene: class ScenePlay
+09-06-2017 13-38-59: 	Initializing game
+09-06-2017 13-38-59: 	Loading assets
+09-06-2017 13-39-00: 	Initilizing scene: class SceneMenu
+09-06-2017 13-39-00: 	Initilizing scene: class ScenePlay
+09-06-2017 13-39-06: 	Initilizing scene: class SceneGameOver
+09-06-2017 13-39-06: 	Activating scene: class SceneMenu
+09-06-2017 13-39-15: 	Creating game world
+09-06-2017 13-39-15: 	Proceeding to next level
+09-06-2017 13-39-15: 	Activating scene: class ScenePlay
+09-06-2017 13-39-35: 	Activating scene: class SceneGameOver
+09-06-2017 13-40-02: 	Activating scene: class SceneMenu
+09-06-2017 13-40-03: 	Creating game world
+09-06-2017 13-40-03: 	Proceeding to next level
+09-06-2017 13-40-03: 	Activating scene: class ScenePlay
+09-06-2017 13-40-21: 	Activating scene: class SceneGameOver

@@ -25,8 +25,7 @@ UIMenu::~UIMenu()
 
 void UIMenu::initialise()
 {
-	blackTexture = AssetManager::getAssetManager().loadTexture("buttonBg", "Assets/Textures/bullet.jpg");
-
+	buttonTexture = AssetManager::getAssetManager().getTexture("button");
 
 	ShaderLoader sl;
 	GLuint shader = sl.CreateProgram("Shaders/texturedSpriteShader.vert",
@@ -70,6 +69,9 @@ void UIMenu::update(float _dt)
 			{
 				//Mouse down on this ui element
 				e->onClick();
+
+				//Play click sound
+				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("click"));
 				break; //Do not check other elements
 			}
 		}
@@ -82,7 +84,7 @@ void UIMenu::draw() const
 {
 	for (auto e : uiElements)
 	{
-		e->draw(blackTexture, spriteRenderer, genericLabel);
+		e->draw(buttonTexture, spriteRenderer, genericLabel);
 	}
 }
 
@@ -96,12 +98,13 @@ void UIMenu::clear()
 	uiElements.clear();
 }
 
-UIElement::UIElement(float _x, float _y, int _width, int _height, std::string _text, std::function<void()> _onClick) :
-	x(_x), y(_y), width(_width), height(_height), text(_text), onClick(_onClick)
+UIElement::UIElement(float _x, float _y, int _width, int _height, std::string _text, bool _isButton, std::function<void()> _onClick) :
+	x(_x), y(_y), width(_width), height(_height), text(_text), onClick(_onClick), isButton(_isButton)
 {
 }
 
-UIElement::UIElement(float _x, float _y, std::string _text, std::function<void()> _onClick) : x(_x), y(_y), text(_text), onClick(_onClick)
+UIElement::UIElement(float _x, float _y, std::string _text, bool _isButton, std::function<void()> _onClick) : 
+	x(_x), y(_y), text(_text), onClick(_onClick), isButton(_isButton)
 {
 	calcWH = true; //Calculate width and height based on text label
 }
@@ -113,6 +116,7 @@ void UIElement::draw(GLuint _texture, SpriteRenderer * _spriteRenderer, TextLabe
 
 	_label->setPosition(glm::vec2(actualX, actualY));
 	_label->setText(text);
+	_label->setScale(1.0f + (scaleFactor - 1.0f) / 2.f);
 
 	glm::mat4 projection = glm::ortho(0.0f, static_cast<GLfloat>(Game::getGame()->getWindowWidth()),
 		0.0f, static_cast<GLfloat>(Game::getGame()->getWindowHeight()));
@@ -120,16 +124,29 @@ void UIElement::draw(GLuint _texture, SpriteRenderer * _spriteRenderer, TextLabe
 	auto scale = glm::scale(glm::mat4(), scaleFactor * glm::vec3(width, height, 1));
 	auto translate = glm::translate(glm::mat4(), glm::vec3(actualX, actualY, 0.f));
 
-	_spriteRenderer->DrawSprite(_texture, projection, glm::mat4(), translate * scale);
+	if (isButton)
+		_spriteRenderer->DrawSprite(_texture, projection, glm::mat4(), translate * scale);
 
 	_label->Render();
 }
 
 void UIElement::update(int _mX, int _mY)
 {
-	if (containsPoint(_mX, _mY))
+	if (isButton && containsPoint(_mX, _mY))
 	{
-		scaleFactor = 1.5f;
+		float actualX = x * Game::getGame()->getWindowWidth();
+		float actualY = y * Game::getGame()->getWindowHeight();
+
+		float d2 = dist2<float>(_mX, _mY, actualX, actualY);
+		float maxD2 = (width / 2.f) * (width / 2.f) + (height / 2.f) * (height / 2.f);
+
+		float dP = d2 / maxD2;
+		dP = 1.0f - dP;
+
+		dP *= 0.25f;
+
+
+		scaleFactor = 1.25f + dP;
 	}
 	else
 	{

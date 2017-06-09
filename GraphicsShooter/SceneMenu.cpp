@@ -31,6 +31,9 @@ SceneMenu::SceneMenu()
 {
 	mainMenu = new UIMenu();
 	mainMenu->initialise();
+
+	//Start Bg music - the constructor is called only once
+	AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("bgMusic"));
 }
 
 SceneMenu::~SceneMenu()
@@ -52,14 +55,16 @@ void SceneMenu::reset()
 {
 	mainMenu->clear();
 
+	mainMenu->addElement(new UIElement(0.5f, 3.f / 4.f, "Tank Survival", false));
+
 	if (Game::getGame()->hasGameWorld() && Game::getGame()->getGameWorld().isGameInProgress())
 	{
-		mainMenu->addElement(new UIElement(0.5f, 2.f / 3.f, "Continue", []() {
+		mainMenu->addElement(new UIElement(0.5f, 2.f / 4.f, "Continue", true, []() {
 			SceneManager::getSceneManager().activate<ScenePlay>();
 		}));
 	}
 
-	mainMenu->addElement(new UIElement(0.5f, 1.f / 3.f, "New Game", []() {
+	mainMenu->addElement(new UIElement(0.5f, 1.f / 4.f, "New Game", true, []() {
 		Game::getGame()->createGameWorld();
 		SceneManager::getSceneManager().activate<ScenePlay>();
 	}));

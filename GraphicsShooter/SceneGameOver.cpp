@@ -33,14 +33,14 @@ void SceneGameOver::reset(int _playerScore)
 {
 	gameOverMenu->clear();
 
-	gameOverMenu->addElement(new UIElement(0.5f, 3.f / 4.f, "Game Over"));
+	gameOverMenu->addElement(new UIElement(0.5f, 3.f / 4.f, "Game Over", false));
 
 	std::stringstream ss;
 	ss << "Your score was: " << _playerScore;
 
-	gameOverMenu->addElement(new UIElement(0.5f, 2.f / 4.f, ss.str()));
+	gameOverMenu->addElement(new UIElement(0.5f, 2.f / 4.f, ss.str(), false));
 
-	gameOverMenu->addElement(new UIElement(0.5f, 1.f / 4.f, "Return to main menu", []() {
+	gameOverMenu->addElement(new UIElement(0.5f, 1.f / 4.f, "Return to main menu", true, []() {
 		SceneManager::getSceneManager().activate<SceneMenu>();
 	}));
 }
