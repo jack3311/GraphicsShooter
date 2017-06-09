@@ -33,10 +33,11 @@ private:
 	MeshRenderer * floorRenderer;
 
 	ModelRenderer * playerRenderer;
-	ModelRenderer * enemy1Renderer;
+	ModelRenderer ** enemyRenderers; // Delete all these
 
 	MeshRenderer * bulletRenderer;
-	MeshRenderer * powerup1Renderer;
+
+	MeshRenderer ** powerupRenderers;
 
 	SkyboxRenderer * skyboxRenderer;
 

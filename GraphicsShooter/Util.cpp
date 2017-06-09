@@ -101,15 +101,15 @@ void Util::CreateSphere(std::vector<TexturedNormalsVertexFormat>& _rVertices, st
 {
 	//TODO: Fix this
 
-	static const int rings = 6;
-	static const int sectors = 6;
+	static const int rings = 15;
+	static const int sectors = 15;
 	static const float radius = 2.f;
 
 	float const R = 1.f / (float)(rings - 1);
 	float const S = 1.f / (float)(sectors - 1);
 	int r, s;
 
-	_rVertices.resize(rings * sectors * 3);
+	_rVertices.resize(rings * sectors);
 	auto v = _rVertices.begin();
 
 	for (r = 0; r < rings; r++)

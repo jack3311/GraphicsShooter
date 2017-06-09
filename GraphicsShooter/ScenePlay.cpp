@@ -34,7 +34,7 @@
 
 ScenePlay::ScenePlay()
 {
-	ambientStrength = 0.33f;
+	ambientStrength = 0.5f;
 	ambientColor = glm::vec3(1.f, 0.7f, 1.f);
 	specularStrength = 0.8f;
 
@@ -50,6 +50,7 @@ ScenePlay::ScenePlay()
 	meshRendererTest->Initialise();*/
 
 
+	//Create floor renderer
 	std::vector<TexturedNormalsVertexFormat> tempFloorVertices;
 	std::vector<GLuint> tempFloorIndices;
 	Util::CreateTexturedNormalsCube(tempFloorVertices, tempFloorIndices);
@@ -57,18 +58,33 @@ ScenePlay::ScenePlay()
 		AssetManager::getAssetManager().getTexture("black"));
 	floorRenderer->Initialise();
 
-
+	//Create player renderer
 	playerRenderer = new ModelRenderer(shader, 0.0f);
 	playerRenderer->loadFromFile("Assets/Models/tank1/Abrams_BF3.obj");
 	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
 	playerRenderer->initialize();
 
-	enemy1Renderer = new ModelRenderer(shader, 0.0f);
-	enemy1Renderer->loadFromFile("Assets/Models/tank2/tank2.obj");
-	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
-	enemy1Renderer->initialize();
+
+	//Create enemy renderers
+	enemyRenderers = new ModelRenderer*[EnemyType::ENEMYTYPE_NUM_ITEMS];
+
+	//Shooter
+	enemyRenderers[EnemyType::SHOOTER] = new ModelRenderer(shader, 0.0f);
+	enemyRenderers[EnemyType::SHOOTER]->loadFromFile("Assets/Models/shooter/shooter.obj");
+	enemyRenderers[EnemyType::SHOOTER]->initialize();
+
+	//Turret
+	enemyRenderers[EnemyType::TURRET] = new ModelRenderer(shader, 0.0f);
+	enemyRenderers[EnemyType::TURRET]->loadFromFile("Assets/Models/turret/turret.obj");
+	enemyRenderers[EnemyType::TURRET]->initialize();
+
+	//Fighter
+	enemyRenderers[EnemyType::FIGHTER] = new ModelRenderer(shader, 0.0f);
+	enemyRenderers[EnemyType::FIGHTER]->loadFromFile("Assets/Models/fighter/fighter.obj");
+	enemyRenderers[EnemyType::FIGHTER]->initialize();
 	
 
+	//Create bullet renderer
 	std::vector<TexturedNormalsVertexFormat> tempBulletVertices;
 	std::vector<GLuint> tempBulletIndices;
 	Util::CreateSphere(tempBulletVertices, tempBulletIndices);
@@ -76,16 +92,34 @@ ScenePlay::ScenePlay()
 	bulletRenderer = new MeshRenderer(shader, tempBulletVertices, tempBulletIndices,
 		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
 	bulletRenderer->Initialise();
+	
+
+	//Create powerup renderers
+	powerupRenderers = new MeshRenderer*[PowerupType::POWERUPTYPE_NUM_ITEMS];
 
 	std::vector<TexturedNormalsVertexFormat> tempPowerup1Vertices;
 	std::vector<GLuint> tempPowerup1Indices;
 	Util::CreateTexturedNormalsCube(tempPowerup1Vertices, tempPowerup1Indices);
-	powerup1Renderer = new MeshRenderer(shader, tempPowerup1Vertices, tempPowerup1Indices,
-		AssetManager::getAssetManager().loadTexture("bullet", "Assets/Textures/bullet.jpg"));
-	powerup1Renderer->Initialise();
+	powerupRenderers[PowerupType::HEALTH] = new MeshRenderer(shader, tempPowerup1Vertices, tempPowerup1Indices,
+		AssetManager::getAssetManager().loadTexture("healthPu", "Assets/Textures/healthpu.png"));
+	powerupRenderers[PowerupType::HEALTH]->Initialise();
+
+	std::vector<TexturedNormalsVertexFormat> tempPowerup2Vertices;
+	std::vector<GLuint> tempPowerup2Indices;
+	Util::CreateSphere(tempPowerup2Vertices, tempPowerup2Indices);
+	powerupRenderers[PowerupType::SHIELD] = new MeshRenderer(shader, tempPowerup2Vertices, tempPowerup2Indices,
+		AssetManager::getAssetManager().loadTexture("shieldPu", "Assets/Textures/shieldpu.png"));
+	powerupRenderers[PowerupType::SHIELD]->Initialise();
+
+	std::vector<TexturedNormalsVertexFormat> tempPowerup3Vertices;
+	std::vector<GLuint> tempPowerup3Indices;
+	Util::CreateSphere(tempPowerup3Vertices, tempPowerup3Indices);
+	powerupRenderers[PowerupType::INFINITE_AMMO] = new MeshRenderer(shader, tempPowerup3Vertices, tempPowerup3Indices,
+		AssetManager::getAssetManager().loadTexture("ammoPu", "Assets/Textures/ammopu.png"));
+	powerupRenderers[PowerupType::INFINITE_AMMO]->Initialise();
 
 
-
+	//Create skybox renderer
 	GLuint shader1 = sl.CreateProgram("Shaders/skyboxShader.vert",
 		"Shaders/skyboxShader.frag");
 
@@ -103,7 +137,17 @@ ScenePlay::ScenePlay()
 
 ScenePlay::~ScenePlay()
 {
-	//TODO: Add destructor...
+	delete floorRenderer;
+	delete playerRenderer;
+	delete bulletRenderer;
+	delete skyboxRenderer;
+
+	delete ammoText;
+	delete scoreText;
+	delete healthText;
+
+	delete[] enemyRenderers;
+	delete[] powerupRenderers;
 }
 
 void ScenePlay::render() const
@@ -125,7 +169,7 @@ void ScenePlay::render() const
 	//Render enemies
 	for (auto enemy : gw.getEnemies())
 	{
-		enemy1Renderer->draw(Game::getGame()->getCamera(), enemy->getModelMatrix(), *this);
+		enemyRenderers[enemy->flag]->draw(Game::getGame()->getCamera(), enemy->getModelMatrix(), *this);
 	}
 
 	//Render bullets
@@ -137,7 +181,7 @@ void ScenePlay::render() const
 	//Render powerups
 	for (auto powerup : gw.getPowerups())
 	{
-		powerup1Renderer->DrawMesh(Game::getGame()->getCamera(), powerup->getModelMatrix(), *this, 0.0f);
+		powerupRenderers[powerup->flag]->DrawMesh(Game::getGame()->getCamera(), powerup->getModelMatrix(), *this, 0.0f);
 	}
 
 	//Render text
