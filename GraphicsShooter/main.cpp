@@ -25,7 +25,7 @@
 
 #define START_WINDOW_WIDTH 800
 #define START_WINDOW_HEIGHT 600
-#define WINDOW_TITLE "Jack Wilson - Graphics Projects - 2017"
+#define WINDOW_TITLE "Jack Wilson - Tank Survival - 2017"
 
 int numFrames = 0;
 
@@ -49,7 +49,7 @@ void reshape(int _width, int _height)
 
 int main(int argc, char ** argv)
 {
-	JNetwork::initWSA();
+	//JNetwork::initWSA();
 
 	srand(static_cast<unsigned int>(time(0)));
 
@@ -70,6 +70,6 @@ int main(int argc, char ** argv)
 	glutIdleFunc(update);
 	glutMainLoop();
 
-	JNetwork::shutdownWSA();
+	//JNetwork::shutdownWSA();
 	return 0;
 }

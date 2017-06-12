@@ -43,6 +43,10 @@ public:
 	const glm::vec3 & getConeDir() const;
 	void setConeDir(const glm::vec3 & _coneDir);
 
+	/// 
+	/// isSpotlight:
+	/// returns whether the light is of a spotlight type (_coneAngle != -1)
+	///
 	bool isSpotlight() const;
 };
 

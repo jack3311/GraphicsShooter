@@ -50,13 +50,47 @@ protected:
 	};
 
 public:
+	/// 
+	/// MeshRenderer:
+	/// Creates a mesh renderer associated with a model
+	/// _shader - the mesh shader
+	/// _vertices - the set of vertices
+	/// _indices - the set of indices
+	/// _textures - the set of model textures
+	///
 	MeshRenderer(GLuint _shader, std::vector<TexturedNormalsVertexFormat> _vertices, std::vector<GLuint> _indices, std::vector<ModelTextureInfo> _textures);
+
+	/// 
+	/// MeshRenderer:
+	/// Creates a standalone mesh renderer
+	/// _shader - the mesh shader
+	/// _vertices - the set of vertices
+	/// _indices - the set of indices
+	/// _texture - the mesh texture
+	///
 	MeshRenderer(GLuint _shader, std::vector<TexturedNormalsVertexFormat> _vertices, std::vector<GLuint> _indices, GLuint _texture);
 	~MeshRenderer();
 
+	/// 
+	/// Initialise:
+	/// Initilises the mesh renderer
+	///
 	void Initialise();
 
+	/// 
+	/// DrawMesh:
+	/// Draws the standalone mesh
+	/// _camera - the game camera
+	/// _model - the model matrix
+	/// _scenePlay - the play scene
+	/// _reflectionStrength - the strength of reflections on this mesh
+	///
 	void DrawMesh(const Camera & _camera, const glm::mat4 & _model, const ScenePlay & _scenePlay, const float & _reflectionStrength) const;
+
+	/// 
+	/// DrawMesh:
+	/// Draws the model-associated mesh
+	///
 	void DrawMeshSimple() const;
 };
 

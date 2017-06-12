@@ -35,10 +35,27 @@ public:
 
 	glm::mat4 getViewMatrix() const;
 	glm::mat4 getProjMatrix() const;
+
+	/// 
+	/// transform:
+	/// Transforms a matrix by the Proj and View matrices associated with the camera
+	/// _source - the original matrix
+	/// returns the new matrix
+	///
 	glm::mat4 transform(glm::mat4 & _source) const;
 
+	/// 
+	/// unproject:
+	/// Unprojects a 2D screen coordinate to 2D world coordinates
+	/// _projected - the screen coordinates
+	/// returns the world coordinates
+	///
 	glm::vec2 unproject(glm::vec2 & _projected) const;
 
+	/// 
+	/// updateCamera:
+	/// Recalculates the view and projection matrices for the camera
+	///
 	void updateCamera();
 
 	void setPosition(glm::vec3 _position);

@@ -40,8 +40,20 @@ public:
 	SpriteRenderer(GLuint _shader);
 	~SpriteRenderer();
 
+	/// 
+	/// Initialise:
+	/// Initilises the sprite renderer
+	///
 	void Initialise();
 
+	/// 
+	/// DrawSprite:
+	/// Draws a sprite
+	/// _texture - the sprite texture
+	/// _projection - the projection matrix
+	/// _view - the view matrix
+	/// _model - the model matrix
+	///
 	void DrawSprite(GLuint _texture, glm::mat4 & _projection, glm::mat4 & _view, glm::mat4 & _model) const;
 };
 

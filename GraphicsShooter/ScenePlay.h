@@ -60,13 +60,46 @@ public:
 	virtual void render() const;
 	virtual void update(float _dt);
 
+	/// 
+	/// reset:
+	/// Resets the scene
+	///
 	void reset();
 
+	/// 
+	/// getLights:
+	/// Returns the vector of lights in the scene
+	///
 	const std::vector<Light *> & getLights() const;
+
+	/// 
+	/// getNumLights:
+	/// Returns the number of lights in the scene
+	///
 	const unsigned int getNumLights() const;
+
+	/// 
+	/// getAmbientStrength:
+	/// Returns the strength of ambient lighting
+	///
 	const float getAmbientStrength() const;
+
+	/// 
+	/// getAmbientColor:
+	/// Returns the color of the ambient light
+	///
 	const glm::vec3 & getAmbientColor() const;
+
+	/// 
+	/// getSpecularStrength:
+	/// Returns the specular strength of the scene
+	///
 	const float getSpecularStrength() const;
+
+	/// 
+	/// getSkyboxCubemap:
+	/// Returns the address of the current skybox
+	///
 	const GLuint getSkyboxCubemap() const;
 };
 

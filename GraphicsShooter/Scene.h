@@ -23,7 +23,17 @@ public:
 	Scene();
 	~Scene();
 
+	/// 
+	/// render:
+	/// Renders the scene
+	/// 
 	virtual void render() const = 0;
+
+	/// 
+	/// update:
+	/// Updates the scene
+	/// _dt - the current delta time
+	/// 
 	virtual void update(float _dt) = 0;
 };
 

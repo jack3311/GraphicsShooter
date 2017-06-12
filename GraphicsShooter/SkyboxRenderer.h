@@ -44,8 +44,19 @@ public:
 	SkyboxRenderer(GLuint _shader);
 	~SkyboxRenderer();
 
+	/// 
+	/// Initialise:
+	/// Initilises the skybox renderer
+	///
 	void Initialise();
 
+	/// 
+	/// DrawModel:
+	/// Draws the skybox
+	/// _texture - the skybox texture
+	/// _camera - the game camera
+	/// _model - the model matrix
+	///
 	void DrawModel(GLuint _texture, const Camera & _camera, const glm::mat4 & _model) const;
 };
 

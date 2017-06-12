@@ -15,8 +15,17 @@ public:
 	glm::vec3 & getVelocity();
 	void setVelocity(glm::vec3);
 
+	///
+	/// update:
+	/// Updates the PhysicsObject
+	/// _dt - the delta time
+	///
 	void update(float _dt);
 
+	///
+	/// getLifetime:
+	/// Returns the duration that this object has existed for
+	///
 	float getLifetime() const;
 };
 

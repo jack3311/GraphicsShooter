@@ -75,23 +75,47 @@ public:
 	GameWorld(/*bool _isServer*/);
 	~GameWorld();
 
+	/// 
+	/// update:
+	/// Updates the game world
+	/// _dt - the delta time
+	///
 	void update(float _dt);
 
 	std::vector<Object *> getEnemies();
-
 	std::vector<PhysicsObject *> getBullets();
-
 	std::vector<PhysicsObject *> getPowerups();
-
 	Player * getPlayer();
 
+	/// 
+	/// playerFire:
+	/// Attempts to fire a bullet for the player
+	///
 	void playerFire();
 
+	/// 
+	/// createBullet:
+	/// Creates a bullet in the scene
+	/// _source - the bullet's source
+	/// _dir - the direction of the bullet
+	/// _friendly - whether the bullet will affect the player or not
+	/// _speed - the speed of the bullet
+	///
 	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED);
 
+	/// 
+	/// isGameInProgress:
+	/// returns whether a game is currently in progress
+	///
 	bool isGameInProgress() const;
 
+	/// 
+	/// nextLevel:
+	/// Resets the game world, and advances to the next level
+	///
 	void nextLevel();
+
+
 
 	////Packet processing step 1 (pool packets if client / directly process if server)
 	//void onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);

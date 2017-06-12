@@ -24,11 +24,31 @@
 class Input
 {
 public:
+
+	/// 
+	/// init:
+	/// Sets up keyboard and mouse input with OpenGL
+	///
 	static void init();
 
+	/// 
+	/// isKeyDown:
+	/// returns whether a given key is currently pressed
+	/// _key - the key
+	///
 	static bool isKeyDown(const unsigned char _key);
+
+	/// 
+	/// isMouseDown:
+	/// returns whether a given mouse button is currently pressed
+	/// _button - the mouse button
+	///
 	static bool isMouseDown(const unsigned int _button);
 
+	/// 
+	/// getMousePosition:
+	/// returns the current mouse position in screen coordinates
+	///
 	static glm::vec2 getMousePosition();
 
 private:

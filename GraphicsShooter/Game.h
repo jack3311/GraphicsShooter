@@ -53,18 +53,50 @@ public:
 
 	Camera & getCamera();
 
+	/// 
+	/// render:
+	/// Renders the current scene
+	///
 	void render();
+
+	/// 
+	/// update:
+	/// Updates the current scene
+	///
 	void update();
+
+	/// 
+	/// init:
+	/// Initialises the game
+	/// _windowWidth - the width of the window
+	/// _windowHeight - the height of the window
+	///
 	void init(int _windowWidth, int _windowHeight);
 
 	int getWindowWidth() const;
 	int getWindowHeight() const;
 
+	/// 
+	/// setWindowDimensions:
+	/// Updates the dimensions of the game window
+	/// _width - the width of the window
+	/// _height - the height of the window
+	///
 	void setWindowDimensions(int _width, int _height);
 
+	/// 
+	/// hasFinishedLoading:
+	/// returns whether all scenes have been loaded
+	///
 	bool hasFinishedLoading() const;
 
+
+	/// 
+	/// createGameWorld:
+	/// Creates a game world
+	///
 	void createGameWorld(/*bool _isServer*/);
+
 	GameWorld & getGameWorld() const;
 	bool hasGameWorld() const;
 };

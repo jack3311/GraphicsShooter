@@ -42,19 +42,47 @@ public:
 	static SceneManager & getSceneManager();
 	static void deleteSceneManager();
 
+	///
+	/// initScene:
+	/// Sets up a given scene
+	/// _args - the scene's reset function arguments
+	///
 	template<typename T, typename ...Args>
 	void initScene(Args ..._args);
 
+	///
+	/// activate:
+	/// Activates a given scene
+	/// _args - the scene's reset function arguments
+	///
 	template<typename T, typename ...Args>
 	void activate(Args ..._args);
 
-	template<typename T, typename ...Args>
-	void activateWithoutReset(Args ..._args);
+	///
+	/// activateWithoutReset:
+	/// Activates a given scene without resetting it
+	///
+	template<typename T>
+	void activateWithoutReset();
 
+	///
+	/// getScene:
+	/// returns a given scene instance
+	///
 	template<typename T>
 	T & getScene();
 
+	///
+	/// render:
+	/// Renders the currently activated scene
+	///
 	void render();
+
+	///
+	/// update:
+	/// Updates the currently activated scene
+	/// _dt - the delta time
+	///
 	void update(float _dt);
 };
 
@@ -77,8 +105,8 @@ inline void SceneManager::activate(Args ..._args)
 	dynamic_cast<T*>(currentScene)->reset(_args...);
 }
 
-template<typename T, typename ...Args>
-inline void SceneManager::activateWithoutReset(Args ..._args)
+template<typename T>
+inline void SceneManager::activateWithoutReset()
 {
 	Logger::getLogger().log("Activating scene: ", typeid(T).name());
 

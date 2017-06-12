@@ -21,8 +21,19 @@ public:
 
 	static Logger & getLogger();
 
+	/// 
+	/// log:
+	/// Logs a given string to the standard output, and the log file
+	/// _a - the string to log
+	///
 	void log(const std::string & _a);
 
+	/// 
+	/// log:
+	/// Logs a set of strings to the standard output, and the log file
+	/// _first - the first string
+	/// _args - the remaining strings
+	///
 	template <typename T, typename... Args>
 	void log(T _first, Args ... _args);
 };

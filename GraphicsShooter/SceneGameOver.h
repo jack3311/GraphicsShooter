@@ -16,6 +16,11 @@ public:
 	virtual void render() const;
 	virtual void update(float _dt);
 
+	/// 
+	/// reset:
+	/// Resets the scene
+	/// _playerScore - the player score to show
+	///
 	void reset(int _playerScore);
 };
 

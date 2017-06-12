@@ -36,7 +36,13 @@ protected:
 public:
 	Sprite(GLuint _texture, glm::vec2 & _position, glm::vec2 & _scale, const float & _rotation);
 	~Sprite();
-
+	
+	///
+	/// draw:
+	/// Draws the sprite to a sprite renderer
+	/// _spriteRenderer - the sprite renderer
+	/// _camera - the game camera
+	///
 	virtual void draw(SpriteRenderer & _spriteRenderer, Camera & _camera);
 
 	void setRotation(float _radians);

@@ -34,5 +34,9 @@ public:
 	virtual void render() const;
 	virtual void update(float _dt);
 
+	/// 
+	/// reset:
+	/// Resets the scene
+	///
 	void reset();
 };

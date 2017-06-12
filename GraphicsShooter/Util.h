@@ -23,6 +23,13 @@
 #include <string>
 #include <cassert>
 
+///
+/// dist2:
+/// Calculates the square of the distance between two points
+/// x1, y1 - the first point's coordinates
+/// x2, y2 - the second point's coordinates
+/// returns the square distance between the points
+///
 template <typename T>
 T dist2(T x1, T y1, T x2, T y2)
 {
@@ -33,65 +40,83 @@ T dist2(T x1, T y1, T x2, T y2)
 }
 
 
-template <typename Target>
-void fromData(char * _in, Target * _out)
-{
-	auto p = reinterpret_cast<Target *>(_in);
-	memcpy_s(_out, sizeof(_out), p, sizeof(p));
+//template <typename Target>
+//void fromData(char * _in, Target * _out)
+//{
+//	auto p = reinterpret_cast<Target *>(_in);
+//	memcpy_s(_out, sizeof(_out), p, sizeof(p));
+//
+//	/*assert(sizeof(_in) >= sizeof(Target));
+//
+//	union
+//	{
+//		char data[sizeof(Target)];
+//		Target conversion;
+//	} conversionUnion;
+//
+//	//Copy 1: into union
+//	memcpy_s(conversionUnion.data, sizeof(Target), _in, sizeof(Target));
+//
+//	//Copy 2: out of union
+//	memcpy_s(_out, sizeof(Target), &conversionUnion.conversion, sizeof(Target));*/
+//}
+//
+//template <typename Target>
+//void toData(char * _out, Target * _in)
+//{
+//	auto p = reinterpret_cast<char *>(_in);
+//	memcpy_s(_out, sizeof(_out), p, sizeof(p));
+//
+//	/*assert(sizeof(_out) >= sizeof(Target));
+//
+//	union
+//	{
+//		char data[sizeof(Target)];
+//		Target conversion;
+//	} conversionUnion;
+//
+//	//Copy 1: into union
+//	memcpy_s(&conversionUnion.conversion, sizeof(Target), _in, sizeof(Target));
+//
+//	//Copy 2: out of union
+//	memcpy_s(_out, sizeof(Target), conversionUnion.data, sizeof(Target));*/
+//}
+//
+//void floatToChar(float _in, char _out[sizeof(float)]);
+//
+//float charToFloat(char _in[sizeof(float)]);
 
-	/*assert(sizeof(_in) >= sizeof(Target));
-
-	union
-	{
-		char data[sizeof(Target)];
-		Target conversion;
-	} conversionUnion;
-
-	//Copy 1: into union
-	memcpy_s(conversionUnion.data, sizeof(Target), _in, sizeof(Target));
-
-	//Copy 2: out of union
-	memcpy_s(_out, sizeof(Target), &conversionUnion.conversion, sizeof(Target));*/
-}
-
-template <typename Target>
-void toData(char * _out, Target * _in)
-{
-	auto p = reinterpret_cast<char *>(_in);
-	memcpy_s(_out, sizeof(_out), p, sizeof(p));
-
-	/*assert(sizeof(_out) >= sizeof(Target));
-
-	union
-	{
-		char data[sizeof(Target)];
-		Target conversion;
-	} conversionUnion;
-
-	//Copy 1: into union
-	memcpy_s(&conversionUnion.conversion, sizeof(Target), _in, sizeof(Target));
-
-	//Copy 2: out of union
-	memcpy_s(_out, sizeof(Target), conversionUnion.data, sizeof(Target));*/
-}
-
-void floatToChar(float _in, char _out[sizeof(float)]);
-
-float charToFloat(char _in[sizeof(float)]);
-
-
+///
+/// concatenate
+/// Joins a set of strings together
+/// _first - the first string
+/// _args - the remaining strings
+///
 template <typename T, typename... Args>
 std::string concatenate(T _first, Args ..._args)
 {
 	return std::string(_first) + concatenate(_args...);
 }
 
+///
+/// concatenate
+/// Joins a set of strings together
+/// _first - the first string
+///
 template <typename T>
 std::string concatenate(T _first)
 {
 	return std::string(_first);
 }
 
+///
+/// clamp
+/// Ensures a value is in a given range
+/// _min - the infimum of the range
+/// _val - the value to clamp
+/// _max - the supremum of the range
+/// returns the clamped value
+///
 template <typename T>
 T clamp(T _min, T _val, T _max)
 {
@@ -101,6 +126,12 @@ T clamp(T _min, T _val, T _max)
 	return temp;
 }
 
+///
+/// length2:
+/// Calculates the square of the length of a vector
+/// x - the vector
+/// returns the square of the vector's length
+///
 template <typename T, glm::precision P, template <typename, glm::precision> class vecType>
 GLM_FUNC_QUALIFIER T length2(vecType<T, P> const & x)
 {
@@ -108,6 +139,14 @@ GLM_FUNC_QUALIFIER T length2(vecType<T, P> const & x)
 	return glm::detail::compute_dot<vecType, T, P>::call(x, x);
 }
 
+///
+/// circleCircleCollision:
+/// Calculates the collision between two circles
+/// _pos1 - the position of the first circle
+/// _r1 - the radius of the first circle
+/// _pos2 - the position of the second circle
+/// _r2 - the radius of the second circle
+///
 inline bool circleCircleCollision(const glm::vec2 & _pos1, const float & _r1, const glm::vec2 & _pos2, const float & _r2)
 {
 	float r1plusr2 = _r1 + _r2;
@@ -115,6 +154,15 @@ inline bool circleCircleCollision(const glm::vec2 & _pos1, const float & _r1, co
 	return length2(d) < r1plusr2 * r1plusr2;
 }
 
+///
+/// lineCircleCollision:
+/// Calculates the collision between a line segment and a circle
+/// _lineStartPos - the start position of the line
+/// _lineEndPos - the end position of the line
+/// _lineRadius - the radius of the line
+/// _circlePos - the position of the circle
+/// _r - the radius of the circle
+///
 inline bool lineCircleCollision(const glm::vec2 & _lineStartPos, const glm::vec2 & _lineEndPos, const float _lineRadius, const glm::vec2 & _circlePos, const float & _r)
 {
 	glm::vec2 diff = _circlePos - _lineStartPos;
@@ -131,6 +179,14 @@ inline bool lineCircleCollision(const glm::vec2 & _lineStartPos, const glm::vec2
 	return fabsf(dist2) <= powf((_lineRadius + _r), 2.f);
 }
 
+///
+/// sphereSphereCollision:
+/// Calculates the collision between two spheres
+/// _pos1 - the position of the first sphere
+/// _r1 - the radius of the first sphere
+/// _pos2 - the position of the second sphere
+/// _r2 - the radius of the second sphere
+///
 inline bool sphereSphereCollision(const glm::vec3 & _pos1, const float & _r1, const glm::vec3 & _pos2, const float & _r2)
 {
 	float r1plusr2 = _r1 + _r2;

@@ -124,14 +124,12 @@ void ModelRenderer::loadMaterialTextures(aiMaterial * _material, aiTextureType _
 	}
 }
 
-bool ModelRenderer::initialize()
+void ModelRenderer::initialize()
 {
 	for (const auto & mr : meshRenderers)
 	{
 		mr->Initialise();
 	}
-
-	return true;
 }
 
 void ModelRenderer::draw(const Camera & _camera, const glm::mat4 & _model, const ScenePlay & _scenePlay) const

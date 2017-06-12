@@ -37,12 +37,22 @@ public:
 	void setScale(glm::vec3 _scale);
 	void setPosition(glm::vec3 _position);
 
+	/// 
+	/// move:
+	/// Moves the position of the model by a given vector
+	/// delta - the movement vector
+	///
 	void move(glm::vec3 delta);
 
 	glm::vec3 & getScale();
 	glm::vec3 & getPosition();
 	glm::mat4 & getRotation();
 
+	/// 
+	/// lookAt:
+	/// Sets the rotation of the model to look at a given point
+	/// pos - the point to look at
+	///
 	void lookAt(glm::vec3 pos);
 
 	const glm::mat4 getModelMatrix() const;
