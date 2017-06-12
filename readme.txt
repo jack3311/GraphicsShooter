@@ -1,4 +1,4 @@
-Readme for Tank Survival
+Readme for Tank Survival - Jack Wilson 2017
 
 Controls:
 A/D/Mouse - Look around and aim
