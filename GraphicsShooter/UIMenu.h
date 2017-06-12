@@ -7,8 +7,8 @@
 #include "TextLabel.h"
 #include "SpriteRenderer.h"
 
-#define ELEMENT_PADDING_X 24.f
-#define ELEMENT_PADDING_Y 18.f
+#define ELEMENT_PADDING_X 24
+#define ELEMENT_PADDING_Y 18
 
 struct UIElement
 {

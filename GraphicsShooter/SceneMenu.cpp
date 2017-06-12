@@ -33,6 +33,7 @@ SceneMenu::SceneMenu()
 	mainMenu->initialise();
 
 	//Start Bg music - the constructor is called only once
+	Logger::getLogger().log("Starting background music");
 	AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("bgMusic"));
 }
 

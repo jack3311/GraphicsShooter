@@ -137,7 +137,7 @@ void UIElement::update(int _mX, int _mY)
 		float actualX = x * Game::getGame()->getWindowWidth();
 		float actualY = y * Game::getGame()->getWindowHeight();
 
-		float d2 = dist2<float>(_mX, _mY, actualX, actualY);
+		float d2 = dist2<float>(static_cast<float>(_mX), static_cast<float>(_mY), actualX, actualY);
 		float maxD2 = (width / 2.f) * (width / 2.f) + (height / 2.f) * (height / 2.f);
 
 		float dP = d2 / maxD2;

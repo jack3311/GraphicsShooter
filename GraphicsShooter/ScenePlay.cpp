@@ -51,6 +51,7 @@ ScenePlay::ScenePlay()
 
 
 	//Create floor renderer
+	Logger::getLogger().log("Creating the floor renderer");
 	std::vector<TexturedNormalsVertexFormat> tempFloorVertices;
 	std::vector<GLuint> tempFloorIndices;
 	Util::CreateTexturedNormalsCube(tempFloorVertices, tempFloorIndices);
@@ -59,6 +60,7 @@ ScenePlay::ScenePlay()
 	floorRenderer->Initialise();
 
 	//Create player renderer
+	Logger::getLogger().log("Creating the player renderer");
 	playerRenderer = new ModelRenderer(shader, 0.0f);
 	playerRenderer->loadFromFile("Assets/Models/tank1/Abrams_BF3.obj");
 	//modelRendererTest->loadFromFile("Assets/Models/gun/Handgun_obj.obj");
@@ -66,6 +68,7 @@ ScenePlay::ScenePlay()
 
 
 	//Create enemy renderers
+	Logger::getLogger().log("Creating the enemy renderers");
 	enemyRenderers = new ModelRenderer*[EnemyType::ENEMYTYPE_NUM_ITEMS];
 
 	//Shooter
@@ -85,6 +88,7 @@ ScenePlay::ScenePlay()
 	
 
 	//Create bullet renderer
+	Logger::getLogger().log("Creating the bullet renderer");
 	std::vector<TexturedNormalsVertexFormat> tempBulletVertices;
 	std::vector<GLuint> tempBulletIndices;
 	Util::CreateSphere(tempBulletVertices, tempBulletIndices);
@@ -95,6 +99,7 @@ ScenePlay::ScenePlay()
 	
 
 	//Create powerup renderers
+	Logger::getLogger().log("Creating the powerup renderers");
 	powerupRenderers = new MeshRenderer*[PowerupType::POWERUPTYPE_NUM_ITEMS];
 
 	std::vector<TexturedNormalsVertexFormat> tempPowerup1Vertices;
@@ -120,17 +125,18 @@ ScenePlay::ScenePlay()
 
 
 	//Create skybox renderer
+	Logger::getLogger().log("Creating the skybox renderer");
 	GLuint shader1 = sl.CreateProgram("Shaders/skyboxShader.vert",
 		"Shaders/skyboxShader.frag");
 
 	skyboxRenderer = new SkyboxRenderer(shader1);
 	skyboxRenderer->Initialise();
 
-
 	lights.push_back(new Light(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::pi<float>() / 8.f, glm::normalize(glm::vec3(1, 1, 1))));
 	lights.push_back(new Light(glm::vec3(10000.f, 100.f, 0.f), glm::vec3(0.f, 0.0f, 1.f)));
 	lights.push_back(new Light(glm::vec3(-10000.f, 100.f, 0.f), glm::vec3(1.f, 0.0f, 0.f)));
 
+	Logger::getLogger().log("Creating the text labels");
 	ammoText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	scoreText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	healthText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
@@ -207,7 +213,7 @@ void ScenePlay::update(float _dt)
 
 	glm::vec2 mouseDel = mousePos - glm::vec2(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f);
 
-	glutWarpPointer(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f);
+	glutWarpPointer(Game::getGame()->getWindowWidth() / 2, Game::getGame()->getWindowHeight() / 2);
 
 	float rotationX = -mouseDel.x * 0.005f;
 	float rotationY = mouseDel.y * 0.005f;
@@ -248,6 +254,7 @@ void ScenePlay::update(float _dt)
 
 	if (Input::isKeyDown(27)) //Escape key
 	{
+		Logger::getLogger().log("Player paused");
 		SceneManager::getSceneManager().activate<SceneMenu>();
 	}
 

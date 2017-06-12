@@ -1,9 +1,781 @@
-12-06-2017 23-47-32: 	Initializing game
-12-06-2017 23-47-32: 	Loading assets
-12-06-2017 23-47-33: 	Initilizing scene: class SceneMenu
-12-06-2017 23-47-33: 	Initilizing scene: class ScenePlay
-12-06-2017 23-47-39: 	Initilizing scene: class SceneGameOver
-12-06-2017 23-47-39: 	Activating scene: class SceneMenu
-12-06-2017 23-47-40: 	Creating game world
-12-06-2017 23-47-40: 	Proceeding to next level
-12-06-2017 23-47-40: 	Activating scene: class ScenePlay
+13-06-2017 10-27-54: 	Initializing game
+13-06-2017 10-27-54: 	Loading assets
+13-06-2017 10-27-55: 	Initilizing scene: class SceneMenu
+13-06-2017 10-27-55: 	Starting background music
+13-06-2017 10-27-55: 	Initilizing scene: class ScenePlay
+13-06-2017 10-27-55: 	Creating the floor renderer
+13-06-2017 10-27-55: 	Creating the player renderer
+13-06-2017 10-27-59: 	Creating the enemy renderers
+13-06-2017 10-27-59: 	Creating the bullet renderer
+13-06-2017 10-28-00: 	Creating the powerup renderers
+13-06-2017 10-28-00: 	Creating the skybox renderer
+13-06-2017 10-28-00: 	Creating the text labels
+13-06-2017 10-28-00: 	Initilizing scene: class SceneGameOver
+13-06-2017 10-28-00: 	Activating scene: class SceneMenu
+13-06-2017 10-28-03: 	Creating game world
+13-06-2017 10-28-03: 	Creating enemies and powerups
+13-06-2017 10-28-03: 	Activating scene: class ScenePlay
+13-06-2017 10-28-04: 	Player fired bullet
+13-06-2017 10-28-04: 	Player fired bullet
+13-06-2017 10-28-04: 	Player fired bullet
+13-06-2017 10-28-04: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-04: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-04: 	Player fired bullet
+13-06-2017 10-28-04: 	Player fired bullet
+13-06-2017 10-28-05: 	Player fired bullet
+13-06-2017 10-28-05: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-05: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-08: 	Player fired bullet
+13-06-2017 10-28-08: 	Player fired bullet
+13-06-2017 10-28-08: 	Player fired bullet
+13-06-2017 10-28-09: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Player fired bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-11: 	Player fired bullet
+13-06-2017 10-28-11: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-11: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-12: 	Player fired bullet
+13-06-2017 10-28-12: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-12: 	Player fired bullet
+13-06-2017 10-28-12: 	Player fired bullet
+13-06-2017 10-28-13: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-13: 	Player fired bullet
+13-06-2017 10-28-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-14: 	Player fired bullet
+13-06-2017 10-28-14: 	Player fired bullet
+13-06-2017 10-28-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-14: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-15: 	Player fired bullet
+13-06-2017 10-28-15: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-15: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-15: 	Player fired bullet
+13-06-2017 10-28-15: 	Player fired bullet
+13-06-2017 10-28-16: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-18: 	Player fired bullet
+13-06-2017 10-28-18: 	Player fired bullet
+13-06-2017 10-28-18: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-18: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-18: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-18: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-23: 	Player fired bullet
+13-06-2017 10-28-23: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-24: 	Player fired bullet
+13-06-2017 10-28-26: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-26: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-26: 	Player paused
+13-06-2017 10-28-26: 	Activating scene: class SceneMenu
+13-06-2017 10-28-28: 	Activating scene: class ScenePlay
+13-06-2017 10-28-29: 	Player fired bullet
+13-06-2017 10-28-30: 	Player fired bullet
+13-06-2017 10-28-30: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-30: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-30: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-30: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-30: 	All enemies defeated, proceeding to next level
+13-06-2017 10-28-30: 	Creating enemies and powerups
+13-06-2017 10-28-31: 	Player fired bullet
+13-06-2017 10-28-31: 	Player fired bullet
+13-06-2017 10-28-31: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-31: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-31: 	Player fired bullet
+13-06-2017 10-28-31: 	Player fired bullet
+13-06-2017 10-28-32: 	Player hit, damaging player
+13-06-2017 10-28-32: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-33: 	Player hit, damaging player
+13-06-2017 10-28-33: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-33: 	Player hit, damaging player
+13-06-2017 10-28-33: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-33: 	Player fired bullet
+13-06-2017 10-28-33: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-33: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-33: 	Player fired bullet
+13-06-2017 10-28-34: 	Player hit, damaging player
+13-06-2017 10-28-34: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-34: 	Player fired bullet
+13-06-2017 10-28-34: 	Player fired bullet
+13-06-2017 10-28-34: 	Player fired bullet
+13-06-2017 10-28-34: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-34: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-34: 	Player hit, damaging player
+13-06-2017 10-28-34: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-34: 	Player fired bullet
+13-06-2017 10-28-34: 	Player fired bullet
+13-06-2017 10-28-34: 	Player hit, damaging player
+13-06-2017 10-28-34: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-34: 	Player fired bullet
+13-06-2017 10-28-35: 	Player fired bullet
+13-06-2017 10-28-35: 	Player fired bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-35: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-35: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-36: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Player fired bullet
+13-06-2017 10-28-37: 	Player fired bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-37: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Player fired bullet
+13-06-2017 10-28-38: 	Player fired bullet
+13-06-2017 10-28-38: 	Player fired bullet
+13-06-2017 10-28-38: 	Player fired bullet
+13-06-2017 10-28-38: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-38: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Player hit, damaging player
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Player fired bullet
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Player fired bullet
+13-06-2017 10-28-39: 	Player hit, damaging player
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Player fired bullet
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-39: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-39: 	Player fired bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-40: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Player hit, damaging player
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-41: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Player fired bullet
+13-06-2017 10-28-42: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Player fired bullet
+13-06-2017 10-28-42: 	Player hit, damaging player
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Player fired bullet
+13-06-2017 10-28-42: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-42: 	Player fired bullet
+13-06-2017 10-28-43: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Player fired bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-43: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-44: 	Player fired bullet
+13-06-2017 10-28-44: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-44: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-44: 	Player hit, damaging player
+13-06-2017 10-28-44: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-44: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-44: 	Player hit, damaging player
+13-06-2017 10-28-44: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-44: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Player hit, damaging player
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-46: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-47: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-47: 	Player hit, damaging player
+13-06-2017 10-28-47: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-49: 	Player hit, damaging player
+13-06-2017 10-28-49: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-50: 	Player hit, damaging player
+13-06-2017 10-28-50: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-52: 	Player hit, damaging player
+13-06-2017 10-28-52: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-52: 	Player hit, damaging player
+13-06-2017 10-28-52: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-53: 	Player hit, damaging player
+13-06-2017 10-28-53: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-53: 	Player hit, damaging player
+13-06-2017 10-28-53: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-54: 	Collision with powerup, deleting powerup and affecting player
+13-06-2017 10-28-55: 	Player fired bullet
+13-06-2017 10-28-55: 	Player fired bullet
+13-06-2017 10-28-55: 	Player fired bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-56: 	Player hit, damaging player
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-56: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-56: 	Player fired bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Player hit, damaging player
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-57: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-57: 	Player fired bullet
+13-06-2017 10-28-58: 	Player hit, damaging player
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Player fired bullet
+13-06-2017 10-28-58: 	Player fired bullet
+13-06-2017 10-28-58: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Player fired bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Player fired bullet
+13-06-2017 10-28-58: 	Player fired bullet
+13-06-2017 10-28-58: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-58: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-58: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-59: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-59: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-28-59: 	Enemy destroyed, deleting enemy
+13-06-2017 10-28-59: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-00: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-00: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-00: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-01: 	Collision with powerup, deleting powerup and affecting player
+13-06-2017 10-29-01: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-01: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-02: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-02: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-02: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-02: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Player fired bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-03: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-04: 	Player fired bullet
+13-06-2017 10-29-04: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-04: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-04: 	Player fired bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-05: 	Player fired bullet
+13-06-2017 10-29-05: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-05: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-06: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-06: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	All enemies defeated, proceeding to next level
+13-06-2017 10-29-07: 	Creating enemies and powerups
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-07: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-08: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-08: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Player hit, damaging player
+13-06-2017 10-29-08: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-08: 	Player fired bullet
+13-06-2017 10-29-09: 	Player hit, damaging player
+13-06-2017 10-29-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-09: 	Player fired bullet
+13-06-2017 10-29-09: 	Player fired bullet
+13-06-2017 10-29-09: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-09: 	Player fired bullet
+13-06-2017 10-29-09: 	Player fired bullet
+13-06-2017 10-29-09: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-09: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-09: 	Player fired bullet
+13-06-2017 10-29-09: 	Player fired bullet
+13-06-2017 10-29-10: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-10: 	Player fired bullet
+13-06-2017 10-29-10: 	Player hit, damaging player
+13-06-2017 10-29-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-10: 	Player fired bullet
+13-06-2017 10-29-10: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-10: 	Player fired bullet
+13-06-2017 10-29-10: 	Player fired bullet
+13-06-2017 10-29-10: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-10: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-10: 	Player fired bullet
+13-06-2017 10-29-10: 	Player hit, damaging player
+13-06-2017 10-29-10: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-11: 	Player fired bullet
+13-06-2017 10-29-11: 	Player fired bullet
+13-06-2017 10-29-11: 	Player fired bullet
+13-06-2017 10-29-11: 	Player fired bullet
+13-06-2017 10-29-11: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-11: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-11: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-11: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-11: 	Player fired bullet
+13-06-2017 10-29-11: 	Player hit, damaging player
+13-06-2017 10-29-11: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-11: 	Player fired bullet
+13-06-2017 10-29-12: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Player fired bullet
+13-06-2017 10-29-12: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Player fired bullet
+13-06-2017 10-29-12: 	Player hit, damaging player
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Player fired bullet
+13-06-2017 10-29-12: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Player fired bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Player fired bullet
+13-06-2017 10-29-12: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Player fired bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-12: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Player fired bullet
+13-06-2017 10-29-13: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Player fired bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-13: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-14: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-15: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-15: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-15: 	Player hit, damaging player
+13-06-2017 10-29-15: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Player hit, damaging player
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Player hit, damaging player
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-16: 	Player fired bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Player fired bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Player fired bullet
+13-06-2017 10-29-17: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Player fired bullet
+13-06-2017 10-29-17: 	Enemy destroyed, deleting enemy
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-17: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-18: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-18: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-18: 	Player hit, damaging player
+13-06-2017 10-29-18: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-19: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-20: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-22: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-22: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-23: 	Bullet expired or collision was detected, deleting bullet
+13-06-2017 10-29-25: 	Player died, stopping game
+13-06-2017 10-29-25: 	Activating scene: class SceneGameOver
+13-06-2017 10-29-33: 	Activating scene: class SceneMenu

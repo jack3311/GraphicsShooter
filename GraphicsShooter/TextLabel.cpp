@@ -227,5 +227,5 @@ int TextLabel::getHeight()
 		}
 	}
 
-	return tallestCharHeight * this->scale;
+	return static_cast<int>(tallestCharHeight * this->scale);
 }

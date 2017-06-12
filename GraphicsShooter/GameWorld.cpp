@@ -49,6 +49,7 @@ void GameWorld::update(float _dt)
 	//Check for player death
 	if (player->isDead())
 	{
+		Logger::getLogger().log("Player died, stopping game");
 		gameInProgress = false;
 		SceneManager::getSceneManager().activate<SceneGameOver>(player->getScore());
 	}
@@ -56,6 +57,7 @@ void GameWorld::update(float _dt)
 	//Check for victory
 	if (enemies.size() == 0)
 	{
+		Logger::getLogger().log("All enemies defeated, proceeding to next level");
 		nextLevel();
 	}
 
@@ -173,6 +175,7 @@ void GameWorld::update(float _dt)
 				if (sphereSphereCollision((*itr2)->getPosition(), ENEMY_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
 				{
 					//Destroy the enemy
+					Logger::getLogger().log("Enemy destroyed, deleting enemy");
 					delete (*itr2);
 					itr2 = enemies.erase(itr2);
 					player->addScore(100);
@@ -191,6 +194,7 @@ void GameWorld::update(float _dt)
 		{
 			if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
 			{
+				Logger::getLogger().log("Player hit, damaging player");
 				//If the player doesn't have shield, deal damage
 				if (!player->hasShield())
 					player->dealDamage(2);
@@ -203,6 +207,7 @@ void GameWorld::update(float _dt)
 
 		if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
 		{
+			Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
 			delete (*itr);
 			itr = bullets.erase(itr);
 
@@ -231,6 +236,8 @@ void GameWorld::update(float _dt)
 		//Check for collision with player
 		if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), POWERUP_COLLISION_RADIUS))
 		{
+			Logger::getLogger().log("Collision with powerup, deleting powerup and affecting player");
+
 			//Process the powerup
 			switch ((*itr)->flag)
 			{
@@ -317,6 +324,8 @@ void GameWorld::playerFire()
 	//If we can fire
 	if (player->tryFire())
 	{
+		Logger::getLogger().log("Player fired bullet");
+
 		//Fire bullet
 		auto facing2D = -glm::vec3(player->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
 		createBullet(player->getPosition() + facing2D * 7.f + glm::vec3(0.f, 2.0f, 0.f), facing2D, true);
@@ -349,8 +358,6 @@ bool GameWorld::isGameInProgress() const
 
 void GameWorld::nextLevel()
 {
-	Logger::getLogger().log("Proceeding to next level");
-
 	++stage;
 
 	//Clear previous level
@@ -367,6 +374,8 @@ void GameWorld::nextLevel()
 	powerups.clear();
 
 
+	Logger::getLogger().log("Creating enemies and powerups");
+
 	//Create enemies
 	for (int i = 0; i < 15 * stage; ++i)
 	{
@@ -378,7 +387,7 @@ void GameWorld::nextLevel()
 	for (int i = 0; i < 5 + stage; ++i)
 	{
 		powerups.push_back(new PhysicsObject(glm::vec3(rand() % 201 - 100, 1.5f, rand() % 201 - 100), glm::vec3(POWERUP_RADIUS, POWERUP_RADIUS, POWERUP_RADIUS)));
-		powerups[i]->update(rand()); //Offset lifetime
+		powerups[i]->update(static_cast<float>(rand())); //Offset lifetime
 		powerups[i]->flag = rand() % PowerupType::POWERUPTYPE_NUM_ITEMS;
 	}
 }
