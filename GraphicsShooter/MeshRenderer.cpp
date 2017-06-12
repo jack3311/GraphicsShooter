@@ -66,17 +66,21 @@ void MeshRenderer::DrawMesh(const Camera & _camera, const glm::mat4 & _model, co
 	glUniformMatrix4fv(uniformModelLocation, 1, GL_FALSE, glm::value_ptr(_model));
 
 
-	//Lighting
+	//Lighting:
 
 	unsigned int numLights = _scenePlay.getNumLights();
 	auto lights = _scenePlay.getLights();
 
 	glm::vec3 * lightPositions = new glm::vec3[numLights];
 	glm::vec3 * lightColors = new glm::vec3[numLights];
+	glm::vec3 * lightSpotDirs = new glm::vec3[numLights];
+	float * lightSpotAngles = new float[numLights];
 	for (unsigned int l = 0; l < numLights; ++l)
 	{
 		lightPositions[l] = lights[l]->getPosition();
 		lightColors[l] = lights[l]->getColor();
+		lightSpotDirs[l] = lights[l]->getConeDir();
+		lightSpotAngles[l] = lights[l]->getConeAngle();
 	}
 
 	GLuint uniformLightPos1Location = glGetUniformLocation(m_Shader, "lightPositions");
@@ -85,8 +89,17 @@ void MeshRenderer::DrawMesh(const Camera & _camera, const glm::mat4 & _model, co
 	GLuint uniformLightCol1Location = glGetUniformLocation(m_Shader, "lightColors");
 	glUniform3fv(uniformLightCol1Location, numLights, glm::value_ptr(lightColors[0]));
 
+	GLuint uniformLightSpotDirsLocation = glGetUniformLocation(m_Shader, "lightSpotDirs");
+	glUniform3fv(uniformLightSpotDirsLocation, numLights, glm::value_ptr(lightSpotDirs[0]));
+
+	GLuint uniformLightSpotAnglesLocation = glGetUniformLocation(m_Shader, "lightSpotAngles");
+	glUniform1fv(uniformLightSpotAnglesLocation, numLights, &lightSpotAngles[0]);
+
+
 	delete[] lightPositions;
 	delete[] lightColors;
+	delete[] lightSpotDirs;
+	delete[] lightSpotAngles;
 
 	GLuint uniformNumLightsLocation = glGetUniformLocation(m_Shader, "numLights");
 	glUniform1i(uniformNumLightsLocation, numLights);

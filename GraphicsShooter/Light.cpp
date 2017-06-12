@@ -16,7 +16,11 @@
 
 #include "Light.h"
 
-Light::Light(glm::vec3 _position, glm::vec3 _colour) : position(_position), colour(_colour)
+Light::Light(glm::vec3 _position, glm::vec3 _colour) : position(_position), colour(_colour), coneAngle(-1.f), coneDir(glm::vec3())
+{
+}
+
+Light::Light(glm::vec3 _position, glm::vec3 _colour, float _coneAngle, glm::vec3 _coneDir) : position(_position), colour(_colour), coneAngle(_coneAngle), coneDir(_coneDir)
 {
 }
 
@@ -37,4 +41,24 @@ void Light::setPosition(glm::vec3 _position)
 const glm::vec3 & Light::getColor() const
 {
 	return colour;
+}
+
+const float & Light::getConeAngle() const
+{
+	return coneAngle;
+}
+
+const glm::vec3 & Light::getConeDir() const
+{
+	return coneDir;
+}
+
+void Light::setConeDir(const glm::vec3 & _coneDir)
+{
+	coneDir = _coneDir;
+}
+
+bool Light::isSpotlight() const
+{
+	return coneAngle == -1.f;
 }

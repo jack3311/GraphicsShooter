@@ -127,6 +127,7 @@ ScenePlay::ScenePlay()
 	skyboxRenderer->Initialise();
 
 
+	lights.push_back(new Light(glm::vec3(0, 0, 0), glm::vec3(1, 1, 1), glm::pi<float>() / 8.f, glm::normalize(glm::vec3(1, 1, 1))));
 	lights.push_back(new Light(glm::vec3(10000.f, 100.f, 0.f), glm::vec3(0.f, 0.0f, 1.f)));
 	lights.push_back(new Light(glm::vec3(-10000.f, 100.f, 0.f), glm::vec3(1.f, 0.0f, 0.f)));
 
@@ -264,24 +265,21 @@ void ScenePlay::update(float _dt)
 	g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
 	g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
 
-
 	Game::getGame()->getCamera().updateCamera();
 
 
+	//Update spotlight
+	lights[0]->setPosition(g.getCamera().getPosition() + facing2D * 2.f);
+	//lights[0]->setConeDir(-glm::normalize(thisPlayer->getPosition() - g.getCamera().getPosition()));
+	lights[0]->setConeDir(-facing2D);
 
 
-	//Light testing
-
-	//lights.at(0)->setPosition(g.getCamera().getPosition());
-	//lights.at(1)->setPosition(glm::vec3(cosf(elapsedTime) * 4.f, 0.f, -sinf(elapsedTime) * 4.f));
-
-	//ambientStrength = 0.5f * (sinf(elapsedTime / 2.f) + 1.f);
-
-
+	
 	//Update text
 	std::stringstream ss;
 	if (thisPlayer->isReloading())
 	{
+
 		ss << "Reloading...";
 	}
 	else if (thisPlayer->hasInfiniteAmmo())

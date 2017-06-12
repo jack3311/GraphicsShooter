@@ -6,6 +6,9 @@ in vec2 outTexCoord;
 
 uniform vec3 lightPositions[10];
 uniform vec3 lightColors[10];
+uniform vec3 lightSpotDirs[10];
+uniform float lightSpotAngles[10];
+
 uniform vec3 camPos;
 uniform float ambientStrength;
 uniform vec3 ambientCol;
@@ -34,6 +37,15 @@ void main()
 	{
 		//For each light:
 		vec3 lightDir = normalize(lightPositions[l] - outFragPos);
+
+		//Check for spotlight
+		if (lightSpotAngles[l] > 0)
+		{
+			float lightToSurfaceFromDirAngle = acos(dot(lightDir, lightSpotDirs[l]));
+			if (lightToSurfaceFromDirAngle > lightSpotAngles[l]) //If this fragment is not lit
+				continue;
+		}
+
 
 	
 		//Diffuse

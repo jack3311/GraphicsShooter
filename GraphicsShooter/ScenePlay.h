@@ -33,7 +33,7 @@ private:
 	MeshRenderer * floorRenderer;
 
 	ModelRenderer * playerRenderer;
-	ModelRenderer ** enemyRenderers; // Delete all these
+	ModelRenderer ** enemyRenderers;
 
 	MeshRenderer * bulletRenderer;
 
