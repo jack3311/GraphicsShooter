@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <sstream>
 
 namespace JNetwork
 {
@@ -28,7 +29,7 @@ namespace JNetwork
 
 		data[0] = _type;
 
-		memcpy_s(data + 1u, PACKET_CONTENT_SIZE, _data, sizeof(_data));
+		strcpy_s(data + 1u, PACKET_CONTENT_SIZE, _data);
 	}
 
 	JNetworkPacket::JNetworkPacket(JNetworkPacketType _type) : type(_type)

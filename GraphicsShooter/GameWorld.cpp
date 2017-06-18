@@ -1,5 +1,7 @@
 #include "GameWorld.h"
 
+#include <sstream>
+
 #include "JNetwork\Server.h"
 #include "JNetwork\Client.h"
 
@@ -8,24 +10,25 @@
 #include "SceneMenu.h"
 #include "SceneGameOver.h"
 #include "AssetManager.h"
+#include "MessageType.h"
 
 
-GameWorld::GameWorld(/*bool _isServer*/)/* : isServer(_isServer)*/
+GameWorld::GameWorld(bool _isServer) : isServer(_isServer)
 {
-	//if (_isServer)
-	//{
-	//	//Use intermediary lambda function to use 'this' to call member function
-	//	networkEntity = new JNetwork::Server([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
-	//		this->onReceivePacket(_p, _a);
-	//	});
-	//}
-	//else
-	//{
-	//	//Use intermediary lambda function to use 'this' to call member function
-	//	networkEntity = new JNetwork::Client([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
-	//		this->onReceivePacket(_p, _a);
-	//	});
-	//}
+	if (_isServer)
+	{
+		//Use intermediary lambda function to use 'this' to call member function
+		networkEntity = new JNetwork::Server([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
+			this->onReceivePacket(_p, _a);
+		});
+	}
+	else
+	{
+		//Use intermediary lambda function to use 'this' to call member function
+		networkEntity = new JNetwork::Client([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
+			this->onReceivePacket(_p, _a);
+		});
+	}
 
 	player = new Player(glm::vec3(0, 0, 0), glm::vec3(1.32f, 1.32f, 1.32f));
 
@@ -46,6 +49,8 @@ GameWorld::~GameWorld()
 
 void GameWorld::update(float _dt)
 {
+#ifdef NOPE
+
 	//Check for player death
 	if (player->isDead())
 	{
@@ -61,243 +66,238 @@ void GameWorld::update(float _dt)
 		nextLevel();
 	}
 
+#endif
 
 
-	//Update player:
-	player->update(_dt);
 
-	//Update enemies:
-	for (auto enemy : enemies)
-	{	
-		//Enemy movement and shooting AI
-		switch (enemy->flag)
-		{
-		case EnemyType::SHOOTER:
-		{
-			//Path towards player
-			glm::vec3 delta = player->getPosition() - enemy->getPosition();
-			glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
 
-			if (length2(enemy->getPosition() + delScl - player->getPosition()) < SHOOTER_STOPPING_DISTANCE * SHOOTER_STOPPING_DISTANCE)
-			{
-				enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * SHOOTER_STOPPING_DISTANCE);
-			}
-			else
-			{
-				enemy->move(delScl);
-			}
 
-			//Face towards player
-			enemy->lookAt(player->getPosition());
 
-			//Try to shoot
-			if (rand() % 10000 < 1000 * _dt)
-			{
-				if (enemy->getPosition() != player->getPosition())
-				{
-					auto facing2D = normalize(player->getPosition() - enemy->getPosition());
 
-					createBullet(enemy->getPosition() + facing2D * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), facing2D, false);
-					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("laser"));
-				}
-			}
-		}
-		break;
-		case EnemyType::FIGHTER:
-		{
-			glm::vec3 delta = player->getPosition() - enemy->getPosition();
-			glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
-
-			if (length2(enemy->getPosition() + delScl - player->getPosition()) < powf(ENEMY_COLLISION_RADIUS + PLAYER_COLLISION_RADIUS, 2.f))
-			{
-				enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * (ENEMY_COLLISION_RADIUS + PLAYER_COLLISION_RADIUS));
-				player->dealDamage(FIGHTER_DPS * _dt);
-				
-				//Try to play drill sound
-				if (rand() % 10000 < 7500 * _dt)
-					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode1"));
-			}
-			else
-			{
-				enemy->move(delScl);
-			}
-
-			//Face towards player
-			enemy->lookAt(player->getPosition());
-		}
-		break;
-		case EnemyType::TURRET:
-		{
-			//Try to shoot
-			if (rand() % 10000 < 1000 * _dt)
-			{
-				//Fire in 8 paths around the enemy
-				for (float theta = 0.f; theta <= 2.f * glm::pi<float>(); theta += 2.f * glm::pi<float>() / 8.f)
-				{
-					glm::vec3 vel = glm::vec3(cosf(theta), 0.f, sinf(theta));
-					createBullet(enemy->getPosition() + vel * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), vel, false);
-				}
-
-				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode2"));
-			}
-		}
-		break;
-		}
-
-		//Stay away from other enemies
-		for (auto enemy1 : enemies)
-		{
-			if (enemy1 != enemy)
-			{
-				//Move away from other enemy based on the distance between them
-				glm::vec3 delta2 = enemy->getPosition() - enemy1->getPosition();
-				glm::vec3 delScl2 = glm::normalize(delta2) * ENEMY1_MAX_SPEED * _dt * (1.f / length2(delta2));
-
-				enemy->move(delScl2);
-			}
-		}
-
-	}
-
-	//Update bullets
-	for (auto itr = bullets.begin(); itr != bullets.end(); )
+	if (isServer)
 	{
-		(*itr)->update(_dt);
 
-		bool collision = false;
-		
-		//Check for collision with enemies
-		if ((*itr)->flag != 0) //If bullet is friendly
+		//Update player:
+		player->update(_dt);
+
+		//Update enemies:
+		for (auto enemy : enemies)
 		{
-			for (auto itr2 = enemies.begin(); itr2 != enemies.end(); )
+			//Enemy movement and shooting AI
+			switch (enemy->flag)
 			{
-				//Check collision with two spheres
-				if (sphereSphereCollision((*itr2)->getPosition(), ENEMY_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+			case EnemyType::SHOOTER:
+			{
+				//Path towards player
+				glm::vec3 delta = player->getPosition() - enemy->getPosition();
+				glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
+
+				if (length2(enemy->getPosition() + delScl - player->getPosition()) < SHOOTER_STOPPING_DISTANCE * SHOOTER_STOPPING_DISTANCE)
 				{
-					//Destroy the enemy
-					Logger::getLogger().log("Enemy destroyed, deleting enemy");
-					delete (*itr2);
-					itr2 = enemies.erase(itr2);
-					player->addScore(100);
-					collision = true;
-					break;
+					enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * SHOOTER_STOPPING_DISTANCE);
 				}
 				else
 				{
-					++itr2;
+					enemy->move(delScl);
+				}
+
+				//Face towards player
+				enemy->lookAt(player->getPosition());
+
+				//Try to shoot
+				if (rand() % 10000 < 1000 * _dt)
+				{
+					if (enemy->getPosition() != player->getPosition())
+					{
+						auto facing2D = normalize(player->getPosition() - enemy->getPosition());
+
+						createBullet(enemy->getPosition() + facing2D * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), facing2D, false);
+						AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("laser"));
+					}
 				}
 			}
+			break;
+			case EnemyType::FIGHTER:
+			{
+				glm::vec3 delta = player->getPosition() - enemy->getPosition();
+				glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
+
+				if (length2(enemy->getPosition() + delScl - player->getPosition()) < powf(ENEMY_COLLISION_RADIUS + PLAYER_COLLISION_RADIUS, 2.f))
+				{
+					enemy->setPosition(player->getPosition() + glm::normalize(enemy->getPosition() - player->getPosition()) * (ENEMY_COLLISION_RADIUS + PLAYER_COLLISION_RADIUS));
+					player->dealDamage(FIGHTER_DPS * _dt);
+
+					//Try to play drill sound
+					if (rand() % 10000 < 7500 * _dt)
+						AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode1"));
+				}
+				else
+				{
+					enemy->move(delScl);
+				}
+
+				//Face towards player
+				enemy->lookAt(player->getPosition());
+			}
+			break;
+			case EnemyType::TURRET:
+			{
+				//Try to shoot
+				if (rand() % 10000 < 1000 * _dt)
+				{
+					//Fire in 8 paths around the enemy
+					for (float theta = 0.f; theta <= 2.f * glm::pi<float>(); theta += 2.f * glm::pi<float>() / 8.f)
+					{
+						glm::vec3 vel = glm::vec3(cosf(theta), 0.f, sinf(theta));
+						createBullet(enemy->getPosition() + vel * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), vel, false);
+					}
+
+					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode2"));
+				}
+			}
+			break;
+			}
+
+			//Stay away from other enemies
+			for (auto enemy1 : enemies)
+			{
+				if (enemy1 != enemy)
+				{
+					//Move away from other enemy based on the distance between them
+					glm::vec3 delta2 = enemy->getPosition() - enemy1->getPosition();
+					glm::vec3 delScl2 = glm::normalize(delta2) * ENEMY1_MAX_SPEED * _dt * (1.f / length2(delta2));
+
+					enemy->move(delScl2);
+				}
+			}
+
 		}
 
-		//Check for collision with player
-		if ((*itr)->flag == 0) //If bullet is not friendly
+#ifdef NOPE
+		//Update bullets
+		for (auto itr = bullets.begin(); itr != bullets.end(); )
 		{
-			if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+			(*itr)->update(_dt);
+
+			bool collision = false;
+
+			//Check for collision with enemies
+			if ((*itr)->flag != 0) //If bullet is friendly
 			{
-				Logger::getLogger().log("Player hit, damaging player");
-				//If the player doesn't have shield, deal damage
-				if (!player->hasShield())
-					player->dealDamage(2);
+				for (auto itr2 = enemies.begin(); itr2 != enemies.end(); )
+				{
+					//Check collision with two spheres
+					if (sphereSphereCollision((*itr2)->getPosition(), ENEMY_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+					{
+						//Destroy the enemy
+						Logger::getLogger().log("Enemy destroyed, deleting enemy");
+						delete (*itr2);
+						itr2 = enemies.erase(itr2);
+						player->addScore(100);
+						collision = true;
+						break;
+					}
+					else
+					{
+						++itr2;
+					}
+				}
+			}
 
-				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+			//Check for collision with player
+			if ((*itr)->flag == 0) //If bullet is not friendly
+			{
+				if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+				{
+					Logger::getLogger().log("Player hit, damaging player");
+					//If the player doesn't have shield, deal damage
+					if (!player->hasShield())
+						player->dealDamage(2);
 
-				collision = true;
+					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+
+					collision = true;
+				}
+			}
+
+			if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
+			{
+				Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
+				delete (*itr);
+				itr = bullets.erase(itr);
+			}
+			else
+			{
+				++itr;
 			}
 		}
 
-		if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
+		//Update powerups
+		for (auto itr = powerups.begin(); itr != powerups.end(); )
 		{
-			Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
-			delete (*itr);
-			itr = bullets.erase(itr);
+			float lt = (*itr)->getLifetime();
 
-			//TODO: Show explosion
+			auto velocity = glm::vec3(
+				sinf(lt / 10.f) * POWERUP_MAX_SPEED,
+				cosf(lt),
+				cos(lt / 10.f) * POWERUP_MAX_SPEED);
+
+			(*itr)->setVelocity(velocity);
+
+			(*itr)->update(_dt);
+
+			//Check for collision with player
+			if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), POWERUP_COLLISION_RADIUS))
+			{
+				Logger::getLogger().log("Collision with powerup, deleting powerup and affecting player");
+
+				//Process the powerup
+				switch ((*itr)->flag)
+				{
+				case PowerupType::HEALTH:
+					//Restore the player's health
+					player->dealDamage(-POWERUP_HEALTH_REGEN_AMOUNT);
+					break;
+				case PowerupType::INFINITE_AMMO:
+					//Give player infinite ammo
+					player->infiniteAmmoFor(POWERUP_INFINITE_AMMO_DURATION);
+					break;
+				case PowerupType::SHIELD:
+					//Give player shield
+					player->shieldFor(POWERUP_SHIELD_DURATION);
+					break;
+				}
+
+				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
+				player->addScore(500);
+				delete (*itr);
+				itr = powerups.erase(itr);
+			}
+			else
+			{
+				++itr;
+			}
 		}
-		else
-		{
-			++itr;
-		}
+#endif
+
+		//Send the game state
+		sendGameState();
 	}
-
-	//Update powerups
-	for (auto itr = powerups.begin(); itr != powerups.end(); )
+	else
 	{
-		float lt = (*itr)->getLifetime();
-		
-		auto velocity = glm::vec3(
-			sinf(lt / 10.f) * POWERUP_MAX_SPEED,
-			cosf(lt),
-			cos(lt / 10.f) * POWERUP_MAX_SPEED);
-
-		(*itr)->setVelocity(velocity);
-
-		(*itr)->update(_dt);
-
-		//Check for collision with player
-		if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), POWERUP_COLLISION_RADIUS))
+		//Parse packet pool
+		while (clientPacketQueue.size() > 0)
 		{
-			Logger::getLogger().log("Collision with powerup, deleting powerup and affecting player");
+			clientPacketQueueMutex.lock();
+			auto packetPair = clientPacketQueue.front();
+			clientPacketQueue.pop();
+			clientPacketQueueMutex.unlock();
 
-			//Process the powerup
-			switch ((*itr)->flag)
-			{
-			case PowerupType::HEALTH:
-				//Restore the player's health
-				player->dealDamage(-POWERUP_HEALTH_REGEN_AMOUNT);
-				break;
-			case PowerupType::INFINITE_AMMO:
-				//Give player infinite ammo
-				player->infiniteAmmoFor(POWERUP_INFINITE_AMMO_DURATION);
-				break;
-			case PowerupType::SHIELD:
-				//Give player shield
-				player->shieldFor(POWERUP_SHIELD_DURATION);
-				break;
-			}
-
-			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
-			player->addScore(500);
-			delete (*itr);
-			itr = powerups.erase(itr);
-		}
-		else
-		{
-			++itr;
+			parsePacket(packetPair.first, packetPair.second);
 		}
 	}
-
-
-	//if (isServer)
-	//{
-	//	//Update position of test object TODO: Remove
-	//	testObject->move(glm::vec3(1, 0, -1) * _dt);
-
-	//	//Send positions to all clients
-
-	//	char data[sizeof(glm::vec3) + 1];
-	//	data[0] = 5;
-	//	//toData(&data[1], &testObject->getPosition());
-
-	//	floatToChar(testObject->getPosition().x, &data[1]);
-	//	floatToChar(testObject->getPosition().y, &data[1 + sizeof(float)]);
-	//	floatToChar(testObject->getPosition().z, &data[1 + 2 * sizeof(float)]);
-
-	//	dynamic_cast<JNetwork::Server *>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, data));
-	//}
-	//else
-	//{
-	//	//Parse packet pool
-	//	while (clientPacketQueue.size() > 0)
-	//	{
-	//		clientPacketQueueMutex.lock();
-	//		auto packetPair = clientPacketQueue.front();
-	//		clientPacketQueue.pop();
-	//		clientPacketQueueMutex.unlock();
-
-	//		parsePacket(packetPair.first, packetPair.second);
-	//	}
-	//}
 }
+
 
 std::vector<Object*> GameWorld::getEnemies()
 {
@@ -392,67 +392,101 @@ void GameWorld::nextLevel()
 	}
 }
 
-//void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)
-//{
-//	if (isServer)
-//	{
-//		//Directly parse packet (this is running on a different thread)
-//		parsePacket(_p, _addr);
-//	}
-//	else
-//	{
-//		//Pool packet for next update
-//		clientPacketQueueMutex.lock();
-//		clientPacketQueue.push(std::pair<JNetwork::JNetworkPacket, sockaddr_in>(JNetwork::JNetworkPacket(_p), _addr));
-//		clientPacketQueueMutex.unlock();
-//	}
-//}
-//
-//void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)
-//{
-//	if (isServer)
-//	{
-//		//Server
-//
-//	}
-//	else
-//	{
-//		//Client
-//		if (_p.data[1] == 5)
-//		{
-//			glm::vec3 position;
-//
-//			position.x = charToFloat(&_p.data[2]);
-//			position.y = charToFloat(&_p.data[2 + sizeof(float)]);
-//			position.z = charToFloat(&_p.data[2 + 2 * sizeof(float)]);
-//
-//			testObject->setPosition(position);
-//		}
-//	}
-//}
-//
-//void GameWorld::startNetwork()
-//{
-//	networkEntity->start();
-//	networkEntity->initialise(5000);
-//}
-//
-//void GameWorld::stopNetwork()
-//{
-//	networkEntity->stop();
-//}
-//
-//bool GameWorld::getIsServer() const
-//{
-//	return isServer;
-//}
-//
-//bool GameWorld::clientConnect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout)
-//{
-//	return dynamic_cast<JNetwork::Client *>(networkEntity)->connect(_serverAddr, _clientName, _timeout);
-//}
-//
-//JNetwork::INetworkEntity * GameWorld::getNetworkEntity()
-//{
-//	return networkEntity;
-//}
+
+
+
+void GameWorld::sendGameState()
+{
+	JNetwork::Server * server = dynamic_cast<JNetwork::Server *>(networkEntity);
+
+	//Send enemy info
+	for (unsigned int i = 0; i < enemies.size(); ++i)
+	{
+		Object * enemy = enemies[i];
+
+		std::ostringstream oss;
+		oss << MessageType::NPC_POSITION_UPDATE << " ";
+		oss << i << " ";
+		enemy->serialise(oss);
+		server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+	}
+}
+
+void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)
+{
+	if (isServer)
+	{
+		//Directly parse packet (this is running on a different thread)
+		parsePacket(_p, _addr);
+	}
+	else
+	{
+		//Pool packet for next update
+		clientPacketQueueMutex.lock();
+		clientPacketQueue.push(std::pair<JNetwork::JNetworkPacket, sockaddr_in>(JNetwork::JNetworkPacket(_p), _addr));
+		clientPacketQueueMutex.unlock();
+	}
+}
+
+void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)
+{
+	std::istringstream iss(&_p.data[1]); //Skip first byte since that is the JNetwork packet type
+	unsigned int messageTypeInt;
+	iss >> messageTypeInt;
+
+	unsigned __int8 messageType = static_cast<unsigned __int8>(messageTypeInt);
+
+
+	if (isServer)
+	{
+		//Server
+
+	}
+	else
+	{
+		//Client
+
+		switch (messageType)
+		{
+
+		case MessageType::NPC_POSITION_UPDATE:
+		{
+			unsigned int index;
+			iss >> index;
+
+			Object * enemy = enemies[index];
+
+			enemy->deserialise(iss);
+			break;
+		}
+
+		}
+
+	}
+}
+
+void GameWorld::startNetwork()
+{
+	networkEntity->start();
+	networkEntity->initialise(5000);
+}
+
+void GameWorld::stopNetwork()
+{
+	networkEntity->stop();
+}
+
+bool GameWorld::getIsServer() const
+{
+	return isServer;
+}
+
+bool GameWorld::clientConnect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout)
+{
+	return dynamic_cast<JNetwork::Client *>(networkEntity)->connect(_serverAddr, _clientName, _timeout);
+}
+
+JNetwork::INetworkEntity * GameWorld::getNetworkEntity()
+{
+	return networkEntity;
+}

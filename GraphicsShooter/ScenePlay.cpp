@@ -31,6 +31,8 @@
 #include "Dependencies\glm\gtc\matrix_transform.hpp"
 #include "Dependencies\glm\gtx\projection.hpp"
 
+#include "JNetwork\Client.h"
+
 
 ScenePlay::ScenePlay()
 {
@@ -191,6 +193,7 @@ void ScenePlay::render() const
 		powerupRenderers[powerup->flag]->DrawMesh(Game::getGame()->getCamera(), powerup->getModelMatrix(), *this, 0.0f);
 	}
 
+
 	//Render text
 	scoreText->Render();
 	ammoText->Render();
@@ -209,7 +212,7 @@ void ScenePlay::update(float _dt)
 
 
 	//Mouse controls
-	glm::vec2 mousePos = Input::getMousePosition();
+	/*glm::vec2 mousePos = Input::getMousePosition();
 
 	glm::vec2 mouseDel = mousePos - glm::vec2(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f);
 
@@ -218,7 +221,7 @@ void ScenePlay::update(float _dt)
 	float rotationX = -mouseDel.x * 0.005f;
 	float rotationY = mouseDel.y * 0.005f;
 
-	thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), rotationX, glm::vec3(0, 1, 0)));
+	thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), rotationX, glm::vec3(0, 1, 0)));*/
 	
 
 

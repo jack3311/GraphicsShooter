@@ -49,7 +49,7 @@ void reshape(int _width, int _height)
 
 int main(int argc, char ** argv)
 {
-	//JNetwork::initWSA();
+	JNetwork::initWSA();
 
 	srand(static_cast<unsigned int>(time(0)));
 
@@ -70,6 +70,6 @@ int main(int argc, char ** argv)
 	glutIdleFunc(update);
 	glutMainLoop();
 
-	//JNetwork::shutdownWSA();
+	JNetwork::shutdownWSA();
 	return 0;
 }

@@ -19,6 +19,8 @@
 #include "Dependencies\glm\glm.hpp"
 #include "Dependencies\glm\gtc\matrix_transform.hpp"
 
+#include <string>
+
 #include "Camera.h"
 #include "ModelRenderer.h"
 
@@ -58,5 +60,9 @@ public:
 	const glm::mat4 getModelMatrix() const;
 
 	unsigned int flag;
+
+
+	virtual void serialise(std::ostringstream & _oss);
+	virtual void deserialise(std::istringstream & _iss);
 };
 

@@ -22,6 +22,15 @@
 #include <vector>
 #include <string>
 #include <cassert>
+#include <sstream>
+
+glm::vec3 vec3FromStream(std::istringstream & iss);
+
+void vec3ToStream(std::ostringstream & oss, const glm::vec3 & _val);
+
+glm::mat4 mat4FromStream(std::istringstream & _iss);
+
+void mat4ToStream(std::ostringstream & _oss, const glm::mat4 & _val);
 
 ///
 /// dist2:
@@ -38,53 +47,6 @@ T dist2(T x1, T y1, T x2, T y2)
 
 	return dX * dX + dY * dY;
 }
-
-
-//template <typename Target>
-//void fromData(char * _in, Target * _out)
-//{
-//	auto p = reinterpret_cast<Target *>(_in);
-//	memcpy_s(_out, sizeof(_out), p, sizeof(p));
-//
-//	/*assert(sizeof(_in) >= sizeof(Target));
-//
-//	union
-//	{
-//		char data[sizeof(Target)];
-//		Target conversion;
-//	} conversionUnion;
-//
-//	//Copy 1: into union
-//	memcpy_s(conversionUnion.data, sizeof(Target), _in, sizeof(Target));
-//
-//	//Copy 2: out of union
-//	memcpy_s(_out, sizeof(Target), &conversionUnion.conversion, sizeof(Target));*/
-//}
-//
-//template <typename Target>
-//void toData(char * _out, Target * _in)
-//{
-//	auto p = reinterpret_cast<char *>(_in);
-//	memcpy_s(_out, sizeof(_out), p, sizeof(p));
-//
-//	/*assert(sizeof(_out) >= sizeof(Target));
-//
-//	union
-//	{
-//		char data[sizeof(Target)];
-//		Target conversion;
-//	} conversionUnion;
-//
-//	//Copy 1: into union
-//	memcpy_s(&conversionUnion.conversion, sizeof(Target), _in, sizeof(Target));
-//
-//	//Copy 2: out of union
-//	memcpy_s(_out, sizeof(Target), conversionUnion.data, sizeof(Target));*/
-//}
-//
-//void floatToChar(float _in, char _out[sizeof(float)]);
-//
-//float charToFloat(char _in[sizeof(float)]);
 
 ///
 /// concatenate

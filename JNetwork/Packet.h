@@ -3,7 +3,7 @@
 #include <string>
 
 #define PACKET_HEADER_SIZE sizeof(JNetworkPacketType)
-#define PACKET_SIZE 64 //bytes
+#define PACKET_SIZE 200 //bytes
 #define PACKET_CONTENT_SIZE (PACKET_SIZE - PACKET_HEADER_SIZE)
 
 namespace JNetwork

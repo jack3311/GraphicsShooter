@@ -68,3 +68,26 @@ const glm::mat4 Object::getModelMatrix() const
 
 	return step3 * step2 * step1;
 }
+
+void Object::serialise(std::ostringstream & _oss)
+{
+	//Flag
+	_oss << flag << " ";
+
+	//Position
+	vec3ToStream(_oss, position);
+
+	//Scale
+	vec3ToStream(_oss, scale);
+
+	//Rotation
+	mat4ToStream(_oss, rotation);
+}
+
+void Object::deserialise(std::istringstream & _iss)
+{
+	_iss >> flag;
+	position = vec3FromStream(_iss);
+	scale = vec3FromStream(_iss);
+	rotation = mat4FromStream(_iss);
+}

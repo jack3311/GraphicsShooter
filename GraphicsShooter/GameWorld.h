@@ -51,14 +51,17 @@ enum EnemyType
 class GameWorld
 {
 private:
-	/*
-	bool isServer;*/
-/*
-	JNetwork::INetworkEntity * networkEntity;*/
-/*
-	std::mutex clientPacketQueueMutex;
-	std::queue<std::pair<JNetwork::JNetworkPacket, sockaddr_in>> clientPacketQueue;*/
+	//NETWORKING
+	bool isServer;
 
+	JNetwork::INetworkEntity * networkEntity;
+
+	std::mutex clientPacketQueueMutex;
+	std::queue<std::pair<JNetwork::JNetworkPacket, sockaddr_in>> clientPacketQueue;
+
+
+
+	//GAME
 	std::vector<Object *> enemies;
 
 	std::vector<PhysicsObject *> bullets;
@@ -67,12 +70,13 @@ private:
 
 	Player * player;
 
+
 	bool gameInProgress = false;
 
 	int stage = 0;
 
 public:
-	GameWorld(/*bool _isServer*/);
+	GameWorld(bool _isServer);
 	~GameWorld();
 
 	/// 
@@ -117,12 +121,13 @@ public:
 
 
 
-	////Packet processing step 1 (pool packets if client / directly process if server)
-	//void onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
+	//NETWORKING
+	//Packet processing step 1 (pool packets if client / directly process if server)
+	void onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
 
-	////Packet processing step 2
-	//void parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
-/*
+	//Packet processing step 2
+	void parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
+
 	void startNetwork();
 	void stopNetwork();
 
@@ -131,6 +136,8 @@ public:
 
 	bool clientConnect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout);
 
-	JNetwork::INetworkEntity * getNetworkEntity();*/
+	JNetwork::INetworkEntity * getNetworkEntity();
+
+	void sendGameState();
 };
 

@@ -143,11 +143,11 @@ bool Game::hasFinishedLoading() const
 	return finishedLoading;
 }
 
-void Game::createGameWorld(/*bool _isServer*/)
+void Game::createGameWorld(bool _isServer)
 {
-	Logger::getLogger().log("Creating game world");
-	//Logger::getLogger().log("Creating game world as ", (_isServer ? "server" : "client"));
-	gameWorld = new GameWorld(/*_isServer*/);
+	//Logger::getLogger().log("Creating game world");
+	Logger::getLogger().log("Creating game world as ", (_isServer ? "server" : "client"));
+	gameWorld = new GameWorld(_isServer);
 }
 
 GameWorld & Game::getGameWorld() const

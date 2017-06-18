@@ -14,27 +14,46 @@
 
 #include "Util.h"
 
-void floatToChar(float _in, char _out[sizeof(float)])
+glm::vec3 vec3FromStream(std::istringstream & _iss)
 {
-	union {
-		float a;
-		char b[sizeof(float)];
-	} conversionUnion;
-
-	conversionUnion.a = _in;
-	memcpy_s(_out, sizeof(_out), conversionUnion.b, sizeof(conversionUnion.b));
+	glm::vec3 vec;
+	_iss >> vec.x;
+	_iss >> vec.y;
+	_iss >> vec.z;
+	return vec;
 }
 
-float charToFloat(char _in[sizeof(float)])
+void vec3ToStream(std::ostringstream & _oss, const glm::vec3 & _val)
 {
-	union {
-		float a;
-		char b[sizeof(float)];
-	} conversionUnion;
+	_oss << _val.x << " ";
+	_oss << _val.y << " ";
+	_oss << _val.z;
+}
 
-	memcpy_s(conversionUnion.b, sizeof(conversionUnion.b), _in, sizeof(_in));
+glm::mat4 mat4FromStream(std::istringstream & _iss)
+{
+	glm::mat4 mat;
+	
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			_iss >> mat[i][j];
+		}
+	}
 
-	return conversionUnion.a;
+	return mat;
+}
+
+void mat4ToStream(std::ostringstream & _oss, const glm::mat4 & _val)
+{
+	for (int i = 0; i < 4; ++i)
+	{
+		for (int j = 0; j < 4; ++j)
+		{
+			_oss << _val[i][j] << " ";
+		}
+	}
 }
 
 void Util::CreateQuad(std::vector<TexturedVertexFormat>& _rVertices, std::vector<GLuint>& _rIndices, float _fWidth, float _fHeight)
