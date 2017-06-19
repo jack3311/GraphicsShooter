@@ -143,11 +143,14 @@ bool Game::hasFinishedLoading() const
 	return finishedLoading;
 }
 
-void Game::createGameWorld(bool _isServer)
+void Game::createGameWorld(bool _isServer, bool _isMultiplayer)
 {
+	if (gameWorld)
+		delete gameWorld;
+
 	//Logger::getLogger().log("Creating game world");
 	Logger::getLogger().log("Creating game world as ", (_isServer ? "server" : "client"));
-	gameWorld = new GameWorld(_isServer);
+	gameWorld = new GameWorld(_isServer, _isMultiplayer);
 }
 
 GameWorld & Game::getGameWorld() const

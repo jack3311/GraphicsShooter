@@ -32,6 +32,7 @@ private:
 	glm::mat4 rotation;
 
 public:
+	Object();
 	Object(glm::vec3 & _position, glm::vec3 & _scale, glm::mat4 & _rotation = glm::mat4());
 	~Object();
 

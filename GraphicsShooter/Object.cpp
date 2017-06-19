@@ -2,7 +2,11 @@
 
 #include "Light.h"
 
-Object::Object(glm::vec3 & _position, glm::vec3 & _scale, glm::mat4 & _rotation) : 
+Object::Object()
+{
+}
+
+Object::Object(glm::vec3 & _position, glm::vec3 & _scale, glm::mat4 & _rotation) :
 	position(_position), scale(_scale), rotation(_rotation)
 {
 }

@@ -13,21 +13,24 @@
 #include "MessageType.h"
 
 
-GameWorld::GameWorld(bool _isServer) : isServer(_isServer)
+GameWorld::GameWorld(bool _isServer, bool _isMultiplayer) : isServer(_isServer), isMultiplayer(_isMultiplayer)
 {
-	if (_isServer)
+	if (isMultiplayer)
 	{
-		//Use intermediary lambda function to use 'this' to call member function
-		networkEntity = new JNetwork::Server([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
-			this->onReceivePacket(_p, _a);
-		});
-	}
-	else
-	{
-		//Use intermediary lambda function to use 'this' to call member function
-		networkEntity = new JNetwork::Client([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
-			this->onReceivePacket(_p, _a);
-		});
+		if (_isServer)
+		{
+			//Use intermediary lambda function to use 'this' to call member function
+			networkEntity = new JNetwork::Server([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
+				this->onReceivePacket(_p, _a);
+			});
+		}
+		else
+		{
+			//Use intermediary lambda function to use 'this' to call member function
+			networkEntity = new JNetwork::Client([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
+				this->onReceivePacket(_p, _a);
+			});
+		}
 	}
 
 	player = new Player(glm::vec3(0, 0, 0), glm::vec3(1.32f, 1.32f, 1.32f));
@@ -74,7 +77,7 @@ void GameWorld::update(float _dt)
 
 
 
-	if (isServer)
+	if (isServer || !isMultiplayer)
 	{
 
 		//Update player:
@@ -173,7 +176,6 @@ void GameWorld::update(float _dt)
 
 		}
 
-#ifdef NOPE
 		//Update bullets
 		for (auto itr = bullets.begin(); itr != bullets.end(); )
 		{
@@ -225,12 +227,14 @@ void GameWorld::update(float _dt)
 				Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
 				delete (*itr);
 				itr = bullets.erase(itr);
-			}
+	}
 			else
 			{
 				++itr;
 			}
 		}
+
+#ifdef NOPE
 
 		//Update powerups
 		for (auto itr = powerups.begin(); itr != powerups.end(); )
@@ -280,8 +284,11 @@ void GameWorld::update(float _dt)
 		}
 #endif
 
-		//Send the game state
-		sendGameState();
+		if (isMultiplayer)
+		{
+			//Send the game state
+			sendGameState();
+		}
 	}
 	else
 	{
@@ -410,6 +417,18 @@ void GameWorld::sendGameState()
 		enemy->serialise(oss);
 		server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
 	}
+
+	//Send bullet info
+	for (unsigned int i = 0; i < bullets.size(); ++i)
+	{
+		PhysicsObject * bullet = bullets[i];
+
+		std::ostringstream oss;
+		oss << MessageType::BULLET_POSITION_UPDATE << " ";
+		oss << i << " ";
+		bullet->serialise(oss);
+		server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+	}
 }
 
 void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)
@@ -457,6 +476,24 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 			Object * enemy = enemies[index];
 
 			enemy->deserialise(iss);
+			break;
+		}
+
+		case MessageType::BULLET_POSITION_UPDATE:
+		{
+			unsigned int index;
+			iss >> index;
+
+			if (index >= bullets.size())
+			{
+				bullets.resize(index + 1u);
+			}
+/*
+			PhysicsObject * bullet = bullets[index];*/
+			if (bullets[index] == nullptr)
+				bullets[index] = new PhysicsObject();
+
+			bullets[index]->deserialise(iss);
 			break;
 		}
 

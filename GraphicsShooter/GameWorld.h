@@ -53,6 +53,7 @@ class GameWorld
 private:
 	//NETWORKING
 	bool isServer;
+	bool isMultiplayer;
 
 	JNetwork::INetworkEntity * networkEntity;
 
@@ -76,7 +77,7 @@ private:
 	int stage = 0;
 
 public:
-	GameWorld(bool _isServer);
+	GameWorld(bool _isServer, bool _isMultiplayer = true);
 	~GameWorld();
 
 	/// 

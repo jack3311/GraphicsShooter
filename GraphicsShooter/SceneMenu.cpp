@@ -22,6 +22,7 @@
 #include "Input.h"
 #include "Game.h"
 #include "GameWorld.h"
+#include "SceneMP.h"
 
 #include "JNetwork\Client.h"
 #include "JNetwork\Util.h"
@@ -56,18 +57,22 @@ void SceneMenu::reset()
 {
 	mainMenu->clear();
 
-	mainMenu->addElement(new UIElement(0.5f, 3.f / 4.f, "Tank Survival", false));
+	mainMenu->addElement(new UIElement(0.5f, 4.f / 5.f, "Tank Survival", false));
 
 	if (Game::getGame()->hasGameWorld() && Game::getGame()->getGameWorld().isGameInProgress())
 	{
-		mainMenu->addElement(new UIElement(0.5f, 2.f / 4.f, "Continue", true, []() {
+		mainMenu->addElement(new UIElement(0.5f, 3.f / 5.f, "Continue", true, []() {
 			SceneManager::getSceneManager().activate<ScenePlay>();
 		}));
 	}
 
-	mainMenu->addElement(new UIElement(0.5f, 1.f / 4.f, "New Game", true, []() {
-		//Game::getGame()->createGameWorld();
+	mainMenu->addElement(new UIElement(0.5f, 2.f / 5.f, "New Single Player Game", true, []() {
+		Game::getGame()->createGameWorld(true, false);
 		SceneManager::getSceneManager().activate<ScenePlay>();
+	}));
+
+	mainMenu->addElement(new UIElement(0.5f, 1.f / 5.f, "New Multi Player Game", true, []() {
+		SceneManager::getSceneManager().activate<SceneMP>();
 	}));
 
 
@@ -75,47 +80,47 @@ void SceneMenu::reset()
 
 
 
-	//TODO: Change to actual menu....
-	std::cout << "Client or server? " << std::endl;
-	int input;
-	std::cin >> input;
+	////TODO: Change to actual menu....
+	//std::cout << "Client or server? " << std::endl;
+	//int input;
+	//std::cin >> input;
 
-	Game::getGame()->createGameWorld(input == 1);
+	//Game::getGame()->createGameWorld(input == 1);
 
-	Logger::getLogger().log("Starting network entity");
-	Game::getGame()->getGameWorld().startNetwork();
+	//Logger::getLogger().log("Starting network entity");
+	//Game::getGame()->getGameWorld().startNetwork();
 
-	if (!Game::getGame()->getGameWorld().getIsServer())
-	{
-		auto _client = dynamic_cast<JNetwork::Client *>(Game::getGame()->getGameWorld().getNetworkEntity());
-
-
-
-
-		_client->broadcastForServers(5000);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		
-		auto serverList = _client->getBroadcastFoundServers();
-		std::cout << "Found " << serverList.size() << " server" << (serverList.size() > 1 ? "s" : "") << ": " << std::endl;
-		for (unsigned int i = 0; i < serverList.size(); ++i)
-		{
-			std::cout << i + 1 << ": " << JNetwork::addrToString(serverList[i]) << std::endl;
-		}
-		
-		std::cout << "Please enter the number corresponding to the server which you wish to join";
-					
-		int chosen;
-		std::cin >> chosen;
-		--chosen;
-		
-		auto serverAddr = serverList[chosen];
+	//if (!Game::getGame()->getGameWorld().getIsServer())
+	//{
+	//	auto _client = dynamic_cast<JNetwork::Client *>(Game::getGame()->getGameWorld().getNetworkEntity());
 
 
 
 
-		if (Game::getGame()->getGameWorld().clientConnect(serverAddr, "Jack", 5000))
-		{
-			Logger::getLogger().log("Connected to server successfully");
-		}
-	}
+	//	_client->broadcastForServers(5000);
+	//	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	//	
+	//	auto serverList = _client->getBroadcastFoundServers();
+	//	std::cout << "Found " << serverList.size() << " server" << (serverList.size() > 1 ? "s" : "") << ": " << std::endl;
+	//	for (unsigned int i = 0; i < serverList.size(); ++i)
+	//	{
+	//		std::cout << i + 1 << ": " << JNetwork::addrToString(serverList[i]) << std::endl;
+	//	}
+	//	
+	//	std::cout << "Please enter the number corresponding to the server which you wish to join";
+	//				
+	//	int chosen;
+	//	std::cin >> chosen;
+	//	--chosen;
+	//	
+	//	auto serverAddr = serverList[chosen];
+
+
+
+
+	//	if (Game::getGame()->getGameWorld().clientConnect(serverAddr, "Jack", 5000))
+	//	{
+	//		Logger::getLogger().log("Connected to server successfully");
+	//	}
+	//}
 }

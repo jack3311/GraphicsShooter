@@ -76,6 +76,7 @@
     <ClCompile Include="SceneGameOver.cpp">
       <Filter>Source Files\Scenes</Filter>
     </ClCompile>
+    <ClCompile Include="SceneMP.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AssetManager.h">
@@ -156,6 +157,7 @@
     <ClInclude Include="MessageType.h">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="SceneMP.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\texturedSpriteShader.vert">

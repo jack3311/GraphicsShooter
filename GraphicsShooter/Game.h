@@ -95,7 +95,7 @@ public:
 	/// createGameWorld:
 	/// Creates a game world
 	///
-	void createGameWorld(bool _isServer);
+	void createGameWorld(bool _isServer, bool _isMultiplayer);
 
 	GameWorld & getGameWorld() const;
 	bool hasGameWorld() const;
