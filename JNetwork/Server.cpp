@@ -113,7 +113,7 @@ namespace JNetwork
 
 		if (_p.type == JNetworkPacketType::JOIN_SERVER)
 		{
-			ClientInfo ci{ _p.data, _addr, true };
+			ClientInfo ci{ &_p.data[1], _addr, true };
 			if (addClient(ci))
 			{
 				socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_ACCEPTED));
