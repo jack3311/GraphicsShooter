@@ -207,6 +207,11 @@ namespace JNetwork
 		}
 	}
 
+	const std::map<std::string, ClientInfo>& Server::getConnectedClients() const
+	{
+		return clientInfoMap;
+	}
+
 	void Server::sendClientList(const sockaddr_in & _addr)
 	{
 		std::string addrString = addrToString(_addr);

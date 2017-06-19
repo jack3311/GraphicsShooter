@@ -48,5 +48,7 @@ namespace JNetwork
 
 		void sendToAll(const JNetworkPacket & _p);
 		void Server::sendToAllExcept(const JNetworkPacket & _p, const std::string & _name);
+
+		const std::map<std::string, ClientInfo> & getConnectedClients() const;
 	};
 }

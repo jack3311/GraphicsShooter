@@ -1,128 +1,20 @@
-19-06-2017 14-14-58: 	Initializing game
-19-06-2017 14-14-58: 	Loading assets
-19-06-2017 14-14-59: 	Initilizing scene: class SceneMenu
-19-06-2017 14-14-59: 	Starting background music
-19-06-2017 14-14-59: 	Initilizing scene: class ScenePlay
-19-06-2017 14-14-59: 	Creating the floor renderer
-19-06-2017 14-14-59: 	Creating the player renderer
-19-06-2017 14-15-07: 	Creating the enemy renderers
-19-06-2017 14-15-07: 	Creating the bullet renderer
-19-06-2017 14-15-08: 	Creating the powerup renderers
-19-06-2017 14-15-08: 	Creating the skybox renderer
-19-06-2017 14-15-08: 	Creating the text labels
-19-06-2017 14-15-08: 	Initilizing scene: class SceneGameOver
-19-06-2017 14-15-08: 	Initilizing scene: class SceneMP
-19-06-2017 14-15-08: 	Activating scene: class SceneMenu
-19-06-2017 14-15-18: 	Creating game world as server
-19-06-2017 14-15-18: 	Creating enemies and powerups
-19-06-2017 14-15-18: 	Activating scene: class ScenePlay
-19-06-2017 14-15-19: 	Player hit, damaging player
-19-06-2017 14-15-19: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-19: 	Player fired bullet
-19-06-2017 14-15-19: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-19: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-19: 	Player hit, damaging player
-19-06-2017 14-15-19: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-19: 	Player fired bullet
-19-06-2017 14-15-20: 	Player fired bullet
-19-06-2017 14-15-20: 	Player fired bullet
-19-06-2017 14-15-20: 	Player fired bullet
-19-06-2017 14-15-20: 	Player fired bullet
-19-06-2017 14-15-20: 	Player fired bullet
-19-06-2017 14-15-20: 	Player fired bullet
-19-06-2017 14-15-21: 	Player fired bullet
-19-06-2017 14-15-21: 	Player fired bullet
-19-06-2017 14-15-21: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-21: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-21: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-21: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-23: 	Player fired bullet
-19-06-2017 14-15-23: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-23: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-23: 	Player fired bullet
-19-06-2017 14-15-24: 	Player fired bullet
-19-06-2017 14-15-24: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-24: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-24: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-24: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Player fired bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-25: 	Player fired bullet
-19-06-2017 14-15-26: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-26: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-26: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-26: 	Player hit, damaging player
-19-06-2017 14-15-26: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-26: 	Player fired bullet
-19-06-2017 14-15-27: 	Player fired bullet
-19-06-2017 14-15-27: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-27: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-27: 	Player fired bullet
-19-06-2017 14-15-27: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-27: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-28: 	Player fired bullet
-19-06-2017 14-15-28: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-28: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-28: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-28: 	Player fired bullet
-19-06-2017 14-15-29: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-29: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-29: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-30: 	Player hit, damaging player
-19-06-2017 14-15-30: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-30: 	Player hit, damaging player
-19-06-2017 14-15-30: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-30: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-31: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-33: 	Player fired bullet
-19-06-2017 14-15-33: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-33: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-33: 	Player fired bullet
-19-06-2017 14-15-34: 	Player fired bullet
-19-06-2017 14-15-35: 	Player fired bullet
-19-06-2017 14-15-35: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-35: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-36: 	Player fired bullet
-19-06-2017 14-15-36: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-36: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-37: 	Player fired bullet
-19-06-2017 14-15-37: 	Enemy destroyed, deleting enemy
-19-06-2017 14-15-37: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-38: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-39: 	Player paused
-19-06-2017 14-15-39: 	Activating scene: class SceneMenu
-19-06-2017 14-15-40: 	Activating scene: class ScenePlay
-19-06-2017 14-15-40: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-41: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-42: 	Player paused
-19-06-2017 14-15-42: 	Activating scene: class SceneMenu
-19-06-2017 14-15-44: 	Creating game world as server
-19-06-2017 14-15-44: 	Creating enemies and powerups
-19-06-2017 14-15-44: 	Activating scene: class ScenePlay
-19-06-2017 14-15-45: 	Player hit, damaging player
-19-06-2017 14-15-45: 	Bullet expired or collision was detected, deleting bullet
-19-06-2017 14-15-45: 	Player hit, damaging player
-19-06-2017 14-15-45: 	Bullet expired or collision was detected, deleting bullet
+19-06-2017 19-22-27: 	Initializing game
+19-06-2017 19-22-27: 	Loading assets
+19-06-2017 19-22-28: 	Initilizing scene: class SceneMenu
+19-06-2017 19-22-28: 	Starting background music
+19-06-2017 19-22-28: 	Initilizing scene: class ScenePlay
+19-06-2017 19-22-28: 	Creating the floor renderer
+19-06-2017 19-22-28: 	Creating the player renderer
+19-06-2017 19-22-37: 	Creating the enemy renderers
+19-06-2017 19-22-37: 	Creating the bullet renderer
+19-06-2017 19-22-38: 	Creating the powerup renderers
+19-06-2017 19-22-38: 	Creating the skybox renderer
+19-06-2017 19-22-38: 	Creating the text labels
+19-06-2017 19-22-38: 	Initilizing scene: class SceneGameOver
+19-06-2017 19-22-38: 	Initilizing scene: class SceneMP
+19-06-2017 19-22-38: 	Activating scene: class SceneMenu
+19-06-2017 19-22-47: 	Activating scene: class SceneMP
+19-06-2017 19-22-58: 	Creating game world as server
+19-06-2017 19-22-58: 	Creating enemies and powerups
+19-06-2017 19-22-58: 	Starting network entity
+19-06-2017 19-23-42: 	Activating scene: class ScenePlay

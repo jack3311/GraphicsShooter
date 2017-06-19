@@ -25,6 +25,7 @@ public:
 	virtual void update(float _dt);
 
 	void setupJoinServer();
+	void setupHostServer();
 
 	/// 
 	/// reset:

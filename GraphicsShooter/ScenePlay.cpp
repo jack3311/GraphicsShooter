@@ -162,6 +162,7 @@ ScenePlay::~ScenePlay()
 void ScenePlay::render() const
 {
 	auto & gw = Game::getGame()->getGameWorld();
+	auto thisPlayer = gw.getThisPlayer();
 
 	//Render floor
 	auto floorScale = glm::scale(glm::mat4(), glm::vec3(10000.f, 1.f, 10000.f));
@@ -172,25 +173,32 @@ void ScenePlay::render() const
 	//Render skybox
 	skyboxRenderer->DrawModel(AssetManager::getAssetManager().getCubeMap("skybox1"), Game::getGame()->getCamera(), glm::scale(glm::mat4(), glm::vec3(10000.f, 10000.f, 10000.f)));
 
-	//Render player
-	playerRenderer->draw(Game::getGame()->getCamera(), gw.getPlayer()->getModelMatrix(), *this);
+	//Render players
+	for (auto player : gw.getPlayers())
+	{
+		if (player.second)
+			playerRenderer->draw(Game::getGame()->getCamera(), player.second->getModelMatrix(), *this);
+	}
 
 	//Render enemies
 	for (auto enemy : gw.getEnemies())
 	{
-		enemyRenderers[enemy->flag]->draw(Game::getGame()->getCamera(), enemy->getModelMatrix(), *this);
+		if (enemy)
+			enemyRenderers[enemy->flag]->draw(Game::getGame()->getCamera(), enemy->getModelMatrix(), *this);
 	}
 
 	//Render bullets
 	for (auto bullet : gw.getBullets())
 	{
-		bulletRenderer->DrawMesh(Game::getGame()->getCamera(), bullet->getModelMatrix(), *this, 0.0f);
+		if (bullet)
+			bulletRenderer->DrawMesh(Game::getGame()->getCamera(), bullet->getModelMatrix(), *this, 0.0f);
 	}
 
 	//Render powerups
 	for (auto powerup : gw.getPowerups())
 	{
-		powerupRenderers[powerup->flag]->DrawMesh(Game::getGame()->getCamera(), powerup->getModelMatrix(), *this, 0.0f);
+		if (powerup)
+			powerupRenderers[powerup->flag]->DrawMesh(Game::getGame()->getCamera(), powerup->getModelMatrix(), *this, 0.0f);
 	}
 
 
@@ -204,9 +212,13 @@ void ScenePlay::update(float _dt)
 {
 	Game & g = *Game::getGame();
 	auto & gw = g.getGameWorld();
-	auto thisPlayer = gw.getPlayer();
+	auto thisPlayer = gw.getThisPlayer();
 
 	elapsedTime += _dt;
+
+
+	//Update game world
+	Game::getGame()->getGameWorld().update(_dt);
 
 
 
@@ -222,38 +234,7 @@ void ScenePlay::update(float _dt)
 	float rotationY = mouseDel.y * 0.005f;
 
 	thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), rotationX, glm::vec3(0, 1, 0)));*/
-	
 
-
-	//Keyboard controls
-	if (Input::isKeyDown('a'))
-	{
-		thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), 3.f * _dt, glm::vec3(0, 1, 0)));
-	}
-
-	if (Input::isKeyDown('d'))
-	{
-		thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), -3.f * _dt, glm::vec3(0, 1, 0)));
-	}
-
-	auto facing2D = -glm::vec3(thisPlayer->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
-
-	if (Input::isKeyDown('s'))
-	{
-		thisPlayer->setPosition(thisPlayer->getPosition() - facing2D * 10.f * _dt);
-	}
-
-	if (Input::isKeyDown('w'))
-	{
-		thisPlayer->setPosition(thisPlayer->getPosition() + facing2D * 10.f * _dt);
-	}
-
-	if (Input::isKeyDown(' ') && !spaceBarLastFrame)
-	{
-		gw.playerFire();
-	}
-
-	spaceBarLastFrame = Input::isKeyDown(' ');
 
 	if (Input::isKeyDown(27)) //Escape key
 	{
@@ -262,64 +243,94 @@ void ScenePlay::update(float _dt)
 	}
 
 
-	//Update game world
-	Game::getGame()->getGameWorld().update(_dt);
-
-
-
-	//Camera settings
-	auto sideways = glm::cross(facing2D, glm::vec3(0, 1, 0));
-	auto offset = sideways * 2.f + glm::vec3(0.f, 3.5f, 0);
-	offset *= thisPlayer->getScale();
-
-	g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
-	g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
-
-	Game::getGame()->getCamera().updateCamera();
-
-
-	//Update spotlight
-	lights[0]->setPosition(g.getCamera().getPosition() + facing2D * 2.f);
-	//lights[0]->setConeDir(-glm::normalize(thisPlayer->getPosition() - g.getCamera().getPosition()));
-	lights[0]->setConeDir(-facing2D);
-
-
-	
-	//Update text
-	std::stringstream ss;
-	if (thisPlayer->isReloading())
+	//Keyboard controls
+	if (thisPlayer)
 	{
+		if (Input::isKeyDown('a'))
+		{
+			thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), 3.f * _dt, glm::vec3(0, 1, 0)));
+		}
 
-		ss << "Reloading...";
-	}
-	else if (thisPlayer->hasInfiniteAmmo())
-	{
-		ss << "Infinite Ammo";
-	}
-	else
-	{
-		ss << "Ammo: " << thisPlayer->getAmmo();
-	}
-	ammoText->setText(ss.str());
+		if (Input::isKeyDown('d'))
+		{
+			thisPlayer->setRotation(glm::rotate(thisPlayer->getRotation(), -3.f * _dt, glm::vec3(0, 1, 0)));
+		}
+
+		auto facing2D = -glm::vec3(thisPlayer->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
+
+		if (Input::isKeyDown('s'))
+		{
+			thisPlayer->setPosition(thisPlayer->getPosition() - facing2D * 10.f * _dt);
+		}
+
+		if (Input::isKeyDown('w'))
+		{
+			thisPlayer->setPosition(thisPlayer->getPosition() + facing2D * 10.f * _dt);
+		}
+
+		if (Input::isKeyDown(' ') && !spaceBarLastFrame)
+		{
+			gw.playerFire();
+		}
+
+		spaceBarLastFrame = Input::isKeyDown(' ');
 
 
-	ss = std::stringstream();
-	ss << "Score: " << thisPlayer->getScore();
-	scoreText->setText(ss.str());
 
-	ss = std::stringstream();
-	ss << "Health: " << thisPlayer->getHealth() << " / " << MAX_HEALTH;
-	if (thisPlayer->hasShield())
-	{
-		ss << " SHIELDED";
-	}
-	healthText->setText(ss.str());
+		//Camera settings
+		auto sideways = glm::cross(facing2D, glm::vec3(0, 1, 0));
+		auto offset = sideways * 2.f + glm::vec3(0.f, 3.5f, 0);
+		offset *= thisPlayer->getScale();
 
-	ammoText->setPosition(glm::vec2(0.f, 0.f));
-	healthText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() - healthText->getWidth(), 0.f));
+		g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
+		g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
 
-	scoreText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f - scoreText->getWidth() / 2.f,
-		Game::getGame()->getWindowHeight() - scoreText->getHeight()));
+		Game::getGame()->getCamera().updateCamera();
+
+
+		//Update spotlight
+		lights[0]->setPosition(g.getCamera().getPosition() + facing2D * 2.f);
+		//lights[0]->setConeDir(-glm::normalize(thisPlayer->getPosition() - g.getCamera().getPosition()));
+		lights[0]->setConeDir(-facing2D);
+
+
+
+		//Update text
+		std::stringstream ss;
+		if (thisPlayer->isReloading())
+		{
+
+			ss << "Reloading...";
+		}
+		else if (thisPlayer->hasInfiniteAmmo())
+		{
+			ss << "Infinite Ammo";
+		}
+		else
+		{
+			ss << "Ammo: " << thisPlayer->getAmmo();
+		}
+		ammoText->setText(ss.str());
+
+
+		ss = std::stringstream();
+		ss << "Score: " << thisPlayer->getScore();
+		scoreText->setText(ss.str());
+
+		ss = std::stringstream();
+		ss << "Health: " << thisPlayer->getHealth() << " / " << MAX_HEALTH;
+		if (thisPlayer->hasShield())
+		{
+			ss << " SHIELDED";
+		}
+		healthText->setText(ss.str());
+
+		ammoText->setPosition(glm::vec2(0.f, 0.f));
+		healthText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() - healthText->getWidth(), 0.f));
+
+		scoreText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f - scoreText->getWidth() / 2.f,
+			Game::getGame()->getWindowHeight() - scoreText->getHeight()));
+	}	
 }
 
 void ScenePlay::reset()

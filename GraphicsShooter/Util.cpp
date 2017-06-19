@@ -27,7 +27,7 @@ void vec3ToStream(std::ostringstream & _oss, const glm::vec3 & _val)
 {
 	_oss << _val.x << " ";
 	_oss << _val.y << " ";
-	_oss << _val.z;
+	_oss << _val.z << " ";
 }
 
 glm::mat4 mat4FromStream(std::istringstream & _iss)

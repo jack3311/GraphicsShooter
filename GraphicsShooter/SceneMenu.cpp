@@ -67,7 +67,7 @@ void SceneMenu::reset()
 	}
 
 	mainMenu->addElement(new UIElement(0.5f, 2.f / 5.f, "New Single Player Game", true, []() {
-		Game::getGame()->createGameWorld(true, false);
+		Game::getGame()->createGameWorld(true, false, "You");
 		SceneManager::getSceneManager().activate<ScenePlay>();
 	}));
 

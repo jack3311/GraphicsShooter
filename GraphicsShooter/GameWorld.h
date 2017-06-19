@@ -2,6 +2,7 @@
 
 #include <queue>
 #include <mutex>
+#include <map>
 
 #include "JNetwork\NetworkEntity.h"
 #include "JNetwork\UDPSocket.h"
@@ -60,7 +61,7 @@ private:
 	std::mutex clientPacketQueueMutex;
 	std::queue<std::pair<JNetwork::JNetworkPacket, sockaddr_in>> clientPacketQueue;
 
-
+	std::string username;
 
 	//GAME
 	std::vector<Object *> enemies;
@@ -69,15 +70,27 @@ private:
 
 	std::vector<PhysicsObject *> powerups;
 
-	Player * player;
+	std::map<std::string, Player *> players;
 
 
 	bool gameInProgress = false;
 
 	int stage = 0;
 
+
+	/// 
+	/// createBullet:
+	/// Creates a bullet in the scene
+	/// _source - the bullet's source
+	/// _dir - the direction of the bullet
+	/// _friendly - whether the bullet will affect the player or not
+	/// _speed - the speed of the bullet
+	///
+	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED);
+
+
 public:
-	GameWorld(bool _isServer, bool _isMultiplayer = true);
+	GameWorld(bool _isServer, bool _isMultiplayer, std::string _username);
 	~GameWorld();
 
 	/// 
@@ -90,23 +103,15 @@ public:
 	std::vector<Object *> getEnemies();
 	std::vector<PhysicsObject *> getBullets();
 	std::vector<PhysicsObject *> getPowerups();
-	Player * getPlayer();
+	std::map<std::string, Player *> getPlayers();
+	Player * getThisPlayer();
 
 	/// 
 	/// playerFire:
 	/// Attempts to fire a bullet for the player
 	///
 	void playerFire();
-
-	/// 
-	/// createBullet:
-	/// Creates a bullet in the scene
-	/// _source - the bullet's source
-	/// _dir - the direction of the bullet
-	/// _friendly - whether the bullet will affect the player or not
-	/// _speed - the speed of the bullet
-	///
-	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED);
+	void playerFire(std::string _username);
 
 	/// 
 	/// isGameInProgress:

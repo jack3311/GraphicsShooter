@@ -18,6 +18,8 @@
 #include "Dependencies\freeglut\freeglut.h"
 #include "Dependencies\glew\wglew.h"
 
+#include <string>
+
 class SpriteRenderer;
 class Camera;
 class GameWorld;
@@ -95,7 +97,7 @@ public:
 	/// createGameWorld:
 	/// Creates a game world
 	///
-	void createGameWorld(bool _isServer, bool _isMultiplayer);
+	void createGameWorld(bool _isServer, bool _isMultiplayer, std::string _username);
 
 	GameWorld & getGameWorld() const;
 	bool hasGameWorld() const;
