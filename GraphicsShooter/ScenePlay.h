@@ -53,6 +53,8 @@ private:
 	TextLabel * scoreText;
 	TextLabel * healthText;
 
+	TextLabel * waitingText;
+
 public:
 	ScenePlay();
 	virtual ~ScenePlay();

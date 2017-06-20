@@ -21,9 +21,10 @@ namespace JNetwork
 
 	void Client::start()
 	{
-		active = true;
+		INetworkEntity::start();
+		//active = true;
 
-		receiveThread = std::thread(&Client::receiveThreadEntry, this);
+		//receiveThread = std::thread(&Client::receiveThreadEntry, this);
 	}
 
 	void Client::stop()
@@ -34,10 +35,7 @@ namespace JNetwork
 			socket->sendPacket(serverAddr, JNetworkPacketType(JNetworkPacketType::CLIENT_DISCONNECT));
 		}
 
-		//Stop receiving packets, receive thread may end without requiring socket shutdown
-		active = false;
-
-		receiveThread.detach();
+		INetworkEntity::stop();
 	}
 
 	void Client::parseClientListPacket(const JNetworkPacket & _packet)
@@ -122,15 +120,18 @@ namespace JNetwork
 			sockaddr_in addr;
 			JNetworkPacket p;
 
-			UDPSocketResponse r = socket->receivePacket(addr, p);
+			if (socket != nullptr)
+			{
+				UDPSocketResponse r = socket->receivePacket(addr, p);
 
-			if (r == UDPSocketResponse::OK)
-			{
-				processPacket(p, addr);
-			}
-			else /*if (r != UDPSocketResponse::CONNECTION_CLOSED)*/
-			{
-				//std::cout << "Could not receive packet" << std::endl;
+				if (r == UDPSocketResponse::OK)
+				{
+					processPacket(p, addr);
+				}
+				else /*if (r != UDPSocketResponse::CONNECTION_CLOSED)*/
+				{
+					//std::cout << "Could not receive packet" << std::endl;
+				}
 			}
 		}
 	}
@@ -152,7 +153,7 @@ namespace JNetwork
 		{
 			std::pair<sockaddr_in, std::string> val;
 			val.first = _addr;
-			val.second = _p.data[1];
+			val.second = &_p.data[1];
 
 			broadcastFoundServerAddresses.push_back(val);
 			break;

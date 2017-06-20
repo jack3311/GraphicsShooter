@@ -142,6 +142,7 @@ ScenePlay::ScenePlay()
 	ammoText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	scoreText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	healthText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
+	waitingText = new TextLabel("Waiting for Server...", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), true);
 }
 
 ScenePlay::~ScenePlay()
@@ -206,12 +207,36 @@ void ScenePlay::render() const
 	scoreText->Render();
 	ammoText->Render();
 	healthText->Render();
+
+	//Check
+	if (gw.getEnemies().size() == 0 && gw.getIsMultiplayer())
+		waitingText->Render();
 }
 
 void ScenePlay::update(float _dt)
 {
 	Game & g = *Game::getGame();
 	auto & gw = g.getGameWorld();
+
+
+	if (gw.getIsMultiplayer())
+	{
+		if (!gw.getIsServer())
+		{
+			if (!dynamic_cast<JNetwork::Client *>(gw.getNetworkEntity())->isConnectedToServer())
+			{
+				Logger::getLogger().log("Lost connection to server");
+				g.deleteGameWorld();
+				SceneManager::getSceneManager().activate<SceneMenu>();
+				return;
+			}
+		}
+	}
+
+
+
+
+
 	auto thisPlayer = gw.getThisPlayer();
 
 	elapsedTime += _dt;
@@ -330,7 +355,10 @@ void ScenePlay::update(float _dt)
 
 		scoreText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f - scoreText->getWidth() / 2.f,
 			Game::getGame()->getWindowHeight() - scoreText->getHeight()));
-	}	
+
+	}
+
+	waitingText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() / 2.f));
 }
 
 void ScenePlay::reset()

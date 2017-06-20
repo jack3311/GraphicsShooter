@@ -20,6 +20,14 @@ namespace JNetwork
 
 		m_socketAddr.sin_family = AF_INET;
 		m_socketAddr.sin_addr.S_un.S_addr = INADDR_ANY;
+
+		//Set socket timeout
+		struct timeval tv;
+		tv.tv_sec = 1;
+		tv.tv_usec = 0;
+		if (setsockopt(m_hSocket, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(tv)) < 0) {
+			return;
+		}
 	}
 
 	UDPSocket::~UDPSocket()
@@ -90,7 +98,9 @@ namespace JNetwork
 
 		char * buffer = new char[_size];
 
-		int bytesReceived = recvfrom(m_hSocket, buffer, _size, 0, reinterpret_cast<sockaddr *>(&_sourceOut), &sourceSize);
+		int bytesReceived = 0;
+
+		bytesReceived = recvfrom(m_hSocket, buffer, _size, 0, reinterpret_cast<sockaddr *>(&_sourceOut), &sourceSize);
 
 		if (bytesReceived < 0)
 		{
@@ -132,5 +142,10 @@ namespace JNetwork
 	{
 		char broadcast = 0;
 		setsockopt(m_hSocket, SOL_SOCKET, SO_BROADCAST, &broadcast, sizeof(broadcast));
+	}
+
+	void UDPSocket::manualClose()
+	{
+		closesocket(m_hSocket);
 	}
 }

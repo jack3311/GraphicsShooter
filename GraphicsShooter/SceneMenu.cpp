@@ -57,21 +57,49 @@ void SceneMenu::reset()
 {
 	mainMenu->clear();
 
-	mainMenu->addElement(new UIElement(0.5f, 4.f / 5.f, "Tank Survival", false));
-
+	mainMenu->addElement(new UIElement(0.5f, 5.f / 6.f, "Tank Survival", false));
+	
 	if (Game::getGame()->hasGameWorld() && Game::getGame()->getGameWorld().isGameInProgress())
 	{
-		mainMenu->addElement(new UIElement(0.5f, 3.f / 5.f, "Continue", true, []() {
-			SceneManager::getSceneManager().activate<ScenePlay>();
-		}));
+		if (Game::getGame()->getGameWorld().getIsMultiplayer())
+		{
+			if (Game::getGame()->getGameWorld().getIsServer())
+			{
+				mainMenu->addElement(new UIElement(0.5f, 4.f / 6.f, "Continue", true, []() {
+					SceneManager::getSceneManager().activate<ScenePlay>();
+				}));
+
+				mainMenu->addElement(new UIElement(0.5f, 3.f / 6.f, "Stop Server", true, []() {
+					Game::getGame()->deleteGameWorld();
+					SceneManager::getSceneManager().activate<SceneMenu>();
+				}));
+			}
+			else if (dynamic_cast<JNetwork::Client *>(Game::getGame()->getGameWorld().getNetworkEntity())->isConnectedToServer())
+			{
+				mainMenu->addElement(new UIElement(0.5f, 4.f / 6.f, "Continue", true, []() {
+					SceneManager::getSceneManager().activate<ScenePlay>();
+				}));
+
+				mainMenu->addElement(new UIElement(0.5f, 3.f / 6.f, "Disconnect", true, []() {
+					Game::getGame()->deleteGameWorld();
+					SceneManager::getSceneManager().activate<SceneMenu>();
+				}));
+			}
+		}
+		else
+		{
+			mainMenu->addElement(new UIElement(0.5f, 4.f / 6.f, "Continue", true, []() {
+				SceneManager::getSceneManager().activate<ScenePlay>();
+			}));
+		}
 	}
 
-	mainMenu->addElement(new UIElement(0.5f, 2.f / 5.f, "New Single Player Game", true, []() {
+	mainMenu->addElement(new UIElement(0.5f, 2.f / 6.f, "New Single Player Game", true, []() {
 		Game::getGame()->createGameWorld(true, false, "You");
 		SceneManager::getSceneManager().activate<ScenePlay>();
 	}));
 
-	mainMenu->addElement(new UIElement(0.5f, 1.f / 5.f, "New Multi Player Game", true, []() {
+	mainMenu->addElement(new UIElement(0.5f, 1.f / 6.f, "New Multi Player Game", true, []() {
 		SceneManager::getSceneManager().activate<SceneMP>();
 	}));
 

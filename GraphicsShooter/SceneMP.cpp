@@ -8,6 +8,7 @@
 #include "SceneMenu.h"
 
 #include "JNetwork\Client.h"
+#include "JNetwork\Server.h"
 #include "JNetwork\Util.h"
 
 
@@ -115,10 +116,15 @@ void SceneMP::setupHostServer()
 	this->mainMenuShown = false;
 	this->hostServerMenuShown = true;
 
-	std::cout << "Enter a username: " << std::endl;
-	std::cin >> clientUsername;
+	std::string serverName;
 
-	Game::getGame()->createGameWorld(true, true, clientUsername);
+	std::cout << "Enter a server name: " << std::endl;
+	std::getline(std::cin, serverName);
+
+	std::cout << "Enter a username: " << std::endl;
+	std::getline(std::cin, clientUsername);
+
+	Game::getGame()->createGameWorld(true, true, clientUsername, serverName);
 
 	Logger::getLogger().log("Starting network entity");
 	Game::getGame()->getGameWorld().startNetwork();
@@ -137,6 +143,8 @@ void SceneMP::reset()
 	hostServerMenu->clear();
 	joinServerMenu->clear();
 
+	backToMPMenu();
+
 	mainMenu->addElement(new UIElement(0.5f, 4.f / 5.f, "Join Server", true, [this]() {
 		this->setupJoinServer();
 	}));
@@ -151,6 +159,7 @@ void SceneMP::reset()
 	
 
 	hostServerMenu->addElement(new UIElement(0.5f, 3.f / 5.f, "Start the Game!", true, [this]() {
+		dynamic_cast<JNetwork::Server *>(Game::getGame()->getGameWorld().getNetworkEntity())->setDenyConnections(true);
 		SceneManager::getSceneManager().activate<ScenePlay>();
 	}));
 }

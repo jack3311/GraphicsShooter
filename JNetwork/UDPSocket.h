@@ -37,5 +37,7 @@ namespace JNetwork
 
 		void enableBroadcast();
 		void disableBroadcast();
+
+		void manualClose();
 	};
 }

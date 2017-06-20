@@ -23,8 +23,9 @@ namespace JNetwork
 	void INetworkEntity::stop()
 	{
 		//Stop receiving packets, receive thread may end without requiring socket shutdown
-		active = false;
 		receiveThread.detach();
+		active = false;
+		std::this_thread::sleep_for(std::chrono::milliseconds(1500));
 	}
 
 	bool INetworkEntity::initialise(unsigned short _port)

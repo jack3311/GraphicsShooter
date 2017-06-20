@@ -27,6 +27,8 @@ namespace JNetwork
 
 		std::thread keepAliveThread;
 
+		bool denyConnections = false;
+
 		bool addClient(ClientInfo _clientInfo);
 		void removeClient(const std::string & _name);
 		bool clientConnected(const sockaddr_in & _addr);
@@ -52,5 +54,7 @@ namespace JNetwork
 		void Server::sendToAllExcept(const JNetworkPacket & _p, const std::string & _name);
 
 		const std::map<std::string, ClientInfo> & getConnectedClients() const;
+
+		void setDenyConnections(bool _value);
 	};
 }

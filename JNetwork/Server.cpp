@@ -9,7 +9,7 @@
 namespace JNetwork
 {
 	#define PROCESS_PACKETS_ON_NEW_THREAD
-	#define KEEP_ALIVE_TIME_MILLISECONDS 750
+	#define KEEP_ALIVE_TIME_MILLISECONDS 1500
 
 	Server::Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc, std::string _name) : INetworkEntity::INetworkEntity(NetworkEntityType::SERVER, _receivePacketGameFunc), name(_name)
 	{
@@ -28,6 +28,8 @@ namespace JNetwork
 
 	void Server::stop()
 	{
+		sendToAll(JNetworkPacket(JNetworkPacketType::PLEASE_JOIN));
+
 		INetworkEntity::stop();
 
 		keepAliveThread.detach();
@@ -111,30 +113,33 @@ namespace JNetwork
 	{
 		//Process received packets:
 
-		if (_p.type == JNetworkPacketType::JOIN_SERVER)
+		if (!denyConnections)
 		{
-			ClientInfo ci{ &_p.data[1], _addr, true };
-			if (addClient(ci))
+			if (_p.type == JNetworkPacketType::JOIN_SERVER)
 			{
-				socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_ACCEPTED));
+				ClientInfo ci{ &_p.data[1], _addr, true };
+				if (addClient(ci))
+				{
+					socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_ACCEPTED));
 
-				//Send the client list
-				sendClientList(_addr);
+					//Send the client list
+					sendClientList(_addr);
 
-				//Send a notification that new client joined
-				sendToAllExcept(JNetworkPacket(JNetworkPacketType::NEW_CLIENT, ci.name.c_str()), ci.name);
+					//Send a notification that new client joined
+					sendToAllExcept(JNetworkPacket(JNetworkPacketType::NEW_CLIENT, ci.name.c_str()), ci.name);
+				}
+				else
+				{
+					socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_DENIED));
+				}
+
+				return;
 			}
-			else
+			if (_p.type == JNetworkPacketType::SERVER_BC_REQUEST)
 			{
-				socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::JOIN_SERVER_DENIED));
+				socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::SERVER_BC_RESPONSE, name.c_str()));
+				return;
 			}
-
-			return;
-		}
-		if (_p.type == JNetworkPacketType::SERVER_BC_REQUEST)
-		{
-			socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::SERVER_BC_RESPONSE, name.c_str()));
-			return;
 		}
 
 
@@ -210,6 +215,11 @@ namespace JNetwork
 	const std::map<std::string, ClientInfo>& Server::getConnectedClients() const
 	{
 		return clientInfoMap;
+	}
+
+	void Server::setDenyConnections(bool _value)
+	{
+		denyConnections = _value;
 	}
 
 	void Server::sendClientList(const sockaddr_in & _addr)

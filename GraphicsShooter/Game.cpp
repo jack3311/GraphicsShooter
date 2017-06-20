@@ -143,14 +143,26 @@ bool Game::hasFinishedLoading() const
 	return finishedLoading;
 }
 
-void Game::createGameWorld(bool _isServer, bool _isMultiplayer, std::string _username)
+void Game::createGameWorld(bool _isServer, bool _isMultiplayer, std::string _username, std::string _serverName)
 {
 	if (gameWorld)
+	{
 		delete gameWorld;
+	}
 
 	//Logger::getLogger().log("Creating game world");
 	Logger::getLogger().log("Creating game world as ", (_isServer ? "server" : "client"));
-	gameWorld = new GameWorld(_isServer, _isMultiplayer, _username);
+	gameWorld = new GameWorld(_isServer, _isMultiplayer, _username, _serverName);
+}
+
+void Game::deleteGameWorld()
+{
+	if (gameWorld != nullptr)
+	{
+		Logger::getLogger().log("Deleting game world");
+		delete gameWorld;
+		gameWorld = nullptr;
+	}
 }
 
 GameWorld & Game::getGameWorld() const

@@ -97,7 +97,7 @@ private:
 
 
 public:
-	GameWorld(bool _isServer, bool _isMultiplayer, std::string _username);
+	GameWorld(bool _isServer, bool _isMultiplayer, std::string _username, std::string _serverName = "");
 	~GameWorld();
 
 	/// 
@@ -154,5 +154,7 @@ public:
 	JNetwork::INetworkEntity * getNetworkEntity();
 
 	void sendGameState();
+
+	bool getIsMultiplayer() const;
 };
 

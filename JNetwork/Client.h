@@ -15,7 +15,7 @@ namespace JNetwork
 
 		sockaddr_in serverAddr;
 
-		std::thread receiveThread;
+		//std::thread receiveThread;
 
 		void receiveThreadEntry();
 		void processPacket(JNetworkPacket _p, const sockaddr_in _addr);

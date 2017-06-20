@@ -13,7 +13,7 @@
 #include "MessageType.h"
 
 
-GameWorld::GameWorld(bool _isServer, bool _isMultiplayer, std::string _username) : isServer(_isServer), isMultiplayer(_isMultiplayer), username(_username)
+GameWorld::GameWorld(bool _isServer, bool _isMultiplayer, std::string _username, std::string _serverName) : isServer(_isServer), isMultiplayer(_isMultiplayer), username(_username)
 {
 	if (isMultiplayer)
 	{
@@ -25,7 +25,7 @@ GameWorld::GameWorld(bool _isServer, bool _isMultiplayer, std::string _username)
 			//Use intermediary lambda function to use 'this' to call member function
 			networkEntity = new JNetwork::Server([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
 				this->onReceivePacket(_p, _a);
-			});
+			}, _serverName);
 
 			nextLevel();
 		}
@@ -36,6 +36,10 @@ GameWorld::GameWorld(bool _isServer, bool _isMultiplayer, std::string _username)
 				this->onReceivePacket(_p, _a);
 			});
 		}
+	}
+	else
+	{
+		nextLevel();
 	}
 
 	//Add this player to the map
@@ -67,9 +71,12 @@ GameWorld::~GameWorld()
 	}
 
 	//Stop network entity
-	networkEntity->stop();
+	if (isMultiplayer)
+	{
+		networkEntity->stop();
 
-	delete networkEntity;
+		delete networkEntity;
+	}
 }
 
 void GameWorld::update(float _dt)
@@ -97,9 +104,7 @@ void GameWorld::update(float _dt)
 
 
 
-
-
-	if (isServer || !isMultiplayer)
+	if (isServer && isMultiplayer)
 	{
 		//Ensure all players are in the map
 		for (auto client : dynamic_cast<JNetwork::Server*>(networkEntity)->getConnectedClients())
@@ -111,6 +116,10 @@ void GameWorld::update(float _dt)
 			}
 		}
 
+	}
+
+	if (isServer || !isMultiplayer)
+	{
 		//Update players:
 		for (auto player : players)
 		{
@@ -639,6 +648,11 @@ void GameWorld::sendGameState()
 			}
 		}
 	}
+}
+
+bool GameWorld::getIsMultiplayer() const
+{
+	return isMultiplayer;
 }
 
 void GameWorld::onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr)
