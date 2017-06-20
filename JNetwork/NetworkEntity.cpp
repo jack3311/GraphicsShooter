@@ -47,4 +47,9 @@ namespace JNetwork
 	{
 		return active;
 	}
+
+	const UDPSocket * INetworkEntity::getSocket() const
+	{
+		return socket;
+	}
 }

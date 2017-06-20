@@ -42,5 +42,7 @@ namespace JNetwork
 		NetworkEntityType getType() const;
 
 		bool isActive() const;
+
+		const UDPSocket * getSocket() const;
 	};
 }

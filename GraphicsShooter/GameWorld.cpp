@@ -19,12 +19,13 @@ GameWorld::GameWorld(bool _isServer, bool _isMultiplayer, std::string _username)
 	{
 		if (_isServer)
 		{
+			tickRateClock = std::chrono::high_resolution_clock();
+			lastNetworkUpdateTime = tickRateClock.now();
+
 			//Use intermediary lambda function to use 'this' to call member function
 			networkEntity = new JNetwork::Server([=](JNetwork::JNetworkPacket & _p, const sockaddr_in & _a) {
 				this->onReceivePacket(_p, _a);
 			});
-
-			players[username] = new Player(glm::vec3(0, 0, 0), glm::vec3(1.32f, 1.32f, 1.32f));
 
 			nextLevel();
 		}
@@ -36,6 +37,9 @@ GameWorld::GameWorld(bool _isServer, bool _isMultiplayer, std::string _username)
 			});
 		}
 	}
+
+	//Add this player to the map
+	players[username] = new Player(glm::vec3(0, 0, 0), glm::vec3(1.32f, 1.32f, 1.32f));
 
 	gameInProgress = true;
 }
@@ -261,7 +265,7 @@ void GameWorld::update(float _dt)
 
 			if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
 			{
-				Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
+				//Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
 				delete (*itr);
 				itr = bullets.erase(itr);
 	}
@@ -321,11 +325,6 @@ void GameWorld::update(float _dt)
 		}
 #endif
 
-		if (isMultiplayer)
-		{
-			//Send the game state
-			sendGameState();
-		}
 	}
 	else
 	{
@@ -339,21 +338,43 @@ void GameWorld::update(float _dt)
 
 			parsePacket(packetPair.first, packetPair.second);
 		}
+
+		//Client side prediction
+		//Update bullets
+		for (auto itr = bullets.begin(); itr != bullets.end(); ++itr)
+		{
+			(*itr)->update(_dt);
+		}
+	}
+
+
+	if (isMultiplayer)
+	{
+		//Send the game state if we need to
+		auto currentTime = tickRateClock.now();
+		auto diff = currentTime - lastNetworkUpdateTime;
+
+		if (diff >= std::chrono::milliseconds(NETWORK_TICK_RATE))
+		{
+			sendGameState();
+
+			lastNetworkUpdateTime = currentTime;
+		}
 	}
 }
 
 
-std::vector<Object*> GameWorld::getEnemies()
+std::vector<Object *> GameWorld::getEnemies()
 {
 	return enemies;
 }
 
-std::vector<PhysicsObject*> GameWorld::getBullets()
+std::vector<PhysicsObject *> GameWorld::getBullets()
 {
 	return bullets;
 }
 
-std::vector<PhysicsObject*> GameWorld::getPowerups()
+std::vector<PhysicsObject *> GameWorld::getPowerups()
 {
 	return powerups;
 }
@@ -448,47 +469,109 @@ void GameWorld::nextLevel()
 	}
 }
 
-
-
+//
+//void GameWorld::sendPlayerMove(glm::vec3 _delta)
+//{
+//	if (isServer)
+//	{
+//		players[username]->move(_delta);
+//	}
+//	else
+//	{
+//		Player * player = players[username];
+//
+//		std::ostringstream oss;
+//		oss << MessageType::PLAYER_POSITION_UPDATE << " ";
+//		oss << username << " ";
+//		player->serialise(oss);
+//
+//		JNetwork::Client * client = dynamic_cast<JNetwork::Client *>(networkEntity);
+//		client->send(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+//	}
+//}
 
 void GameWorld::sendGameState()
 {
-	JNetwork::Server * server = dynamic_cast<JNetwork::Server *>(networkEntity);
-
-	//Send player info
-	for (auto playerp : players)
+	if (isServer)
 	{
-		Player * player = playerp.second;
+		JNetwork::Server * server = dynamic_cast<JNetwork::Server *>(networkEntity);
+		const auto & clientList = server->getConnectedClients();
+		
+		//Send player info:
+		for (auto playerp : players)
+		{
+			Player * player = playerp.second;
 
-		std::ostringstream oss;
-		oss << MessageType::PLAYER_POSITION_UPDATE << " ";
-		oss << playerp.first << " ";
-		player->serialise(oss);
-		server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+			std::ostringstream oss;
+			oss << MessageType::PLAYER_POSITION_UPDATE << " ";
+			oss << playerp.first << " ";
+			player->serialise(oss);
+
+			//Do not send to the owner of the player
+			server->sendToAllExcept(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()), playerp.first);
+		}
+
+		//Send enemy info:
+		//Send array size
+		{
+			std::ostringstream oss;
+			oss << MessageType::RESIZE_ENEMIES << " ";
+			oss << enemies.size();
+			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+		}
+
+		//Send positions
+		for (unsigned int i = 0; i < enemies.size(); ++i)
+		{
+			Object * enemy = enemies[i];
+
+			std::ostringstream oss;
+			oss << MessageType::ENEMY_POSITION_UPDATE << " ";
+			oss << i << " ";
+			enemy->serialise(oss);
+			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+		}
+
+		//Send bullet info:
+		//Send array size
+		{
+			std::ostringstream oss;
+			oss << MessageType::RESIZE_BULLETS << " ";
+			oss << bullets.size();
+			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+		}
+
+		//Send positions
+		for (unsigned int i = 0; i < bullets.size(); ++i)
+		{
+			PhysicsObject * bullet = bullets[i];
+
+			std::ostringstream oss;
+			oss << MessageType::BULLET_POSITION_UPDATE << " ";
+			oss << i << " ";
+			bullet->serialise(oss);
+			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+		}
 	}
-
-	//Send enemy info
-	for (unsigned int i = 0; i < enemies.size(); ++i)
+	else
 	{
-		Object * enemy = enemies[i];
+		JNetwork::Client * client = dynamic_cast<JNetwork::Client *>(networkEntity);
 
-		std::ostringstream oss;
-		oss << MessageType::NPC_POSITION_UPDATE << " ";
-		oss << i << " ";
-		enemy->serialise(oss);
-		server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
-	}
+		
+		//Send player info
+		{
+			Player * player = players[username];
 
-	//Send bullet info
-	for (unsigned int i = 0; i < bullets.size(); ++i)
-	{
-		PhysicsObject * bullet = bullets[i];
+			if (player)
+			{
+				std::ostringstream oss;
+				oss << MessageType::PLAYER_POSITION_UPDATE << " ";
+				oss << username << " ";
+				player->serialise(oss);
 
-		std::ostringstream oss;
-		oss << MessageType::BULLET_POSITION_UPDATE << " ";
-		oss << i << " ";
-		bullet->serialise(oss);
-		server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+				client->send(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+			}
+		}
 	}
 }
 
@@ -521,6 +604,24 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 	{
 		//Server
 
+		Logger::getLogger().log(_p.data);
+
+		switch (messageType)
+		{
+
+		case MessageType::PLAYER_POSITION_UPDATE:
+		{
+			std::string pos;
+			iss >> pos;
+
+			if (players[pos] == nullptr)
+				players[pos] = new Player(glm::vec3(), glm::vec3());
+
+			players[pos]->deserialise(iss);
+			break;
+		}
+
+		}
 	}
 	else
 	{
@@ -529,7 +630,24 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 		switch (messageType)
 		{
 
-		case MessageType::NPC_POSITION_UPDATE:
+		case MessageType::RESIZE_ENEMIES:
+		{
+			unsigned int size;
+			iss >> size;
+
+			if (size < enemies.size())
+			{
+				for (int i = size; i < enemies.size(); ++i)
+				{
+					delete enemies[i];
+				}
+			}
+
+			enemies.resize(size);
+			break;
+		}			
+
+		case MessageType::ENEMY_POSITION_UPDATE:
 		{
 			unsigned int index;
 			iss >> index;
@@ -543,6 +661,23 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 				enemies[index] = new PhysicsObject();
 
 			enemies[index]->deserialise(iss);
+			break;
+		}
+
+		case MessageType::RESIZE_BULLETS:
+		{
+			unsigned int size;
+			iss >> size;
+
+			if (size < bullets.size())
+			{
+				for (int i = size; i < bullets.size(); ++i)
+				{
+					delete bullets[i];
+				}
+			}
+
+			bullets.resize(size);
 			break;
 		}
 

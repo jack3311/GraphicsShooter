@@ -33,6 +33,9 @@
 #define FIGHTER_DPS 5.f
 
 
+#define NETWORK_TICK_RATE 1000u / 60u //60 times per second
+
+
 enum PowerupType
 {
 	HEALTH = 0,
@@ -62,6 +65,10 @@ private:
 	std::queue<std::pair<JNetwork::JNetworkPacket, sockaddr_in>> clientPacketQueue;
 
 	std::string username;
+
+	std::chrono::high_resolution_clock tickRateClock;
+	std::chrono::time_point<std::chrono::high_resolution_clock> lastNetworkUpdateTime;
+
 
 	//GAME
 	std::vector<Object *> enemies;
@@ -124,6 +131,8 @@ public:
 	/// Resets the game world, and advances to the next level
 	///
 	void nextLevel();
+
+	/*void sendPlayerMove(glm::vec3 _delta);*/
 
 
 

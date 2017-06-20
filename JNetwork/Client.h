@@ -38,5 +38,7 @@ namespace JNetwork
 		void broadcastForServers(unsigned int _startPort);
 
 		const std::vector<sockaddr_in> & getBroadcastFoundServers();
+
+		void send(const JNetworkPacket & _p);
 	};
 }

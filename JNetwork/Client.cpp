@@ -110,6 +110,11 @@ namespace JNetwork
 		return broadcastFoundServerAddresses;
 	}
 
+	void Client::send(const JNetworkPacket & _p)
+	{
+		socket->sendPacket(serverAddr, _p);
+	}
+
 	void Client::receiveThreadEntry()
 	{
 		while (active)
@@ -127,39 +132,6 @@ namespace JNetwork
 			{
 				//std::cout << "Could not receive packet" << std::endl;
 			}
-
-
-//			sockaddr_in addr;
-//			char * buff = new char[PACKET_SIZE];
-//
-//			UDPSocketResponse r = socket->receiveData(addr, buff, PACKET_SIZE);
-//
-//			if (r == UDPSocketResponse::OK)
-//			{
-//				//Process packet
-//
-//				JNetworkPacket p(buff);
-//
-//#ifdef PROCESS_PACKETS_ON_NEW_THREADS
-//				//Process packet - use OS thread management
-//				//Copy packet for thread - deleted in thread
-//				//JNetworkPacket * pCopy = new JNetworkPacket(p);
-//				std::thread packetProcessThread(&Client::processPacket, this, p, addr); //Member function so pass this as well
-//				packetProcessThread.detach();
-//#else
-//				processPacket(p, addr);
-//#endif
-//			}
-//			else if (r == UDPSocketResponse::CONNECTION_CLOSED)
-//			{
-//				//logE("No server present");
-//			}
-//			else
-//			{
-//				//logE("Could not receive packet");
-//			}
-//
-//			delete[] buff;
 		}
 	}
 

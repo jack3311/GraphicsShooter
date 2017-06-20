@@ -35,17 +35,17 @@ void Object::move(glm::vec3 delta)
 	position += delta;
 }
 
-glm::vec3 & Object::getScale()
+const glm::vec3 & Object::getScale() const
 {
 	return scale;
 }
 
-glm::vec3 & Object::getPosition()
+const glm::vec3 & Object::getPosition() const
 {
 	return position;
 }
 
-glm::mat4 & Object::getRotation()
+const glm::mat4 & Object::getRotation() const
 {
 	return rotation;
 }

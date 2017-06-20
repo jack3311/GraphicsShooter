@@ -47,9 +47,9 @@ public:
 	///
 	void move(glm::vec3 delta);
 
-	glm::vec3 & getScale();
-	glm::vec3 & getPosition();
-	glm::mat4 & getRotation();
+	const glm::vec3 & getScale() const;
+	const glm::vec3 & getPosition() const;
+	const glm::mat4 & getRotation() const;
 
 	/// 
 	/// lookAt:

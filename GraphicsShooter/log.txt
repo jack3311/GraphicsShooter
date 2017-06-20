@@ -1,20 +1,20 @@
-19-06-2017 19-22-27: 	Initializing game
-19-06-2017 19-22-27: 	Loading assets
-19-06-2017 19-22-28: 	Initilizing scene: class SceneMenu
-19-06-2017 19-22-28: 	Starting background music
-19-06-2017 19-22-28: 	Initilizing scene: class ScenePlay
-19-06-2017 19-22-28: 	Creating the floor renderer
-19-06-2017 19-22-28: 	Creating the player renderer
-19-06-2017 19-22-37: 	Creating the enemy renderers
-19-06-2017 19-22-37: 	Creating the bullet renderer
-19-06-2017 19-22-38: 	Creating the powerup renderers
-19-06-2017 19-22-38: 	Creating the skybox renderer
-19-06-2017 19-22-38: 	Creating the text labels
-19-06-2017 19-22-38: 	Initilizing scene: class SceneGameOver
-19-06-2017 19-22-38: 	Initilizing scene: class SceneMP
-19-06-2017 19-22-38: 	Activating scene: class SceneMenu
-19-06-2017 19-22-47: 	Activating scene: class SceneMP
-19-06-2017 19-22-58: 	Creating game world as server
-19-06-2017 19-22-58: 	Creating enemies and powerups
-19-06-2017 19-22-58: 	Starting network entity
-19-06-2017 19-23-42: 	Activating scene: class ScenePlay
+20-06-2017 19-33-29: 	Initializing game
+20-06-2017 19-33-29: 	Loading assets
+20-06-2017 19-33-30: 	Initilizing scene: class SceneMenu
+20-06-2017 19-33-30: 	Starting background music
+20-06-2017 19-33-30: 	Initilizing scene: class ScenePlay
+20-06-2017 19-33-30: 	Creating the floor renderer
+20-06-2017 19-33-30: 	Creating the player renderer
+20-06-2017 19-33-39: 	Creating the enemy renderers
+20-06-2017 19-33-39: 	Creating the bullet renderer
+20-06-2017 19-33-40: 	Creating the powerup renderers
+20-06-2017 19-33-40: 	Creating the skybox renderer
+20-06-2017 19-33-40: 	Creating the text labels
+20-06-2017 19-33-40: 	Initilizing scene: class SceneGameOver
+20-06-2017 19-33-40: 	Initilizing scene: class SceneMP
+20-06-2017 19-33-40: 	Activating scene: class SceneMenu
+20-06-2017 19-34-17: 	Activating scene: class SceneMP
+20-06-2017 19-34-20: 	Creating game world as client
+20-06-2017 19-34-20: 	Starting network entity
+20-06-2017 19-34-30: 	Connected to server successfully
+20-06-2017 19-34-30: 	Activating scene: class ScenePlay
