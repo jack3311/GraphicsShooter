@@ -69,6 +69,8 @@ private:
 	std::chrono::high_resolution_clock tickRateClock;
 	std::chrono::time_point<std::chrono::high_resolution_clock> lastNetworkUpdateTime;
 
+	bool forcePlayerPositions = true;
+
 
 	//GAME
 	std::vector<Object *> enemies;

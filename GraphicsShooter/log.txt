@@ -1,240 +1,112 @@
-21-06-2017 01-10-47: 	Initializing game
-21-06-2017 01-10-47: 	Loading assets
-21-06-2017 01-10-48: 	Initilizing scene: class SceneMenu
-21-06-2017 01-10-48: 	Starting background music
-21-06-2017 01-10-48: 	Initilizing scene: class ScenePlay
-21-06-2017 01-10-48: 	Creating the floor renderer
-21-06-2017 01-10-48: 	Creating the player renderer
-21-06-2017 01-10-57: 	Creating the enemy renderers
-21-06-2017 01-10-57: 	Creating the bullet renderer
-21-06-2017 01-10-58: 	Creating the powerup renderers
-21-06-2017 01-10-58: 	Creating the skybox renderer
-21-06-2017 01-10-58: 	Creating the text labels
-21-06-2017 01-10-58: 	Initilizing scene: class SceneGameOver
-21-06-2017 01-10-58: 	Initilizing scene: class SceneMP
-21-06-2017 01-10-58: 	Activating scene: class SceneMenu
-21-06-2017 01-11-15: 	Creating game world as server
-21-06-2017 01-11-15: 	Creating enemies and powerups
-21-06-2017 01-11-15: 	Activating scene: class ScenePlay
-21-06-2017 01-11-17: 	Player 'You' hit
-21-06-2017 01-11-17: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-17: 	Player fired bullet
-21-06-2017 01-11-17: 	Player fired bullet
-21-06-2017 01-11-18: 	Player fired bullet
-21-06-2017 01-11-18: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-18: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-18: 	Player fired bullet
-21-06-2017 01-11-18: 	Player fired bullet
-21-06-2017 01-11-18: 	Player fired bullet
-21-06-2017 01-11-18: 	Player fired bullet
-21-06-2017 01-11-18: 	Player fired bullet
-21-06-2017 01-11-19: 	Player fired bullet
-21-06-2017 01-11-19: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-19: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-19: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-19: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-19: 	Player fired bullet
-21-06-2017 01-11-19: 	Player fired bullet
-21-06-2017 01-11-19: 	Player fired bullet
-21-06-2017 01-11-19: 	Player fired bullet
-21-06-2017 01-11-19: 	Player fired bullet
-21-06-2017 01-11-20: 	Player fired bullet
-21-06-2017 01-11-20: 	Player fired bullet
-21-06-2017 01-11-20: 	Player 'You' hit
-21-06-2017 01-11-20: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-20: 	Player fired bullet
-21-06-2017 01-11-20: 	Player fired bullet
-21-06-2017 01-11-21: 	Player 'You' hit
-21-06-2017 01-11-21: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Player 'You' collided with powerup, deleting powerup and affecting player
-21-06-2017 01-11-22: 	Player fired bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Player fired bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Player fired bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Player fired bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-22: 	Player fired bullet
-21-06-2017 01-11-22: 	Player fired bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Player fired bullet
-21-06-2017 01-11-23: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-23: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-23: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-24: 	Player fired bullet
-21-06-2017 01-11-25: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-25: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-25: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-25: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-26: 	Player fired bullet
-21-06-2017 01-11-27: 	Player 'You' hit
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Player fired bullet
-21-06-2017 01-11-27: 	Player fired bullet
-21-06-2017 01-11-27: 	Enemy destroyed by player 'You', deleting enemy
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Player fired bullet
-21-06-2017 01-11-27: 	Player fired bullet
-21-06-2017 01-11-27: 	Player fired bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Player fired bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-11-27: 	Player paused
-21-06-2017 01-11-27: 	Activating scene: class SceneMenu
-21-06-2017 01-12-27: 	Activating scene: class SceneMP
-21-06-2017 01-12-30: 	Creating game world as server
-21-06-2017 01-12-30: 	Creating enemies and powerups
-21-06-2017 01-12-30: 	Starting network entity
-21-06-2017 01-12-31: 	Activating scene: class ScenePlay
-21-06-2017 01-12-34: 	Player 'jgfrj' hit
-21-06-2017 01-12-34: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-12-35: 	Player 'jgfrj' hit
-21-06-2017 01-12-35: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-12-36: 	Player paused
-21-06-2017 01-12-36: 	Activating scene: class SceneMenu
-21-06-2017 01-12-44: 	Deleting game world
-21-06-2017 01-12-46: 	Activating scene: class SceneMenu
-21-06-2017 01-12-49: 	Creating game world as server
-21-06-2017 01-12-49: 	Creating enemies and powerups
-21-06-2017 01-12-49: 	Activating scene: class ScenePlay
-21-06-2017 01-12-50: 	Player 'You' hit
-21-06-2017 01-12-50: 	Bullet expired or collision was detected, deleting bullet
-21-06-2017 01-12-51: 	Player paused
-21-06-2017 01-12-51: 	Activating scene: class SceneMenu
-21-06-2017 01-13-56: 	Activating scene: class SceneMP
-21-06-2017 01-13-58: 	Creating game world as client
-21-06-2017 01-13-58: 	Starting network entity
-21-06-2017 01-14-33: 	Connected to server successfully
-21-06-2017 01-14-33: 	Activating scene: class ScenePlay
-21-06-2017 01-15-00: 	Player fired bullet
-21-06-2017 01-15-00: 	Player fired bullet
-21-06-2017 01-15-01: 	Player fired bullet
-21-06-2017 01-15-01: 	Player fired bullet
-21-06-2017 01-15-01: 	Player fired bullet
-21-06-2017 01-15-03: 	Player fired bullet
-21-06-2017 01-15-04: 	Lost connection to server
-21-06-2017 01-15-04: 	Deleting game world
-21-06-2017 01-15-06: 	Activating scene: class SceneMenu
+21-06-2017 01-26-29: 	Initializing game
+21-06-2017 01-26-30: 	Loading assets
+21-06-2017 01-26-31: 	Initilizing scene: class SceneMenu
+21-06-2017 01-26-31: 	Starting background music
+21-06-2017 01-26-31: 	Initilizing scene: class ScenePlay
+21-06-2017 01-26-31: 	Creating the floor renderer
+21-06-2017 01-26-31: 	Creating the player renderer
+21-06-2017 01-26-39: 	Creating the enemy renderers
+21-06-2017 01-26-39: 	Creating the bullet renderer
+21-06-2017 01-26-40: 	Creating the powerup renderers
+21-06-2017 01-26-40: 	Creating the skybox renderer
+21-06-2017 01-26-40: 	Creating the text labels
+21-06-2017 01-26-40: 	Initilizing scene: class SceneGameOver
+21-06-2017 01-26-40: 	Initilizing scene: class SceneMP
+21-06-2017 01-26-40: 	Activating scene: class SceneMenu
+21-06-2017 01-26-59: 	Activating scene: class SceneMP
+21-06-2017 01-27-00: 	Creating game world as client
+21-06-2017 01-27-00: 	Starting network entity
+21-06-2017 01-27-03: 	Connected to server successfully
+21-06-2017 01-27-03: 	Activating scene: class ScenePlay
+21-06-2017 01-27-06: 	Player fired bullet
+21-06-2017 01-27-06: 	Player fired bullet
+21-06-2017 01-27-19: 	Player fired bullet
+21-06-2017 01-27-20: 	Player fired bullet
+21-06-2017 01-27-20: 	Player fired bullet
+21-06-2017 01-27-20: 	Player fired bullet
+21-06-2017 01-27-20: 	Player fired bullet
+21-06-2017 01-27-20: 	Player fired bullet
+21-06-2017 01-27-22: 	Player fired bullet
+21-06-2017 01-27-22: 	Player fired bullet
+21-06-2017 01-27-22: 	Player fired bullet
+21-06-2017 01-27-22: 	Player fired bullet
+21-06-2017 01-27-22: 	Player fired bullet
+21-06-2017 01-27-22: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-23: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-24: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-25: 	Player fired bullet
+21-06-2017 01-27-26: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-28: 	Player fired bullet
+21-06-2017 01-27-29: 	Player fired bullet
+21-06-2017 01-27-29: 	Player fired bullet
+21-06-2017 01-27-38: 	Player fired bullet
+21-06-2017 01-27-38: 	Player fired bullet
+21-06-2017 01-27-38: 	Player fired bullet
+21-06-2017 01-27-39: 	Player fired bullet
+21-06-2017 01-27-39: 	Player fired bullet
+21-06-2017 01-28-04: 	Player fired bullet
+21-06-2017 01-28-04: 	Player fired bullet
+21-06-2017 01-28-05: 	Player fired bullet
+21-06-2017 01-28-05: 	Player fired bullet
+21-06-2017 01-28-05: 	Player fired bullet
+21-06-2017 01-28-05: 	Player fired bullet
+21-06-2017 01-28-06: 	Player fired bullet
+21-06-2017 01-28-06: 	Player fired bullet
+21-06-2017 01-28-06: 	Player fired bullet
+21-06-2017 01-28-07: 	Player fired bullet
+21-06-2017 01-28-07: 	Player fired bullet
+21-06-2017 01-28-07: 	Player fired bullet
+21-06-2017 01-28-07: 	Player fired bullet
+21-06-2017 01-28-07: 	Player fired bullet
+21-06-2017 01-28-29: 	Player fired bullet
+21-06-2017 01-28-29: 	Player fired bullet
+21-06-2017 01-28-29: 	Player fired bullet
+21-06-2017 01-28-30: 	Player fired bullet
+21-06-2017 01-28-30: 	Player fired bullet
+21-06-2017 01-28-30: 	Player fired bullet
+21-06-2017 01-28-30: 	Player fired bullet
+21-06-2017 01-28-30: 	Player fired bullet
+21-06-2017 01-28-31: 	Player fired bullet
+21-06-2017 01-28-31: 	Player fired bullet
+21-06-2017 01-28-31: 	Player fired bullet
+21-06-2017 01-28-31: 	Player fired bullet
+21-06-2017 01-28-31: 	Player fired bullet
+21-06-2017 01-28-36: 	Player fired bullet
+21-06-2017 01-28-36: 	Player fired bullet
+21-06-2017 01-28-36: 	Player fired bullet
+21-06-2017 01-28-36: 	Player fired bullet
+21-06-2017 01-28-36: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet
+21-06-2017 01-28-37: 	Player fired bullet

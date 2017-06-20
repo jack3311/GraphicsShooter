@@ -81,29 +81,6 @@ GameWorld::~GameWorld()
 
 void GameWorld::update(float _dt)
 {
-#ifdef NOPE
-
-	//Check for player death
-	if (player->isDead())
-	{
-		Logger::getLogger().log("Player died, stopping game");
-		gameInProgress = false;
-		SceneManager::getSceneManager().activate<SceneGameOver>(player->getScore());
-	}
-
-	//Check for victory
-	if (enemies.size() == 0)
-	{
-		Logger::getLogger().log("All enemies defeated, proceeding to next level");
-		nextLevel();
-	}
-
-#endif
-
-
-
-
-
 	if (isServer && isMultiplayer)
 	{
 		//Ensure all players are in the map
@@ -120,6 +97,32 @@ void GameWorld::update(float _dt)
 
 	if (isServer || !isMultiplayer)
 	{
+		//Check for player death
+		bool isAPlayerAlive = false;
+		for (auto playerp : players)
+		{
+			if (!playerp.second->isDead())
+			{
+				isAPlayerAlive = true;
+			}
+		}
+		if (!isAPlayerAlive)
+		{
+			Logger::getLogger().log("All players died, stopping game");
+			gameInProgress = false;
+			SceneManager::getSceneManager().activate<SceneGameOver>(players[username]->getScore());
+			//TODO: Send game over packet
+			stopNetwork();
+		}
+
+		//Check for victory
+		if (enemies.size() == 0)
+		{
+			Logger::getLogger().log("All enemies defeated, proceeding to next level");
+			nextLevel();
+		}
+
+
 		//Update players:
 		for (auto player : players)
 		{
@@ -527,6 +530,8 @@ void GameWorld::nextLevel()
 		player->setHealth(MAX_HEALTH);
 		player->resetAmmo();
 	}
+
+	forcePlayerPositions = true;
 }
 
 void GameWorld::sendGameState()
@@ -548,8 +553,16 @@ void GameWorld::sendGameState()
 				oss << playerp.first << " ";
 				player->serialise(oss);
 
-				//Do not send object info to the owner of the player
-				server->sendToAllExcept(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()), playerp.first);
+				if (forcePlayerPositions)
+				{
+					server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+					forcePlayerPositions = false;
+				}
+				else
+				{
+					//Do not send object info to the owner of the player
+					server->sendToAllExcept(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()), playerp.first);
+				}
 			}
 
 			//Player specific info
