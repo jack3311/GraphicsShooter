@@ -178,7 +178,10 @@ void ScenePlay::render() const
 	for (auto player : gw.getPlayers())
 	{
 		if (player.second)
-			playerRenderer->draw(Game::getGame()->getCamera(), player.second->getModelMatrix(), *this);
+		{
+			if (!player.second->isDead())
+				playerRenderer->draw(Game::getGame()->getCamera(), player.second->getModelMatrix(), *this);
+		}
 	}
 
 	//Render enemies
@@ -303,12 +306,21 @@ void ScenePlay::update(float _dt)
 
 
 		//Camera settings
-		auto sideways = glm::cross(facing2D, glm::vec3(0, 1, 0));
-		auto offset = sideways * 2.f + glm::vec3(0.f, 3.5f, 0);
-		offset *= thisPlayer->getScale();
+		if (!thisPlayer->isDead())
+		{
+			auto sideways = glm::cross(facing2D, glm::vec3(0, 1, 0));
+			auto offset = sideways * 2.f + glm::vec3(0.f, 3.5f, 0);
+			offset *= thisPlayer->getScale();
 
-		g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
-		g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
+			g.getCamera().setPosition(thisPlayer->getPosition() + offset - facing2D * 6.f);
+			g.getCamera().setLookAt(thisPlayer->getPosition() + facing2D * 100.f);
+		}
+		else
+		{
+			g.getCamera().setPosition(glm::vec3(100, 30, 100));
+			g.getCamera().setLookAt(glm::vec3(0, 0, 0));
+		}
+
 
 		Game::getGame()->getCamera().updateCamera();
 
