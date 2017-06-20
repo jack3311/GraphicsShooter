@@ -39,6 +39,12 @@ int Player::getAmmo() const
 	return ammo;
 }
 
+void Player::resetAmmo()
+{
+	reloading = false;
+	ammo = CLIP_SIZE;
+}
+
 void Player::update(float _dt)
 {
 	lifetime += _dt;
@@ -70,6 +76,11 @@ void Player::dealDamage(float _amount)
 int Player::getHealth() const
 {
 	return static_cast<int>(health);
+}
+
+void Player::setHealth(float _amount)
+{
+	health = _amount;
 }
 
 void Player::addScore(int _amount)
@@ -114,4 +125,37 @@ bool Player::hasInfiniteAmmo() const
 bool Player::hasShield() const
 {
 	return shieldEndTime > lifetime;
+}
+
+void Player::serialiseSpecific(std::ostringstream & _oss)
+{
+	//Lifetime
+	_oss << lifetime << " ";
+	
+	//End times
+	_oss << infiniteAmmoEndTime << " ";
+	_oss << shieldEndTime << " ";
+
+	//Health
+	_oss << health << " ";
+
+	//Ammo
+	_oss << ammo << " ";
+
+	//Reloading
+	_oss << reloading << " ";
+
+	//Score
+	_oss << score << " ";
+}
+
+void Player::deserialiseSpecific(std::istringstream & _iss)
+{
+	_iss >> lifetime;
+	_iss >> infiniteAmmoEndTime;
+	_iss >> shieldEndTime;
+	_iss >> health;
+	_iss >> ammo;
+	_iss >> reloading;
+	_iss >> score;
 }

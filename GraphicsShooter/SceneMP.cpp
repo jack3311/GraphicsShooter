@@ -5,6 +5,7 @@
 #include "GameWorld.h"
 #include "SceneManager.h"
 #include "ScenePlay.h"
+#include "SceneMenu.h"
 
 #include "JNetwork\Client.h"
 #include "JNetwork\Util.h"
@@ -58,6 +59,8 @@ void SceneMP::setupJoinServer()
 	mainMenuShown = false;
 	joinServerMenuShown = true;
 
+	joinServerMenu->clear();
+
 	std::cout << "Enter a username: " << std::endl;
 	std::cin >> clientUsername;
 
@@ -79,17 +82,32 @@ void SceneMP::setupJoinServer()
 	{
 		auto addrCopy = serverList[i];
 
-		std::cout << i + 1 << ": " << JNetwork::addrToString(serverList[i]) << std::endl;
+		std::cout << i + 1 << ": " << JNetwork::addrToString(serverList[i].first) << std::endl;
 
 		//Display servers as buttons
-		joinServerMenu->addElement(new UIElement(0.5f, i / (serverList.size() + 1), JNetwork::addrToString(addrCopy), true, [addrCopy, this]() {
-			if (Game::getGame()->getGameWorld().clientConnect(addrCopy, this->clientUsername, 5000))
+		joinServerMenu->addElement(new UIElement(
+			0.75f,
+			1.f - ((i + 1) / (serverList.size() + 1)), 
+			addrCopy.second,
+			true,
+
+			[addrCopy, this]() {
+			if (Game::getGame()->getGameWorld().clientConnect(addrCopy.first, this->clientUsername, 1000))
 			{
 				Logger::getLogger().log("Connected to server successfully");
 				SceneManager::getSceneManager().activate<ScenePlay>();
 			}
 		}));
 	}
+
+	if (serverList.size() == 0)
+	{
+		joinServerMenu->addElement(new UIElement(0.75f, 0.5f, "No servers found", false));
+	}
+
+	joinServerMenu->addElement(new UIElement(0.25f, 0.5f, "Back", true, [&]() {
+		this->backToMPMenu();
+	}));
 }
 
 void SceneMP::setupHostServer()
@@ -106,6 +124,13 @@ void SceneMP::setupHostServer()
 	Game::getGame()->getGameWorld().startNetwork();
 }
 
+void SceneMP::backToMPMenu()
+{
+	mainMenuShown = true;
+	joinServerMenuShown = false;
+	hostServerMenuShown = false;
+}
+
 void SceneMP::reset()
 {
 	mainMenu->clear();
@@ -118,6 +143,10 @@ void SceneMP::reset()
 
 	mainMenu->addElement(new UIElement(0.5f, 3.f / 5.f, "Create Server", true, [this]() {
 		this->setupHostServer();
+	}));
+
+	mainMenu->addElement(new UIElement(0.5f, 2.f / 5.f, "Back", true, [this]() {
+		SceneManager::getSceneManager().activate<SceneMenu>();
 	}));
 	
 

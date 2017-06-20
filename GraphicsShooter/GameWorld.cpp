@@ -230,12 +230,16 @@ void GameWorld::update(float _dt)
 					if (sphereSphereCollision((*itr2)->getPosition(), ENEMY_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
 					{
 						//Destroy the enemy
-						Logger::getLogger().log("Enemy destroyed, deleting enemy");
 						delete (*itr2);
 						itr2 = enemies.erase(itr2);
-						Player * player = players[username]; //TODO: CHANGE THIS TO RANDOM ENEMY
+
+						const auto & bulletSource = (*itr)->bulletSource;
+
+						Player * player = players[bulletSource];
 						player->addScore(100);
 						collision = true;
+
+						Logger::getLogger().log("Enemy destroyed by player '", bulletSource, "', deleting enemy");
 						break;
 					}
 					else
@@ -248,34 +252,37 @@ void GameWorld::update(float _dt)
 			//Check for collision with player
 			if ((*itr)->flag == 0) //If bullet is not friendly
 			{
-				Player * player = players[username]; //TODO: CHANGE THIS TO RANDOM ENEMY
-
-				if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+				for (auto playerp : players)
 				{
-					Logger::getLogger().log("Player hit, damaging player");
-					//If the player doesn't have shield, deal damage
-					if (!player->hasShield())
-						player->dealDamage(2);
+					Player * player = playerp.second;
 
-					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+					if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), BULLET_COLLISION_RADIUS))
+					{
+						Logger::getLogger().log("Player '", playerp.first, "' hit");
+						//If the player doesn't have shield, deal damage
+						if (!player->hasShield())
+							player->dealDamage(2);
 
-					collision = true;
+						//TODO: SEND BULLET HIT PACKET TO PLAY SOUND
+
+						//AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+
+						collision = true;
+					}
 				}
 			}
 
 			if ((*itr)->getLifetime() >= BULLET_LIFETIME || collision)
 			{
-				//Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
+				Logger::getLogger().log("Bullet expired or collision was detected, deleting bullet");
 				delete (*itr);
 				itr = bullets.erase(itr);
-	}
+			}
 			else
 			{
 				++itr;
 			}
 		}
-
-#ifdef NOPE
 
 		//Update powerups
 		for (auto itr = powerups.begin(); itr != powerups.end(); )
@@ -292,29 +299,44 @@ void GameWorld::update(float _dt)
 			(*itr)->update(_dt);
 
 			//Check for collision with player
-			if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), POWERUP_COLLISION_RADIUS))
+
+			bool collision = false; //Allow multiple players to get one powerup's effect
+			for (auto playerp : players)
 			{
-				Logger::getLogger().log("Collision with powerup, deleting powerup and affecting player");
-
-				//Process the powerup
-				switch ((*itr)->flag)
+				Player * player = playerp.second;
+				if (sphereSphereCollision(player->getPosition(), PLAYER_COLLISION_RADIUS, (*itr)->getPosition(), POWERUP_COLLISION_RADIUS))
 				{
-				case PowerupType::HEALTH:
-					//Restore the player's health
-					player->dealDamage(-POWERUP_HEALTH_REGEN_AMOUNT);
-					break;
-				case PowerupType::INFINITE_AMMO:
-					//Give player infinite ammo
-					player->infiniteAmmoFor(POWERUP_INFINITE_AMMO_DURATION);
-					break;
-				case PowerupType::SHIELD:
-					//Give player shield
-					player->shieldFor(POWERUP_SHIELD_DURATION);
-					break;
-				}
+					collision = true;
 
-				AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
-				player->addScore(500);
+					Logger::getLogger().log("Player '", playerp.first, "' collided with powerup, deleting powerup and affecting player");
+
+					//Process the powerup
+					switch ((*itr)->flag)
+					{
+					case PowerupType::HEALTH:
+						//Restore the player's health
+						player->dealDamage(-POWERUP_HEALTH_REGEN_AMOUNT);
+						break;
+					case PowerupType::INFINITE_AMMO:
+						//Give player infinite ammo
+						player->infiniteAmmoFor(POWERUP_INFINITE_AMMO_DURATION);
+						break;
+					case PowerupType::SHIELD:
+						//Give player shield
+						player->shieldFor(POWERUP_SHIELD_DURATION);
+						break;
+					}
+
+					//AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
+
+					//TODO: player powerup receive packet to play sound
+
+					player->addScore(500);
+				}
+			}
+
+			if (collision)
+			{
 				delete (*itr);
 				itr = powerups.erase(itr);
 			}
@@ -323,7 +345,6 @@ void GameWorld::update(float _dt)
 				++itr;
 			}
 		}
-#endif
 
 	}
 	else
@@ -343,7 +364,8 @@ void GameWorld::update(float _dt)
 		//Update bullets
 		for (auto itr = bullets.begin(); itr != bullets.end(); ++itr)
 		{
-			(*itr)->update(_dt);
+			if ((*itr) != nullptr)
+				(*itr)->update(_dt);
 		}
 	}
 
@@ -391,23 +413,35 @@ Player * GameWorld::getThisPlayer()
 
 void GameWorld::playerFire()
 {
+	Logger::getLogger().log("Player fired bullet");
 	playerFire(username);
+	AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().loadSound("shoot", "Assets/Sounds/shoot.wav"));
 }
 
 void GameWorld::playerFire(std::string _username)
 {
-	Player * player = players[username];
+	Player * player = players[_username];
 
-	//If we can fire
+	//Also functions as client side prediction:
+
+	if (!isServer)
+	{
+		//Send fire packet
+		JNetwork::Client * client = dynamic_cast<JNetwork::Client *>(networkEntity);
+
+		std::ostringstream oss;
+		oss << MessageType::PLAYER_TRY_FIRE << " ";
+		oss << _username;
+
+		client->send(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+	}
+
+	//If the player can fire
 	if (player->tryFire())
 	{
-		Logger::getLogger().log("Player fired bullet");
-
 		//Fire bullet
 		auto facing2D = -glm::vec3(player->getRotation() * glm::vec4(0, 0, 1.f, 0.f));
-		createBullet(player->getPosition() + facing2D * 7.f + glm::vec3(0.f, 2.0f, 0.f), facing2D, true);
-
-		AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().loadSound("shoot", "Assets/Sounds/shoot.wav"));
+		createBullet(player->getPosition() + facing2D * 7.f + glm::vec3(0.f, 2.0f, 0.f), facing2D, true, BULLET_MAX_SPEED, _username);
 	}
 	else
 	{
@@ -416,7 +450,7 @@ void GameWorld::playerFire(std::string _username)
 	}
 }
 
-void GameWorld::createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed)
+void GameWorld::createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed, std::string _user)
 {
 	assert(length2(_dir) != 0);
 
@@ -424,6 +458,8 @@ void GameWorld::createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, 
 	bullet->setVelocity(normalize(_dir) * BULLET_MAX_SPEED);
 
 	bullet->flag = _friendly;
+
+	bullet->bulletSource = _user;
 
 	bullets.push_back(bullet);
 }
@@ -450,6 +486,11 @@ void GameWorld::nextLevel()
 	}
 	powerups.clear();
 
+	for (auto obj : bullets)
+	{
+		delete obj;
+	}
+	bullets.clear();
 
 	Logger::getLogger().log("Creating enemies and powerups");
 
@@ -467,28 +508,17 @@ void GameWorld::nextLevel()
 		powerups[i]->update(static_cast<float>(rand())); //Offset lifetime
 		powerups[i]->flag = rand() % PowerupType::POWERUPTYPE_NUM_ITEMS;
 	}
-}
 
-//
-//void GameWorld::sendPlayerMove(glm::vec3 _delta)
-//{
-//	if (isServer)
-//	{
-//		players[username]->move(_delta);
-//	}
-//	else
-//	{
-//		Player * player = players[username];
-//
-//		std::ostringstream oss;
-//		oss << MessageType::PLAYER_POSITION_UPDATE << " ";
-//		oss << username << " ";
-//		player->serialise(oss);
-//
-//		JNetwork::Client * client = dynamic_cast<JNetwork::Client *>(networkEntity);
-//		client->send(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
-//	}
-//}
+	//Reset players
+	for (auto playerp : players)
+	{
+		Player * player = playerp.second;
+		player->setPosition(glm::vec3(0, 0, 0));
+		player->setRotation(glm::mat4());
+		player->setHealth(MAX_HEALTH);
+		player->resetAmmo();
+	}
+}
 
 void GameWorld::sendGameState()
 {
@@ -502,13 +532,28 @@ void GameWorld::sendGameState()
 		{
 			Player * player = playerp.second;
 
-			std::ostringstream oss;
-			oss << MessageType::PLAYER_POSITION_UPDATE << " ";
-			oss << playerp.first << " ";
-			player->serialise(oss);
+			//Object info
+			{
+				std::ostringstream oss;
+				oss << MessageType::PLAYER_POSITION_UPDATE << " ";
+				oss << playerp.first << " ";
+				player->serialise(oss);
 
-			//Do not send to the owner of the player
-			server->sendToAllExcept(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()), playerp.first);
+				//Do not send object info to the owner of the player
+				server->sendToAllExcept(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()), playerp.first);
+			}
+
+			//Player specific info
+			{
+				std::ostringstream oss;
+				oss << MessageType::PLAYER_SPECIFIC_UPDATE << " ";
+				oss << playerp.first << " ";
+				player->serialiseSpecific(oss);
+
+				//Send to all (score etc.)
+				server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+			}
+			
 		}
 
 		//Send enemy info:
@@ -550,6 +595,27 @@ void GameWorld::sendGameState()
 			oss << MessageType::BULLET_POSITION_UPDATE << " ";
 			oss << i << " ";
 			bullet->serialise(oss);
+			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+		}
+
+		//Send powerup info:
+		//Send array size
+		{
+			std::ostringstream oss;
+			oss << MessageType::RESIZE_POWERUPS << " ";
+			oss << powerups.size();
+			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+		}
+
+		//Send positions
+		for (unsigned int i = 0; i < powerups.size(); ++i)
+		{
+			PhysicsObject * powerup = powerups[i];
+
+			std::ostringstream oss;
+			oss << MessageType::POWERUP_POSITION_UPDATE << " ";
+			oss << i << " ";
+			powerup->serialise(oss);
 			server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
 		}
 	}
@@ -618,6 +684,16 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 				players[pos] = new Player(glm::vec3(), glm::vec3());
 
 			players[pos]->deserialise(iss);
+			break;
+		}
+
+		case MessageType::PLAYER_TRY_FIRE:
+		{
+			std::string username;
+			iss >> username;
+
+			playerFire(username);
+
 			break;
 		}
 
@@ -698,6 +774,40 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 			break;
 		}
 
+		case MessageType::RESIZE_POWERUPS:
+		{
+			unsigned int size;
+			iss >> size;
+
+			if (size < powerups.size())
+			{
+				for (int i = size; i < powerups.size(); ++i)
+				{
+					delete powerups[i];
+				}
+			}
+
+			powerups.resize(size);
+			break;
+		}
+
+		case MessageType::POWERUP_POSITION_UPDATE:
+		{
+			unsigned int index;
+			iss >> index;
+
+			if (index >= powerups.size())
+			{
+				powerups.resize(index + 1u);
+			}
+
+			if (powerups[index] == nullptr)
+				powerups[index] = new PhysicsObject();
+
+			powerups[index]->deserialise(iss);
+			break;
+		}
+
 		case MessageType::PLAYER_POSITION_UPDATE:
 		{
 			std::string pos;
@@ -707,6 +817,18 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 				players[pos] = new Player(glm::vec3(), glm::vec3());
 
 			players[pos]->deserialise(iss);
+			break;
+		}
+
+		case MessageType::PLAYER_SPECIFIC_UPDATE:
+		{
+			std::string pos;
+			iss >> pos;
+
+			if (players[pos] == nullptr)
+				players[pos] = new Player(glm::vec3(), glm::vec3());
+
+			players[pos]->deserialiseSpecific(iss);
 			break;
 		}
 

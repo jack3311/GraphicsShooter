@@ -26,6 +26,7 @@ public:
 
 	void setupJoinServer();
 	void setupHostServer();
+	void backToMPMenu();
 
 	/// 
 	/// reset:

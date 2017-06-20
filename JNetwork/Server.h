@@ -21,6 +21,8 @@ namespace JNetwork
 		public INetworkEntity
 	{
 	private:
+		std::string name;
+
 		std::map<std::string, ClientInfo> clientInfoMap;
 
 		std::thread keepAliveThread;
@@ -39,7 +41,7 @@ namespace JNetwork
 		void keepAliveThreadEntry();
 
 	public:
-		Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc);
+		Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc, std::string _name);
 		virtual ~Server();
 
 		virtual void start();

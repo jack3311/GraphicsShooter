@@ -93,7 +93,7 @@ private:
 	/// _friendly - whether the bullet will affect the player or not
 	/// _speed - the speed of the bullet
 	///
-	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED);
+	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED, std::string _user = "");
 
 
 public:

@@ -11,7 +11,7 @@ namespace JNetwork
 	#define PROCESS_PACKETS_ON_NEW_THREAD
 	#define KEEP_ALIVE_TIME_MILLISECONDS 750
 
-	Server::Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc) : INetworkEntity::INetworkEntity(NetworkEntityType::SERVER, _receivePacketGameFunc)
+	Server::Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc, std::string _name) : INetworkEntity::INetworkEntity(NetworkEntityType::SERVER, _receivePacketGameFunc), name(_name)
 	{
 	}
 
@@ -133,7 +133,7 @@ namespace JNetwork
 		}
 		if (_p.type == JNetworkPacketType::SERVER_BC_REQUEST)
 		{
-			socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::SERVER_BC_RESPONSE));
+			socket->sendPacket(_addr, JNetworkPacket(JNetworkPacketType::SERVER_BC_RESPONSE, name.c_str()));
 			return;
 		}
 

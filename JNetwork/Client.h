@@ -20,7 +20,7 @@ namespace JNetwork
 		void receiveThreadEntry();
 		void processPacket(JNetworkPacket _p, const sockaddr_in _addr);
 
-		std::vector<sockaddr_in> broadcastFoundServerAddresses;
+		std::vector<std::pair<sockaddr_in, std::string>> broadcastFoundServerAddresses;
 
 	public:
 		Client(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc);
@@ -37,7 +37,7 @@ namespace JNetwork
 
 		void broadcastForServers(unsigned int _startPort);
 
-		const std::vector<sockaddr_in> & getBroadcastFoundServers();
+		const std::vector<std::pair<sockaddr_in, std::string>> & getBroadcastFoundServers();
 
 		void send(const JNetworkPacket & _p);
 	};

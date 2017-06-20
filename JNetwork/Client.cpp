@@ -105,7 +105,7 @@ namespace JNetwork
 		socket->disableBroadcast();
 	}
 
-	const std::vector<sockaddr_in>& Client::getBroadcastFoundServers()
+	const std::vector<std::pair<sockaddr_in, std::string>>& Client::getBroadcastFoundServers()
 	{
 		return broadcastFoundServerAddresses;
 	}
@@ -149,8 +149,14 @@ namespace JNetwork
 		switch (_p.type)
 		{
 		case JNetworkPacketType::SERVER_BC_RESPONSE:
-			broadcastFoundServerAddresses.push_back(_addr);
+		{
+			std::pair<sockaddr_in, std::string> val;
+			val.first = _addr;
+			val.second = _p.data[1];
+
+			broadcastFoundServerAddresses.push_back(val);
 			break;
+		}
 		case JNetworkPacketType::JOIN_SERVER_ACCEPTED:
 			//logR("Successfully joined server");
 			connectedToServer = true;

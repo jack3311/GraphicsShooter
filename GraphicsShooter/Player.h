@@ -44,6 +44,8 @@ public:
 
 	int getAmmo() const;
 
+	void resetAmmo();
+
 	///
 	/// update:
 	/// Updates the player
@@ -64,6 +66,8 @@ public:
 	///
 	void dealDamage(float _amount);
 	int getHealth() const;
+
+	void setHealth(float _amount);
 
 	///
 	/// addScore:
@@ -89,5 +93,10 @@ public:
 
 	bool hasInfiniteAmmo() const;
 	bool hasShield() const;
+
+
+
+	virtual void serialiseSpecific(std::ostringstream & _oss);
+	virtual void deserialiseSpecific(std::istringstream & _iss);
 };
 

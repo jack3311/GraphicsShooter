@@ -33,6 +33,7 @@ public:
 	virtual void serialise(std::ostringstream & _oss);
 	virtual void deserialise(std::istringstream & _iss);
 
-	std::string bulletSource; //Good enough solution, would normally create child class
+	std::string bulletSource;	//Good enough solution, would normally create child class
+								//Intentionally do not serialise/deserialise
 };
 
