@@ -1,3 +1,18 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    PhysicsObject.cpp
+//  Description  :    Represents a game object with physics details
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
+
 #include "PhysicsObject.h"
 
 

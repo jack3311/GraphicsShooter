@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    GameWorld.h
+//  Description  :    Represents a game world and the relevant network entity
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #pragma once
 
 #include <queue>
@@ -10,6 +24,7 @@
 #include "Object.h"
 #include "PhysicsObject.h"
 #include "Player.h"
+
 
 #define ENEMY1_MAX_SPEED 5.f
 #define BULLET_MAX_SPEED 75.f
@@ -97,6 +112,26 @@ private:
 	///
 	void createBullet(glm::vec3 _source, glm::vec3 _dir, bool _friendly, float _speed = BULLET_MAX_SPEED, std::string _user = "");
 
+	/// 
+	/// onReceivePacket:
+	/// Packet processing step 1 (pool packets if client / directly process if server)
+	/// Processes received packets
+	///
+	void onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
+
+	/// 
+	/// onReceivePacket:
+	/// Packet processing step 2
+	/// Parses packets
+	///
+	void parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
+
+	/// 
+	/// sendGameState:
+	/// Sends info about the game state to all relevant connections
+	///
+	void sendGameState();
+
 
 public:
 	GameWorld(bool _isServer, bool _isMultiplayer, std::string _username, std::string _serverName = "");
@@ -134,29 +169,46 @@ public:
 	///
 	void nextLevel();
 
-	/*void sendPlayerMove(glm::vec3 _delta);*/
+	//NETWORKING:
 
-
-
-	//NETWORKING
-	//Packet processing step 1 (pool packets if client / directly process if server)
-	void onReceivePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
-
-	//Packet processing step 2
-	void parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _addr);
-
+	/// 
+	/// startNetwork:
+	/// Starts the network entity
+	///
 	void startNetwork();
+
+	/// 
+	/// stopNetwork:
+	/// Stops the network entity
+	///
 	void stopNetwork();
 
-
+	/// 
+	/// getIsServer:
+	/// returns whether this game world is a server
+	///
 	bool getIsServer() const;
 
+	/// 
+	/// clientConnect:
+	/// Connects this game world to a server
+	/// _serverAddr - the server address
+	/// _clientName - the username to use
+	/// _timeout - the max time to connect
+	/// returns whether the connection was successful
+	///
 	bool clientConnect(sockaddr_in _serverAddr, const std::string & _clientName, unsigned int _timeout);
 
+	/// 
+	/// getNetworkEntity:
+	/// returns the network entity
+	///
 	JNetwork::INetworkEntity * getNetworkEntity();
 
-	void sendGameState();
-
+	/// 
+	/// getIsMultiplayer:
+	/// returns whether this game world is running in multiplayer
+	///
 	bool getIsMultiplayer() const;
 };
 

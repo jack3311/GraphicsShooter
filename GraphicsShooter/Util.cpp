@@ -118,8 +118,6 @@ void Util::CreatePyramid(std::vector<TexturedNormalsVertexFormat>& _rVertices, s
 
 void Util::CreateSphere(std::vector<TexturedNormalsVertexFormat>& _rVertices, std::vector<GLuint>& _rIndices)
 {
-	//TODO: Fix this
-
 	static const int rings = 15;
 	static const int sectors = 15;
 	static const float radius = 2.f;

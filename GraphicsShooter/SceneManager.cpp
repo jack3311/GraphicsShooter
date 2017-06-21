@@ -19,6 +19,7 @@
 #include "ScenePlay.h"
 #include "SceneGameOver.h"
 #include "SceneMP.h"
+#include "SceneHelp.h"
 
 SceneManager * SceneManager::sceneManager = nullptr;
 
@@ -28,6 +29,7 @@ SceneManager::SceneManager()
 	initScene<ScenePlay>();
 	initScene<SceneGameOver>();
 	initScene<SceneMP>();
+	initScene<SceneHelp>();
 
 	activate<SceneMenu>();
 }

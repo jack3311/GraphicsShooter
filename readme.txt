@@ -1,11 +1,11 @@
 Readme for Tank Survival - Jack Wilson 2017
 
 Controls:
-A/D/Mouse - Look around and aim
-W/S - Move back and forwards
+WASD - Look around and move
 Escape - Pause
 Spacebar - Fire
 Mouse and Left Mouse Button - Navigate through menus
+Tab - See player status
 
 Features:
 When playing the game, you are put in a tank in an arena-like area in which you face waves of enemy tanks and turrets who will try to destroy you.

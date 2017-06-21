@@ -99,9 +99,23 @@ public:
 	///
 	void createGameWorld(bool _isServer, bool _isMultiplayer, std::string _username, std::string _serverName = "");
 
+
+	/// 
+	/// deleteGameWorld:
+	/// Deletes the game world
+	///
 	void deleteGameWorld();
 
+	/// 
+	/// getGameWorld:
+	/// returns the game world
+	///
 	GameWorld & getGameWorld() const;
+
+	/// 
+	/// hasGameWorld:
+	/// returns whether a game world exists
+	///
 	bool hasGameWorld() const;
 };
 

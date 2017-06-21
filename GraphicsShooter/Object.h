@@ -6,7 +6,7 @@
 //
 //  (c) 2017 Media Design School
 //
-//  File Name    :    Sprite.h
+//  File Name    :    Object.h
 //  Description  :    Represents a game object
 //  Author       :    Jack Wilson
 //  Mail         :    jack.wil6883@mediadesign.school.nz
@@ -62,8 +62,20 @@ public:
 
 	unsigned int flag;
 
+	std::string playerTarget;
 
+	/// 
+	/// serialise:
+	/// Converts information about the object to a packet
+	/// _oss - an ostringstream for the packet
+	///
 	virtual void serialise(std::ostringstream & _oss);
+
+	/// 
+	/// deserialise:
+	/// Sets information about the object from a packet
+	/// _iss - an istringstream for the packet
+	///
 	virtual void deserialise(std::istringstream & _iss);
 };
 

@@ -1,4 +1,19 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    Player.h
+//  Description  :    Represents a player
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #pragma once
+
 #include "Object.h"
 
 #define MAX_HEALTH 100.f
@@ -44,6 +59,10 @@ public:
 
 	int getAmmo() const;
 
+	///
+	/// resetAmmo:
+	/// resets the ammo state to its default
+	///
 	void resetAmmo();
 
 	///
@@ -65,8 +84,8 @@ public:
 	/// _amount - the amount
 	///
 	void dealDamage(float _amount);
-	int getHealth() const;
 
+	int getHealth() const;
 	void setHealth(float _amount);
 
 	///
@@ -95,8 +114,18 @@ public:
 	bool hasShield() const;
 
 
-
+	/// 
+	/// serialiseSpecific:
+	/// Converts information about the player to a packet
+	/// _oss - an ostringstream for the packet
+	///
 	virtual void serialiseSpecific(std::ostringstream & _oss);
+
+	/// 
+	/// deserialiseSpecific:
+	/// Sets information about the player from a packet
+	/// _iss - an istringstream for the packet
+	///
 	virtual void deserialiseSpecific(std::istringstream & _iss);
 };
 

@@ -9,7 +9,7 @@
 namespace JNetwork
 {
 	#define PROCESS_PACKETS_ON_NEW_THREAD
-	#define KEEP_ALIVE_TIME_MILLISECONDS 1500
+	#define KEEP_ALIVE_TIME_MILLISECONDS 3000
 
 	Server::Server(std::function<void(JNetworkPacket &, const sockaddr_in &)> _receivePacketGameFunc, std::string _name) : INetworkEntity::INetworkEntity(NetworkEntityType::SERVER, _receivePacketGameFunc), name(_name)
 	{
@@ -244,7 +244,7 @@ namespace JNetwork
 
 	void Server::keepAliveThreadEntry()
 	{
-		std::chrono::high_resolution_clock clock;
+		std::chrono::high_resolution_clock clock = std::chrono::high_resolution_clock();
 		auto t1 = clock.now();
 
 		while (active)

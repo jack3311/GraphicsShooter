@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    Object.cpp
+//  Description  :    Represents a game object
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #include "Object.h"
 
 #include "Light.h"
@@ -7,7 +21,7 @@ Object::Object()
 }
 
 Object::Object(glm::vec3 & _position, glm::vec3 & _scale, glm::mat4 & _rotation) :
-	position(_position), scale(_scale), rotation(_rotation)
+	position(_position), scale(_scale), rotation(_rotation), playerTarget("")
 {
 }
 

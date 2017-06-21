@@ -1,53 +1,21 @@
-21-06-2017 01-33-14: 	Initializing game
-21-06-2017 01-33-14: 	Loading assets
-21-06-2017 01-33-15: 	Initilizing scene: class SceneMenu
-21-06-2017 01-33-15: 	Starting background music
-21-06-2017 01-33-15: 	Initilizing scene: class ScenePlay
-21-06-2017 01-33-15: 	Creating the floor renderer
-21-06-2017 01-33-15: 	Creating the player renderer
-21-06-2017 01-33-24: 	Creating the enemy renderers
-21-06-2017 01-33-24: 	Creating the bullet renderer
-21-06-2017 01-33-25: 	Creating the powerup renderers
-21-06-2017 01-33-25: 	Creating the skybox renderer
-21-06-2017 01-33-25: 	Creating the text labels
-21-06-2017 01-33-25: 	Initilizing scene: class SceneGameOver
-21-06-2017 01-33-25: 	Initilizing scene: class SceneMP
-21-06-2017 01-33-25: 	Activating scene: class SceneMenu
-21-06-2017 01-33-43: 	Activating scene: class SceneMP
-21-06-2017 01-33-51: 	Creating game world as client
-21-06-2017 01-33-51: 	Starting network entity
-21-06-2017 01-33-54: 	Connected to server successfully
-21-06-2017 01-33-54: 	Activating scene: class ScenePlay
-21-06-2017 01-34-01: 	Lost connection to server
-21-06-2017 01-34-01: 	Deleting game world
-21-06-2017 01-34-03: 	Activating scene: class SceneMenu
-21-06-2017 01-34-06: 	Activating scene: class SceneMP
-21-06-2017 01-34-11: 	Creating game world as client
-21-06-2017 01-34-11: 	Starting network entity
-21-06-2017 01-34-14: 	Connected to server successfully
-21-06-2017 01-34-14: 	Activating scene: class ScenePlay
-21-06-2017 01-34-39: 	Player fired bullet
-21-06-2017 01-34-39: 	Player fired bullet
-21-06-2017 01-34-40: 	Player fired bullet
-21-06-2017 01-34-40: 	Player fired bullet
-21-06-2017 01-34-41: 	Player fired bullet
-21-06-2017 01-34-41: 	Player fired bullet
-21-06-2017 01-34-42: 	Player fired bullet
-21-06-2017 01-34-43: 	Player fired bullet
-21-06-2017 01-34-45: 	Player fired bullet
-21-06-2017 01-34-47: 	Player fired bullet
-21-06-2017 01-34-49: 	Player fired bullet
-21-06-2017 01-34-50: 	Player fired bullet
-21-06-2017 01-34-51: 	Player fired bullet
-21-06-2017 01-34-52: 	Player fired bullet
-21-06-2017 01-34-55: 	Player fired bullet
-21-06-2017 01-34-56: 	Player fired bullet
-21-06-2017 01-34-57: 	Player fired bullet
-21-06-2017 01-34-58: 	Player fired bullet
-21-06-2017 01-35-01: 	Player fired bullet
-21-06-2017 01-35-02: 	Player fired bullet
-21-06-2017 01-35-03: 	Player fired bullet
-21-06-2017 01-35-06: 	Player fired bullet
-21-06-2017 01-41-46: 	Lost connection to server
-21-06-2017 01-41-46: 	Deleting game world
-21-06-2017 01-41-47: 	Activating scene: class SceneMenu
+21-06-2017 14-17-44: 	Initializing game
+21-06-2017 14-17-45: 	Loading assets
+21-06-2017 14-17-46: 	Initilizing scene: class SceneMenu
+21-06-2017 14-17-46: 	Starting background music
+21-06-2017 14-17-46: 	Initilizing scene: class ScenePlay
+21-06-2017 14-17-46: 	Creating the floor renderer
+21-06-2017 14-17-46: 	Creating the player renderer
+21-06-2017 14-17-50: 	Creating the enemy renderers
+21-06-2017 14-17-50: 	Creating the bullet renderer
+21-06-2017 14-17-51: 	Creating the powerup renderers
+21-06-2017 14-17-51: 	Creating the skybox renderer
+21-06-2017 14-17-51: 	Creating the text labels
+21-06-2017 14-17-51: 	Initilizing scene: class SceneGameOver
+21-06-2017 14-17-51: 	Initilizing scene: class SceneMP
+21-06-2017 14-17-51: 	Initilizing scene: class SceneHelp
+21-06-2017 14-17-51: 	Activating scene: class SceneMenu
+21-06-2017 14-18-07: 	Activating scene: class SceneMP
+21-06-2017 14-18-09: 	Creating game world as client
+21-06-2017 14-18-09: 	Starting network entity
+21-06-2017 14-18-22: 	Creating game world as client
+21-06-2017 14-18-22: 	Starting network entity

@@ -6,8 +6,8 @@
 //
 //  (c) 2017 Media Design School
 //
-//  File Name    :    SceneGameOver.h
-//  Description  :    The game over scene
+//  File Name    :    SceneHelp.h
+//  Description  :    The help scene
 //  Author       :    Jack Wilson
 //  Mail         :    jack.wil6883@mediadesign.school.nz
 //
@@ -15,17 +15,22 @@
 #pragma once
 
 #include "Scene.h"
+
+#include "TextLabel.h"
 #include "UIMenu.h"
 
-class SceneGameOver :
+class SceneHelp :
 	public Scene
 {
 private:
-	UIMenu * gameOverMenu;
+	TextLabel * titleText;
+	TextLabel * helpText;
+
+	UIMenu * helpMenu;
 
 public:
-	SceneGameOver();
-	virtual ~SceneGameOver();
+	SceneHelp();
+	~SceneHelp();
 
 	virtual void render() const;
 	virtual void update(float _dt);
@@ -33,8 +38,7 @@ public:
 	/// 
 	/// reset:
 	/// Resets the scene
-	/// _playerScore - the player score to show
 	///
-	void reset(int _playerScore);
+	void reset();
 };
 

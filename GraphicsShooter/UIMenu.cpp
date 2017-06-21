@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    UIMenu.cpp
+//  Description  :    Represents a menu
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #include "UIMenu.h"
 
 #include "Input.h"
@@ -29,13 +43,10 @@ void UIMenu::initialise()
 
 	ShaderLoader sl;
 	GLuint shader = sl.CreateProgram("Shaders/texturedSpriteShader.vert",
-		"Shaders/texturedSpriteShader.frag");/*
-	GLuint shader = sl.CreateProgram("Shaders/uiBgShader.vert",
-		"Shaders/uiBgShader.frag");*/
+		"Shaders/texturedSpriteShader.frag");
 
 	spriteRenderer = new SpriteRenderer(shader);
 	spriteRenderer->Initialise();
-
 
 	//Use just one label so we don't repeatedly load assets, create vbos, etc...
 	genericLabel = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), true);

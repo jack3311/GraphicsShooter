@@ -22,9 +22,6 @@ namespace JNetwork
 	void Client::start()
 	{
 		INetworkEntity::start();
-		//active = true;
-
-		//receiveThread = std::thread(&Client::receiveThreadEntry, this);
 	}
 
 	void Client::stop()
@@ -51,25 +48,6 @@ namespace JNetwork
 			if (current.size() != 0)
 				nameList.push_back(current);
 		}
-
-		//TODO: set member variable or something
-
-
-		//Display clients
-		//std::cout << std::endl;
-		//if (nameList.size() > 0)
-		//{
-		//	//logR("Connected Clients: ");
-		//	for (std::string name : nameList)
-		//	{
-		//		//logR(name);
-		//	}
-		//}
-		//else
-		//{
-		//	//logR("No other clients connected");
-		//}
-		//std::cout << std::endl;
 	}
 
 	bool Client::isConnectedToServer() const

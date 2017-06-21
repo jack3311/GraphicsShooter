@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    SceneMP.cpp
+//  Description  :    The multiplayer menu scene
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #include "SceneMP.h"
 
 #include "Game.h"
@@ -87,8 +101,8 @@ void SceneMP::setupJoinServer()
 
 		//Display servers as buttons
 		joinServerMenu->addElement(new UIElement(
-			0.75f,
-			1.f - ((i + 1) / (serverList.size() + 1)), 
+			0.5f,
+			1.f - (static_cast<float>(i + 1) / static_cast<float>(serverList.size() + 2)),
 			addrCopy.second,
 			true,
 
@@ -103,10 +117,10 @@ void SceneMP::setupJoinServer()
 
 	if (serverList.size() == 0)
 	{
-		joinServerMenu->addElement(new UIElement(0.75f, 0.5f, "No servers found", false));
+		joinServerMenu->addElement(new UIElement(0.5f, 0.25f, "No servers found", false));
 	}
 
-	joinServerMenu->addElement(new UIElement(0.25f, 0.5f, "Back", true, [&]() {
+	joinServerMenu->addElement(new UIElement(0.5f, 1.f / static_cast<float>(serverList.size() + 2), "Back", true, [&]() {
 		this->backToMPMenu();
 	}));
 }

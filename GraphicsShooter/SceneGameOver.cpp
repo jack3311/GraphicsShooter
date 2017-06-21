@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    SceneGameOver.cpp
+//  Description  :    The game over scene
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #include "SceneGameOver.h"
 
 #include <sstream>

@@ -6,8 +6,8 @@
 //
 //  (c) 2017 Media Design School
 //
-//  File Name    :    SpriteRenderer.h
-//  Description  :    Renders sprite objects
+//  File Name    :    SkyboxRenderer.h
+//  Description  :    Renders skyboxes
 //  Author       :    Jack Wilson
 //  Mail         :    jack.wil6883@mediadesign.school.nz
 //

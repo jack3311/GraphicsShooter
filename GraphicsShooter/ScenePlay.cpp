@@ -143,6 +143,7 @@ ScenePlay::ScenePlay()
 	scoreText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	healthText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 	waitingText = new TextLabel("Waiting for Server...", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), true);
+	infoText = new TextLabel("", "Assets/Fonts/arial.ttf", glm::vec2(0, 0), false);
 }
 
 ScenePlay::~ScenePlay()
@@ -155,6 +156,8 @@ ScenePlay::~ScenePlay()
 	delete ammoText;
 	delete scoreText;
 	delete healthText;
+	delete waitingText;
+	delete infoText;
 
 	delete[] enemyRenderers;
 	delete[] powerupRenderers;
@@ -211,15 +214,63 @@ void ScenePlay::render() const
 	ammoText->Render();
 	healthText->Render();
 
-	//Check
+	//Check for server
 	if (gw.getEnemies().size() == 0 && gw.getIsMultiplayer())
 		waitingText->Render();
+
+	//Check for player info
+	if (Input::isKeyDown('\t'))
+	{
+		const auto & players = gw.getPlayers();
+		int i = 0;
+		for (auto itr = players.begin(); itr != players.end(); ++itr)
+		{
+			//Name
+			infoText->setPosition(glm::vec2(10.f, Game::getGame()->getWindowHeight() - (150.f + i * 50.f)));
+			infoText->setText(itr->first);
+			infoText->Render();
+
+			//Score
+			{
+				std::ostringstream oss;
+				oss << itr->second->getScore();
+				infoText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() / 2.f, Game::getGame()->getWindowHeight() - (150.f + i * 50.f)));
+				infoText->setText(oss.str());
+				infoText->Render();
+			}
+
+			//Health
+			{
+				std::ostringstream oss;
+				oss << itr->second->getHealth() << " / " << MAX_HEALTH;
+				infoText->setText(oss.str());
+				infoText->setPosition(glm::vec2(Game::getGame()->getWindowWidth() - infoText->getWidth() - 10.f, Game::getGame()->getWindowHeight() - (150.f + i * 50.f)));
+				infoText->Render();
+			}
+
+
+			++i;
+		}
+	}
 }
 
 void ScenePlay::update(float _dt)
 {
 	Game & g = *Game::getGame();
 	auto & gw = g.getGameWorld();
+
+
+
+
+
+	auto thisPlayer = gw.getThisPlayer();
+
+	elapsedTime += _dt;
+
+
+	//Update game world
+	Game::getGame()->getGameWorld().update(_dt);
+	if (!gw.isGameInProgress()) return;
 
 
 	if (gw.getIsMultiplayer())
@@ -235,21 +286,6 @@ void ScenePlay::update(float _dt)
 			}
 		}
 	}
-
-
-
-
-
-	auto thisPlayer = gw.getThisPlayer();
-
-	elapsedTime += _dt;
-
-
-	//Update game world
-	Game::getGame()->getGameWorld().update(_dt);
-
-
-
 
 	//Mouse controls
 	/*glm::vec2 mousePos = Input::getMousePosition();
@@ -407,5 +443,5 @@ const float ScenePlay::getSpecularStrength() const
 
 const GLuint ScenePlay::getSkyboxCubemap() const
 {
-	return AssetManager::getAssetManager().getCubeMap("skybox1"); //TODO: maybe change this
+	return AssetManager::getAssetManager().getCubeMap("skybox1");
 }

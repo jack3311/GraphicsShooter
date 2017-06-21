@@ -24,12 +24,36 @@
 #include <cassert>
 #include <sstream>
 
-glm::vec3 vec3FromStream(std::istringstream & iss);
+///
+/// vec3FromStream:
+/// Gets a vec3 from a stringstream
+/// _iss - the stringstream
+/// returns the vec3
+///
+glm::vec3 vec3FromStream(std::istringstream & _iss);
 
+///
+/// vec3ToStream:
+/// Writes a vec3 to a stringstream
+/// _oss - the stringstream
+/// _val - the vec3
+///
 void vec3ToStream(std::ostringstream & oss, const glm::vec3 & _val);
 
+///
+/// mat4FromStream:
+/// Gets a mat4 from a stringstream
+/// _iss - the stringstream
+/// returns the mat4
+///
 glm::mat4 mat4FromStream(std::istringstream & _iss);
 
+///
+/// mat4ToStream:
+/// Writes a mat4 to a stringstream
+/// _oss - the stringstream
+/// _val - the mat4
+///
 void mat4ToStream(std::ostringstream & _oss, const glm::mat4 & _val);
 
 ///

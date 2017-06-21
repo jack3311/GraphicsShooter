@@ -55,6 +55,8 @@ private:
 
 	TextLabel * waitingText;
 
+	TextLabel * infoText;
+
 public:
 	ScenePlay();
 	virtual ~ScenePlay();

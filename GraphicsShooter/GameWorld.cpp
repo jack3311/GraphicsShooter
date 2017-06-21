@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    GameWorld.cpp
+//  Description  :    Represents a game world and the relevant network entity
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #include "GameWorld.h"
 
 #include <sstream>
@@ -93,6 +107,47 @@ void GameWorld::update(float _dt)
 			}
 		}
 
+		//Check for disconnected clients
+		for (auto itr = players.begin(); itr != players.end(); )
+		{
+			if (itr->first != username) //Check it is not server player
+			{
+				//Check it is in clients list
+				bool match = false;
+				for (auto client : dynamic_cast<JNetwork::Server*>(networkEntity)->getConnectedClients())
+				{
+					const auto & name = client.second.name;
+					if (itr->first == name)
+					{
+						match = true;
+					}
+				}
+
+				if (!match)
+				{
+
+
+					std::ostringstream oss;
+					oss << MessageType::PLAYER_LEAVE;
+					oss << itr->first;
+
+					//Send player leave packet
+					dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+
+					delete itr->second;
+					players.erase(itr++); //Need to increment before deleting old one
+				}
+				else
+				{
+					++itr;
+				}
+			}
+			else
+			{
+				++itr;
+			}
+		}
+
 	}
 
 	if (isServer || !isMultiplayer)
@@ -111,8 +166,16 @@ void GameWorld::update(float _dt)
 			Logger::getLogger().log("All players died, stopping game");
 			gameInProgress = false;
 			SceneManager::getSceneManager().activate<SceneGameOver>(players[username]->getScore());
-			//TODO: Send game over packet
-			stopNetwork();
+
+			if (isMultiplayer)
+			{
+				//Send game over packet
+				std::ostringstream oss;
+				oss << MessageType::GAME_OVER;
+				dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+
+				stopNetwork();
+			}
 		}
 
 		//Check for victory
@@ -137,7 +200,31 @@ void GameWorld::update(float _dt)
 			{
 			case EnemyType::SHOOTER:
 			{
-				Player * player = players[username]; //TODO: CHANGE THIS TO RANDOM ENEMY
+				//Check if player exists
+				const auto & findResult = players.find(enemy->playerTarget);
+				if (findResult == players.end() ||
+					findResult->second == nullptr ||
+					findResult->second->isDead())
+				{
+					//Choose new target
+					std::pair<std::string, Player *> random("", nullptr);
+
+					for (auto playerp : players)
+					{
+						if (!playerp.second->isDead())
+							random = playerp;
+					}
+
+					if (random.second == nullptr)
+					{
+						return;
+					}
+
+					enemy->playerTarget = random.first;
+				}
+
+
+				Player * player = players[enemy->playerTarget];
 
 				//Path towards player
 				glm::vec3 delta = player->getPosition() - enemy->getPosition();
@@ -163,14 +250,48 @@ void GameWorld::update(float _dt)
 						auto facing2D = normalize(player->getPosition() - enemy->getPosition());
 
 						createBullet(enemy->getPosition() + facing2D * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), facing2D, false);
-						AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("laser"));
+
+						if (isMultiplayer)
+						{
+							std::ostringstream oss;
+							oss << MessageType::ENEMY_FIRED_BULLET;
+							dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+						}
+						else
+						{
+							AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("laser"));
+						}
 					}
 				}
 			}
 			break;
 			case EnemyType::FIGHTER:
 			{
-				Player * player = players[username]; //TODO: CHANGE THIS TO RANDOM ENEMY
+				//Check if player exists
+				const auto & findResult = players.find(enemy->playerTarget);
+				if (findResult == players.end() ||
+					findResult->second == nullptr ||
+					findResult->second->isDead())
+				{
+					//Choose new target
+					std::pair<std::string, Player *> random("", nullptr);
+
+					for (auto playerp : players)
+					{
+						if (!playerp.second->isDead())
+							random = playerp;
+					}
+
+					if (random.second == nullptr)
+					{
+						return;
+					}
+
+					enemy->playerTarget = random.first;
+				}
+				
+
+				Player * player = players[enemy->playerTarget];
 
 				glm::vec3 delta = player->getPosition() - enemy->getPosition();
 				glm::vec3 delScl = glm::normalize(delta) * ENEMY1_MAX_SPEED * _dt;
@@ -182,7 +303,18 @@ void GameWorld::update(float _dt)
 
 					//Try to play drill sound
 					if (rand() % 10000 < 7500 * _dt)
-						AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode1"));
+					{
+						if (isMultiplayer)
+						{
+							std::ostringstream oss;
+							oss << MessageType::PLAYER_HIT_BY_DRILL;
+							dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+						}
+						else
+						{
+							AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode1"));
+						}
+					}
 				}
 				else
 				{
@@ -205,7 +337,17 @@ void GameWorld::update(float _dt)
 						createBullet(enemy->getPosition() + vel * 5.f + glm::vec3(0.f, (36.f / 40.f) * 4.f, 0.f), vel, false);
 					}
 
-					AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode2"));
+					//Send player hit by drill packet
+					if (isMultiplayer)
+					{
+						std::ostringstream oss;
+						oss << MessageType::ENEMY_TURRET_FIRED;
+						dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+					}
+					else
+					{
+						AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode2"));
+					}
 				}
 			}
 			break;
@@ -275,9 +417,17 @@ void GameWorld::update(float _dt)
 						if (!player->hasShield())
 							player->dealDamage(2);
 
-						//TODO: SEND BULLET HIT PACKET TO PLAY SOUND
-
-						//AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+						//SEND BULLET HIT PACKET TO PLAY SOUND
+						if (isMultiplayer)
+						{
+							std::ostringstream oss;
+							oss << MessageType::PLAYER_HIT_BY_BULLET;
+							dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+						}
+						else
+						{
+							AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+						}
 
 						collision = true;
 					}
@@ -339,9 +489,19 @@ void GameWorld::update(float _dt)
 						break;
 					}
 
-					//AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
+					//Player powerup receive packet to play sound
+					if (isMultiplayer)
+					{
+						std::ostringstream oss;
+						oss << MessageType::PLAYER_COLLECTED_POWERUP;
+						dynamic_cast<JNetwork::Server*>(networkEntity)->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
+					}
+					else
+					{
+						AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
+					}
 
-					//TODO: player powerup receive packet to play sound
+					
 
 					player->addScore(500);
 				}
@@ -556,7 +716,6 @@ void GameWorld::sendGameState()
 				if (forcePlayerPositions)
 				{
 					server->sendToAll(JNetwork::JNetworkPacket(JNetwork::JNetworkPacketType::UPDATE, oss.str().c_str()));
-					forcePlayerPositions = false;
 				}
 				else
 				{
@@ -577,6 +736,8 @@ void GameWorld::sendGameState()
 			}
 			
 		}
+
+		forcePlayerPositions = false;
 
 		//Send enemy info:
 		//Send array size
@@ -740,7 +901,7 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 
 			if (size < enemies.size())
 			{
-				for (int i = size; i < enemies.size(); ++i)
+				for (unsigned int i = size; i < enemies.size(); ++i)
 				{
 					delete enemies[i];
 				}
@@ -774,7 +935,7 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 
 			if (size < bullets.size())
 			{
-				for (int i = size; i < bullets.size(); ++i)
+				for (unsigned int i = size; i < bullets.size(); ++i)
 				{
 					delete bullets[i];
 				}
@@ -808,7 +969,7 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 
 			if (size < powerups.size())
 			{
-				for (int i = size; i < powerups.size(); ++i)
+				for (unsigned int i = size; i < powerups.size(); ++i)
 				{
 					delete powerups[i];
 				}
@@ -858,6 +1019,56 @@ void GameWorld::parsePacket(JNetwork::JNetworkPacket & _p, const sockaddr_in & _
 			players[pos]->deserialiseSpecific(iss);
 			break;
 		}
+
+		case MessageType::PLAYER_LEAVE:
+		{
+			std::string pos;
+			iss >> pos;
+
+			players.erase(pos);
+
+			break;
+		}
+
+		case MessageType::GAME_OVER:
+		{
+			SceneManager::getSceneManager().activate<SceneGameOver>(getThisPlayer()->getScore());
+			stopNetwork();
+			gameInProgress = false;
+			break;
+		}
+
+		case MessageType::PLAYER_HIT_BY_BULLET:
+		{
+			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("impact"));
+			break;
+		}
+
+		case MessageType::ENEMY_TURRET_FIRED:
+		{
+			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode2"));
+			break;
+		}
+
+		case MessageType::PLAYER_COLLECTED_POWERUP:
+		{
+			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("star"));
+			break;
+		}
+
+		case MessageType::ENEMY_FIRED_BULLET:
+		{
+			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("laser"));
+			break;
+		}
+
+		case MessageType::PLAYER_HIT_BY_DRILL:
+		{
+			AssetManager::getAssetManager().playSound(AssetManager::getAssetManager().getSound("explode1"));
+			break;
+		}
+
+
 
 		}
 

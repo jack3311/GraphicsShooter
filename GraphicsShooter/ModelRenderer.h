@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    ModelRenderer.h
+//  Description  :    Renders models
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #pragma once
 
 #include <vector>
@@ -20,9 +34,22 @@ private:
 
 	float reflectionStrength;
 
-
+	/// 
+	/// processNode:
+	/// Processes a node of a model
+	///
 	void processNode(aiNode * _node, const aiScene * _scene);
+
+	/// 
+	/// processMesh:
+	/// Processes a mesh of a model
+	///
 	void processMesh(aiMesh * _mesh, const aiScene * _scene);
+
+	/// 
+	/// loadMaterialTextures:
+	/// Loads all material textures
+	///
 	void loadMaterialTextures(aiMaterial * _material, aiTextureType _aiTextureType, ModelTextureType _textureType, std::vector<ModelTextureInfo> & _appendTextures);
 
 public:

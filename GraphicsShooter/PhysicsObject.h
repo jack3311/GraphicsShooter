@@ -1,3 +1,17 @@
+//
+//  Bachelor of Game Development
+//  Media Design School
+//  Auckland
+//  New Zealand
+//
+//  (c) 2017 Media Design School
+//
+//  File Name    :    PhysicsObject.h
+//  Description  :    Represents a game object with physics details
+//  Author       :    Jack Wilson
+//  Mail         :    jack.wil6883@mediadesign.school.nz
+//
+
 #pragma once
 #include "Object.h"
 
@@ -30,7 +44,18 @@ public:
 	float getLifetime() const;
 
 
+	/// 
+	/// serialise:
+	/// Converts information about the object to a packet
+	/// _oss - an ostringstream for the packet
+	///
 	virtual void serialise(std::ostringstream & _oss);
+
+	/// 
+	/// deserialise:
+	/// Sets information about the object from a packet
+	/// _iss - an istringstream for the packet
+	///
 	virtual void deserialise(std::istringstream & _iss);
 
 	std::string bulletSource;	//Good enough solution, would normally create child class
