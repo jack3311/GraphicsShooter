@@ -1,3 +1,17 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) 2017 Media Design School
+//
+// File Name	: Util.cpp
+// Description	: Utility Functions
+// Author		: Jack Wilson
+// Mail			: jack.wil6883@mediadesign.school.nz
+//
+
 #include "Util.h"
 
 #include <iostream>

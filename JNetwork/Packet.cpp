@@ -1,3 +1,17 @@
+//
+// Bachelor of Software Engineering
+// Media Design School
+// Auckland
+// New Zealand
+//
+// (c) 2017 Media Design School
+//
+// File Name	: Packet.cpp
+// Description	: Functionality for packet creation etc.
+// Author		: Jack Wilson
+// Mail			: jack.wil6883@mediadesign.school.nz
+//
+
 #include "Packet.h"
 
 #include <iostream>
